@@ -3,3 +3,13 @@
 ################################################################################
 
 /.vs
+/Codebase/.vs/SmiteNoobLeague
+/Codebase/obj
+/Codebase/Properties
+/Codebase/appsettings.json
+/Codebase/appsettings.Development.json
+/SmiteNoobLeague/.vs/SmiteNoobLeague/v16
+/SmiteNoobLeague/obj
+/SmiteNoobLeague/appsettings.json
+/SmiteNoobLeague/appsettings.Development.json
+/SmiteNoobLeague/Properties
