@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmiteNoobLeague", "SmiteNoobLeague.csproj", "{8C5CE16D-C97B-4A7B-B2C6-CA3702280051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmiteNoobLeague", "SmiteNoobLeague.csproj", "{8C5CE16D-C97B-4A7B-B2C6-CA3702280051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNL_DataAccessLayer", "..\SNL_DataAccessLayer\SNL_DataAccessLayer.csproj", "{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{8C5CE16D-C97B-4A7B-B2C6-CA3702280051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C5CE16D-C97B-4A7B-B2C6-CA3702280051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C5CE16D-C97B-4A7B-B2C6-CA3702280051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

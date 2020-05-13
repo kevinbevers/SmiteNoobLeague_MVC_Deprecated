@@ -13,3 +13,6 @@
 /SmiteNoobLeague/appsettings.json
 /SmiteNoobLeague/appsettings.Development.json
 /SmiteNoobLeague/Properties
+/SmiteNoobLeague/.vs/SmiteNoobLeague
+/SmiteNoobLeague/bin/Debug/netcoreapp3.1
+/SNL_DataAccessLayer/obj
