@@ -16,3 +16,6 @@
 /SmiteNoobLeague/.vs/SmiteNoobLeague
 /SmiteNoobLeague/bin/Debug/netcoreapp3.1
 /SNL_DataAccessLayer/obj
+/SNL_DataAccessLayer/bin/Debug/netcoreapp3.1
+/SNL_LogicLayer/bin/Debug/netcoreapp3.1
+/SNL_LogicLayer/obj

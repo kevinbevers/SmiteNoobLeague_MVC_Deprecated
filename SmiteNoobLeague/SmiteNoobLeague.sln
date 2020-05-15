@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmiteNoobLeague", "SmiteNoobLeague.csproj", "{8C5CE16D-C97B-4A7B-B2C6-CA3702280051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNL_DataAccessLayer", "..\SNL_DataAccessLayer\SNL_DataAccessLayer.csproj", "{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNL_PersistenceLayer", "..\SNL_DataAccessLayer\SNL_PersistenceLayer.csproj", "{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNL_LogicLayer", "..\SNL_LogicLayer\SNL_LogicLayer.csproj", "{A50AE721-6A23-44CC-9737-00F0D946427F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F73E0EF4-26E2-4293-A4C2-6A7FF264910B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A50AE721-6A23-44CC-9737-00F0D946427F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A50AE721-6A23-44CC-9737-00F0D946427F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A50AE721-6A23-44CC-9737-00F0D946427F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A50AE721-6A23-44CC-9737-00F0D946427F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

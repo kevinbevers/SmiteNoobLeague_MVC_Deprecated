@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SmiteNoobLeague.Models;
+using SNL_PersistenceLayer;
+using SNL_LogicLayer;
 
 namespace SmiteNoobLeague
 {
@@ -25,14 +26,16 @@ namespace SmiteNoobLeague
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.Add(new ServiceDescriptor(typeof(SmiteNoobLeagueContext), new SmiteNoobLeagueContext(Configuration.GetConnectionString("DevConnection"))));
+            services.Add(new ServiceDescriptor(typeof(UnitOfWork), new UnitOfWork(new SmiteNoobLeagueContext(Configuration.GetConnectionString("DevConnection")))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //remove when not in dev mode
-            app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

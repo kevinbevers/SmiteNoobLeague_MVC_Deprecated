@@ -5,21 +5,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SmiteNoobLeague.Models;
+using SNL_LogicLayer;
 
 namespace SmiteNoobLeague.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SmiteNoobLeagueContext _context;
-        public HomeController(SmiteNoobLeagueContext context)
+        private readonly UnitOfWork _unitofwork;
+
+        public HomeController(UnitOfWork unitOfWork)
         {
-            _context = context;           
+            _unitofwork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            ViewBag.teams = _context.GetAllTeams();
+            var test = _unitofwork.GetTeamByID(1);
+
+            ViewBag.test = test.TeamName;
 
             return View();
         }
