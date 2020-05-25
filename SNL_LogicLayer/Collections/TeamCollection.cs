@@ -7,25 +7,24 @@ using SNL_LogicLayer.Interfaces;
 using SNL_LogicLayer.Models;
 using SNL_PersistenceLayer.Repo;
 
-namespace SNL_LogicLayer.WorkClasses
+namespace SNL_LogicLayer.Collection
 {
-    public class Team : IDataObject<TeamModel>
+    public class TeamCollection : IDataObject<Team>
     {
         private readonly TeamRepo _teamRepo;
 
-        public Team(TeamRepo teamRepo)
+        public TeamCollection(TeamRepo teamRepo)
         {
             _teamRepo = teamRepo;
         }
-
-        public IEnumerable<TeamModel>  GetAll()
+        public IEnumerable<Team> GetAll()
         {
-            List<TeamModel> tl = new List<TeamModel>();
+            List<Team> tl = new List<Team>();
             var result = _teamRepo.GetAll();
             foreach (var data in result)
             {
                 //recreate DTO
-                TeamModel tm = new TeamModel
+                Team tm = new Team
                 {
                     TeamID = data.TeamID,
                     TeamName = data.TeamName,
@@ -41,12 +40,12 @@ namespace SNL_LogicLayer.WorkClasses
             }
             return tl;
         }
-        public TeamModel GetByID(int id)
+        public Team GetByID(int id)
         {
-            TeamModel tm = new TeamModel();        
+            Team tm = new Team();        
             var data = _teamRepo.GetByID(id);
             //recreate DTO
-            tm = new TeamModel {
+            tm = new Team {
                 TeamID = data.TeamID,
                 TeamName = data.TeamName,
                 TeamLogo = data.TeamLogo,
@@ -58,13 +57,6 @@ namespace SNL_LogicLayer.WorkClasses
                 TeamMember5ID = data.TeamMember5ID,
             };
             return tm;
-        }
-
-        public IEnumerable<TeamModel> Find(Expression<Func<TeamModel, bool>> exp)
-        {
-            var result = GetAll();
-
-            return result.AsQueryable().Where(exp);
         }
     }
 }

@@ -12,16 +12,16 @@ namespace SmiteNoobLeague.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UnitOfWork _unitofwork;
+        private readonly LogicFactory _logicFactory;
 
-        public HomeController(UnitOfWork unitOfWork)
+        public HomeController(LogicFactory logicFactory)
         {
-            _unitofwork = unitOfWork;
+            _logicFactory = logicFactory;
         }
 
         public IActionResult Index()
         {
-            var test = _unitofwork.Team.GetByID(1);
+            var test = _logicFactory.Team.GetByID(1);
 
             ViewBag.test = test.TeamName;
 

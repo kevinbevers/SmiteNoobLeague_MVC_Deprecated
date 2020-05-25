@@ -26,7 +26,7 @@ namespace SmiteNoobLeague
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.Add(new ServiceDescriptor(typeof(UnitOfWork), new UnitOfWork(new SmiteNoobLeagueContext(Configuration.GetConnectionString("DevConnection")))));
+            services.Add(new ServiceDescriptor(typeof(LogicFactory), new LogicFactory(new SmiteNoobLeagueContext(Configuration.GetConnectionString("DevConnection")))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

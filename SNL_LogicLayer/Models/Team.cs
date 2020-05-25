@@ -5,7 +5,7 @@ using SNL_PersistenceLayer;
 
 namespace SNL_LogicLayer.Models
 {
-    public class TeamModel
+    public class Team
     {
         public int TeamID { get; set; }
         public string TeamName { get; set; }
