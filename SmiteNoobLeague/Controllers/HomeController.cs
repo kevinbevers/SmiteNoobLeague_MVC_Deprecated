@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SNL_LogicLayer;
+using SmiteNoobLeague.Models;
 
 namespace SmiteNoobLeague.Controllers
 {
@@ -20,7 +21,7 @@ namespace SmiteNoobLeague.Controllers
 
         public IActionResult Index()
         {
-            var test = _unitofwork.GetTeamByID(1);
+            var test = _unitofwork.Team.GetByID(1);
 
             ViewBag.test = test.TeamName;
 

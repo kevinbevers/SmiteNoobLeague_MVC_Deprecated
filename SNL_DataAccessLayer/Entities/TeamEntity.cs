@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SNL_LogicLayer.Models
+namespace SNL_PersistenceLayer.Entities
 {
-    public class Team
+    public class TeamEntity
     {
         public int TeamID { get; set; }
         public string TeamName { get; set; }
-        public byte[] TeamLogo { get; set; }
+        public byte[] TeamLogo { get; set; } 
         public int TeamDivisionID { get; set; }
         public int TeamCaptainID { get; set; }
         public int TeamMember2ID { get; set; }

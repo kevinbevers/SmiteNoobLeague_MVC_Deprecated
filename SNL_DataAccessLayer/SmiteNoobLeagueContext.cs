@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SNL_PersistenceLayer.Entities;
+using System.Data;
 
 namespace SNL_PersistenceLayer
 {
@@ -22,9 +23,9 @@ namespace SNL_PersistenceLayer
         }
 
         #region team
-        public List<Team> GetAllTeams()
+        public List<TeamEntity> GetAllTeams()
         {
-            List<Team> list = new List<Team>();
+            List<TeamEntity> list = new List<TeamEntity>();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -35,7 +36,7 @@ namespace SNL_PersistenceLayer
                 {
                     while (reader.Read())
                     {
-                        Team team = new Team
+                        TeamEntity team = new TeamEntity
                         {
                             TeamName = reader["TeamName"].ToString()
                         };
@@ -46,9 +47,9 @@ namespace SNL_PersistenceLayer
             }
             return list;
         }
-        public Team GetTeam(int id)
+        public TeamEntity GetTeam(int id)
         {
-            Team team = new Team();
+            TeamEntity team = new TeamEntity();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -59,7 +60,6 @@ namespace SNL_PersistenceLayer
                 {
                     while (reader.Read())
                     {
-
                         team.TeamID = reader["TeamID"] as int? ?? default;
                         team.TeamName = reader["TeamName"] as string ?? default;
                         team.TeamLogo = reader["TeamLogo"] as byte[] ?? default;
@@ -68,6 +68,38 @@ namespace SNL_PersistenceLayer
                 }
             }
             return team;
+        }
+        #endregion
+        #region generic
+        public DataSet GetByID(int id, string table)
+        {
+            DataSet ds = new DataSet();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                string query = new string($"select * from {table} where {table}ID = {id}");
+
+                MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
+                da.Fill(ds, "result");
+
+                return ds;
+            }
+        }
+        public DataSet GetAll(string table)
+        {
+            DataSet ds = new DataSet();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                string query = new string($"select * from {table}");
+
+                MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
+                da.Fill(ds, "result");
+
+                return ds;
+            }
         }
         #endregion
         //end of class
