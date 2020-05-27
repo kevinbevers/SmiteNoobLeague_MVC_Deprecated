@@ -21,9 +21,11 @@ namespace SmiteNoobLeague.Controllers
 
         public IActionResult Index()
         {
-            var test = _logicFactory.Team.GetByID(1);
+            var TeamCol = _logicFactory.GetTeamCollection();
 
-            ViewBag.test = test.TeamName;
+            var t = TeamCol.GetByID(1);
+
+            ViewBag.test = t.TeamName;
 
             return View();
         }

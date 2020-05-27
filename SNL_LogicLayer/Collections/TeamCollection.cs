@@ -4,59 +4,110 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Text;
 using SNL_LogicLayer.Interfaces;
+using SNL_LogicLayer;
+using SNL_PersistenceLayer.Contexts;
+using SNL_InterfaceLayer.DateTransferObjects;
 using SNL_LogicLayer.Models;
-using SNL_PersistenceLayer.Repo;
 
 namespace SNL_LogicLayer.Collection
 {
     public class TeamCollection : IDataObject<Team>
     {
-        private readonly TeamRepo _teamRepo;
+        private readonly TeamContext _teamContext;
 
-        public TeamCollection(TeamRepo teamRepo)
+        public TeamCollection(TeamContext teamContext)
         {
-            _teamRepo = teamRepo;
+            _teamContext = teamContext;
+        }
+
+        public void Add(Team entity)
+        {
+            TeamDTO tDTO = new TeamDTO
+            {
+                TeamID = entity.TeamID,
+                TeamCaptainID = entity.TeamCaptain.PlayerID,
+                TeamDivisionID = entity.TeamDivision.DivisionID,
+                TeamLogo = entity.TeamLogo,
+                TeamMember2ID = entity.TeamMembers[0].PlayerID,
+                TeamMember3ID = entity.TeamMembers[1].PlayerID,
+                TeamMember4ID = entity.TeamMembers[2].PlayerID,
+                TeamMember5ID = entity.TeamMembers[3].PlayerID,
+            };
+
+            _teamContext.Add(tDTO);
         }
         public IEnumerable<Team> GetAll()
         {
-            List<Team> tl = new List<Team>();
-            var result = _teamRepo.GetAll();
-            foreach (var data in result)
+            IEnumerable<TeamDTO> tDTOList = _teamContext.GetAll();
+            List<Team> teamList = new List<Team>();
+
+            foreach(var tDTO in tDTOList)
             {
-                //recreate DTO
-                Team tm = new Team
+                Team t = new Team
                 {
-                    TeamID = data.TeamID,
-                    TeamName = data.TeamName,
-                    TeamLogo = data.TeamLogo,
-                    TeamCaptainID = data.TeamCaptainID,
-                    TeamDivisionID = data.TeamDivisionID,
-                    TeamMember2ID = data.TeamMember2ID,
-                    TeamMember3ID = data.TeamMember3ID,
-                    TeamMember4ID = data.TeamMember4ID,
-                    TeamMember5ID = data.TeamMember5ID,
+                    TeamID = tDTO.TeamID,
+                    TeamName = tDTO.TeamName,
+                    TeamLogo = tDTO.TeamLogo,
                 };
-                tl.Add(tm);
+
+                teamList.Add(t);
             }
-            return tl;
+
+
+            return teamList;
         }
         public Team GetByID(int id)
         {
-            Team tm = new Team();        
-            var data = _teamRepo.GetByID(id);
-            //recreate DTO
-            tm = new Team {
-                TeamID = data.TeamID,
-                TeamName = data.TeamName,
-                TeamLogo = data.TeamLogo,
-                TeamCaptainID = data.TeamCaptainID,
-                TeamDivisionID = data.TeamDivisionID,
-                TeamMember2ID = data.TeamMember2ID,
-                TeamMember3ID = data.TeamMember3ID,
-                TeamMember4ID = data.TeamMember4ID,
-                TeamMember5ID = data.TeamMember5ID,
+            TeamDTO tDTO = _teamContext.GetByID(id);
+
+            Team t = new Team
+            {
+               TeamID = tDTO.TeamID,
+               TeamName = tDTO.TeamName,
+               TeamLogo = tDTO.TeamLogo,
+
             };
-            return tm;
+
+            return t;
+        }
+
+        public void Remove(Team entity)
+        {
+            TeamDTO tDTO = new TeamDTO
+            {
+                TeamID = entity.TeamID,
+                TeamCaptainID = entity.TeamCaptain.PlayerID,
+                TeamDivisionID = entity.TeamDivision.DivisionID,
+                TeamLogo = entity.TeamLogo,
+                TeamMember2ID = entity.TeamMembers[0].PlayerID,
+                TeamMember3ID = entity.TeamMembers[1].PlayerID,
+                TeamMember4ID = entity.TeamMembers[2].PlayerID,
+                TeamMember5ID = entity.TeamMembers[3].PlayerID,
+            };
+
+            _teamContext.Remove(tDTO);
+        }
+
+        public void GetTeamRecentMatches()
+        {
+
+        }
+
+        public void Update(Team entity)
+        {
+            TeamDTO tDTO = new TeamDTO
+            {
+                TeamID = entity.TeamID,
+                TeamCaptainID = entity.TeamCaptain.PlayerID,
+                TeamDivisionID = entity.TeamDivision.DivisionID,
+                TeamLogo = entity.TeamLogo,
+                TeamMember2ID = entity.TeamMembers[0].PlayerID,
+                TeamMember3ID = entity.TeamMembers[1].PlayerID,
+                TeamMember4ID = entity.TeamMembers[2].PlayerID,
+                TeamMember5ID = entity.TeamMembers[3].PlayerID,
+            };
+
+            _teamContext.Update(tDTO);
         }
     }
 }

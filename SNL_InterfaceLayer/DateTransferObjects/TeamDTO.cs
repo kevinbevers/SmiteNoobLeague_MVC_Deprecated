@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SNL_PersistenceLayer.Entities
+namespace SNL_InterfaceLayer.DateTransferObjects
 {
-    public class TeamEntity
+    public class TeamDTO
     {
         public int TeamID { get; set; }
         public string TeamName { get; set; }
-        public byte[] TeamLogo { get; set; } 
+        public byte[] TeamLogo { get; set; }
         public int TeamDivisionID { get; set; }
         public int TeamCaptainID { get; set; }
         public int TeamMember2ID { get; set; }
