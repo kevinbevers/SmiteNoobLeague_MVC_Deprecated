@@ -24,6 +24,9 @@ namespace SmiteNoobLeague.Controllers
             var TeamCol = _logicFactory.GetTeamCollection();
 
             var t = TeamCol.GetByID(1);
+            var t2 = TeamCol.GetByID(2);
+
+            TeamCol.Remove(t2);
 
             ViewBag.test = t.TeamName;
 

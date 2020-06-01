@@ -17,7 +17,7 @@ namespace SNL_LogicLayer
 
         public TeamCollection GetTeamCollection()
         {
-            return new TeamCollection(new TeamContext(_context));
+            return new TeamCollection(new TeamContext(_context), new PlayerContext(_context));
         }
     }
 }

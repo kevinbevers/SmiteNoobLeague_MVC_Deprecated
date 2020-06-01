@@ -34,16 +34,16 @@ namespace SNL_PersistenceLayer.Contexts
                         {
                             TeamDTO team = new TeamDTO
                             {
-                                TeamID = reader.GetInt16(0),
-                                TeamName = reader.GetString(1),
-                                TeamLogo = (byte[])reader.GetValue(2),
-                                TeamDivisionID = reader.GetInt16(3),
-                                TeamCaptainID = reader.GetInt16(4),
-                                TeamMember2ID = reader.GetInt16(5),
-                                TeamMember3ID = reader.GetInt16(6),
-                                TeamMember4ID = reader.GetInt16(7),
-                                TeamMember5ID = reader.GetInt16(8),
-                            };
+                                TeamID = reader[0] as int? ?? default,
+                                TeamName = reader[1] as string ?? default,
+                                TeamLogo = reader[2] as byte[] ?? default,
+                                TeamDivisionID = reader[3] as int? ?? default,
+                                TeamCaptainID = reader[4] as int? ?? default,
+                                TeamMember2ID = reader[5] as int? ?? default,
+                                TeamMember3ID = reader[6] as int? ?? default,
+                                TeamMember4ID = reader[7] as int? ?? default,
+                                TeamMember5ID = reader[8] as int? ?? default,
+                        };
 
                             list.Add(team);
                         }
@@ -53,7 +53,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
             catch(Exception ex)
             {
-                throw new ContextErrorException("TeamContext.GetAll", ex.InnerException);
+                throw new ContextErrorException("TeamContext.GetAll", ex);
             }
         }
         public TeamDTO GetByID(int id)
@@ -65,60 +65,110 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select * from team where TeamID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("select TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
+                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID from team where TeamID = ?id", conn);
                     cmd.Parameters.AddWithValue("id", id);
-
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            team.TeamID = reader["TeamID"] as int? ?? default;
-                            team.TeamName = reader["TeamName"] as string ?? default;
-                            team.TeamLogo = reader["TeamLogo"] as byte[] ?? default;
-                            team.TeamDivisionID = reader["TeamDivisionID"] as int? ?? default;
+                            team.TeamID = reader[0] as int? ?? default;
+                            team.TeamName = reader[1] as string ?? default;
+                            team.TeamLogo = reader[2] as byte[] ?? default;
+                            team.TeamDivisionID = reader[3] as int? ?? default;
+                            team.TeamCaptainID = reader[4] as int? ?? default;
+                            team.TeamMember2ID = reader[5] as int? ?? default;
+                            team.TeamMember3ID = reader[6] as int? ?? default;
+                            team.TeamMember4ID = reader[7] as int? ?? default;
+                            team.TeamMember5ID = reader[8] as int? ?? default;
                         }
                     }
                 }
                 return team;
             }
+            //exception catch. throw custom exception for logging.
             catch(Exception ex)
             {
-                throw new ContextErrorException("TeamContext.GetByID", ex.InnerException);
+                throw new ContextErrorException("TeamContext.GetByID", ex);
             }
         }
         public void Add(TeamDTO entity)
         {
             try 
             {
-                throw new NotImplementedException();
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO team VALUES(TeamName = ?TeamName,TeamLogo = ?TeamLogo,TeamDivisionID = ?TeamDivisionID,TeamCaptainID = ?TeamCaptainID," +
+                                                        "TeamMember2ID = ?TeamMember2ID,TeamMember3ID = ?TeamMember3ID,TeamMember4ID = ?TeamMember4ID,TeamMember5ID = ?TeamMember5ID)", conn);
+                    //values
+                    cmd.Parameters.AddWithValue("TeamName", entity.TeamName);
+                    cmd.Parameters.AddWithValue("TeamLogo", entity.TeamLogo);
+                    cmd.Parameters.AddWithValue("TeamDivisionID", entity.TeamDivisionID);
+                    cmd.Parameters.AddWithValue("TeamCaptainID", entity.TeamCaptainID);
+                    cmd.Parameters.AddWithValue("TeamMember2ID", entity.TeamMember2ID);
+                    cmd.Parameters.AddWithValue("TeamMember3ID", entity.TeamMember3ID);
+                    cmd.Parameters.AddWithValue("TeamMember4ID", entity.TeamMember4ID);
+                    cmd.Parameters.AddWithValue("TeamMember5ID", entity.TeamMember5ID);
+                    //execute command
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    //should return if a row is affected or not
+                }
             }
             catch(Exception ex)
             {
-                throw new ContextErrorException("TeamContext.Add", ex.InnerException);
+                throw new ContextErrorException("TeamContext.Add", ex);
             }
         }
         public void Remove(TeamDTO entity)
         {
             try
             {
-                throw new NotImplementedException();
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("DELETE FROM team WHERE TeamID = ?id", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("id", entity.TeamID);
+                    //execute command
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    //should return if a row is affected or not
+                }
             }
             catch (Exception ex)
             {
-                throw new ContextErrorException("TeamContext.Add", ex.InnerException);
+                throw new ContextErrorException("TeamContext.Remove", ex);
             }
-            throw new NotImplementedException();
         }
 
         public void Update(TeamDTO entity)
         {
             try
             {
-                throw new NotImplementedException();
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("UPDATE team SET TeamName = ?TeamName,TeamLogo = ?TeamLogo,TeamDivisionID = ?TeamDivisionID,TeamCaptainID = ?TeamCaptainID," +
+                                                        "TeamMember2ID = ?TeamMember2ID,TeamMember3ID = ?TeamMember3ID,TeamMember4ID = ?TeamMember4ID,TeamMember5ID = ?TeamMember5ID WHERE TeamID = ?id", conn);
+                    //where ID
+                    cmd.Parameters.Add(new MySqlParameter("id", entity.TeamID));
+                    //values
+                    cmd.Parameters.AddWithValue("TeamName", entity.TeamName);
+                    cmd.Parameters.AddWithValue("TeamLogo", entity.TeamLogo);
+                    cmd.Parameters.AddWithValue("TeamDivisionID", entity.TeamDivisionID);
+                    cmd.Parameters.AddWithValue("TeamCaptainID", entity.TeamCaptainID);
+                    cmd.Parameters.AddWithValue("TeamMember2ID", entity.TeamMember2ID);
+                    cmd.Parameters.AddWithValue("TeamMember3ID", entity.TeamMember3ID);
+                    cmd.Parameters.AddWithValue("TeamMember4ID", entity.TeamMember4ID);
+                    cmd.Parameters.AddWithValue("TeamMember5ID", entity.TeamMember5ID);
+                    //execute command
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    //should return if a row is affected or not
+                }
             }
             catch (Exception ex)
             {
-                throw new ContextErrorException("TeamContext.Add", ex.InnerException);
+                throw new ContextErrorException("TeamContext.Update", ex);
             }
         }
     }

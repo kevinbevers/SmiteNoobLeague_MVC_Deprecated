@@ -11,8 +11,8 @@ namespace SNL_InterfaceLayer.CustomExceptions
 
         }
 
-        public ContextErrorException(string contextName, Exception inner)
-            : base(String.Format("Something went wrong in the ", contextName, inner))
+        public ContextErrorException(string contextName, Exception ex)
+            : base(String.Format($"Something went wrong in the {contextName}. \n{ex.Message} \n{ex.StackTrace}"))
         {
 
         }
