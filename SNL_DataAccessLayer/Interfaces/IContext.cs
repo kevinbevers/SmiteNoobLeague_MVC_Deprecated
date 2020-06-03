@@ -7,10 +7,10 @@ namespace SNL_PersistenceLayer.Interfaces
 {
     public interface IContext<TEntity> where TEntity : class
     {
-        TEntity GetByID(int id);
-        IEnumerable<TEntity> GetAll();
         void Add(TEntity entity);
-        void Remove(TEntity entity);
+        TEntity GetByID(int? id);
+        IEnumerable<TEntity> GetAll();
         void Update(TEntity entity);
+        void Remove(TEntity entity);
     }
 }

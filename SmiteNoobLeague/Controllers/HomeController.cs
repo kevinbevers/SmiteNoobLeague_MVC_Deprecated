@@ -26,7 +26,10 @@ namespace SmiteNoobLeague.Controllers
             var t = TeamCol.GetByID(1);
             var t2 = TeamCol.GetByID(2);
 
-            TeamCol.Remove(t2);
+            t2.TeamName = "This is a new name";
+
+            TeamCol.Update(t2);
+            
 
             ViewBag.test = t.TeamName;
 

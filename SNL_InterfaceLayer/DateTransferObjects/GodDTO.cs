@@ -6,7 +6,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
 {
     public class GodDTO
     {
-        public int GodID { get; set; }
+        public int? GodID { get; set; }
         public string GodName { get; set; }
         public byte[] GodIcon { get; set; }
         public byte[] GodCardArt { get; set; }

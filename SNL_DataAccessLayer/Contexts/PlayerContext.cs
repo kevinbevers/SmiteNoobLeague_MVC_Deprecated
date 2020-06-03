@@ -16,6 +16,7 @@ namespace SNL_PersistenceLayer.Contexts
             _con = con;
         }
 
+        //Create
         public void Add(PlayerDTO entity)
         {
             try
@@ -26,11 +27,11 @@ namespace SNL_PersistenceLayer.Contexts
                     MySqlCommand cmd = new MySqlCommand("INSERT INTO player VALUES(PlayerID = ?PlayerID, PlayerName = ?PlayerName, PlayerPlatformID = ?PlayerPlatformID," +
                                                         "PlayerRoleID = ?PlayerRoleID, PlayerTeamID = ?PlayerTeamID)", conn);
                     //values
-                    cmd.Parameters.AddWithValue("PlayerID", entity.PlayerID);
-                    cmd.Parameters.AddWithValue("PlayerName", entity.PlayerName);
-                    cmd.Parameters.AddWithValue("PlayerPlatformID", entity.PlayerPlatformID);
-                    cmd.Parameters.AddWithValue("PlayerRoleID", entity.PlayerRoleID);
-                    cmd.Parameters.AddWithValue("PlayerTeamID", entity.PlayerTeamID);
+                    cmd.Parameters.AddWithValue("PlayerID", entity.PlayerID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerName", entity.PlayerName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerPlatformID", entity.PlayerPlatformID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerRoleID", entity.PlayerRoleID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerTeamID", entity.PlayerTeamID ?? (object)DBNull.Value);
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
@@ -38,10 +39,41 @@ namespace SNL_PersistenceLayer.Contexts
             }
             catch (Exception ex)
             {
-                throw new ContextErrorException("PlayerContext.Add", ex);
+                throw new ContextErrorException(ex);
             }
         }
+        //Read
+        public PlayerDTO GetByID(int? id)
+        {
+            try
+            {
+                PlayerDTO player = new PlayerDTO();
 
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select PlayerID,PlayerName,PlayerTeamID,PlayerRoleID,PlayerPlatformID from player where PlayerID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            player.PlayerID = reader[0] as int? ?? default;
+                            player.PlayerName = reader[1] as string ?? default;
+                            player.PlayerTeamID = reader[2] as int? ?? default;
+                            player.PlayerRoleID = reader[3] as int? ?? default;
+                            player.PlayerPlatformID = reader[4] as int? ?? default;
+                        }
+                    }
+                }
+                return player;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
         public IEnumerable<PlayerDTO> GetAll()
         {
             try
@@ -73,42 +105,37 @@ namespace SNL_PersistenceLayer.Contexts
             }
             catch (Exception ex)
             {
-                throw new ContextErrorException("PlayerContext.GetAll", ex);
+                throw new ContextErrorException(ex);
             }
         }
-
-        public PlayerDTO GetByID(int id)
+        //Update
+        public void Update(PlayerDTO entity)
         {
             try
             {
-                PlayerDTO player = new PlayerDTO();
-
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select PlayerID,PlayerName,PlayerTeamID,PlayerRoleID,PlayerPlatformID from player where PlayerID = ?id", conn);
-                    cmd.Parameters.AddWithValue("id", id);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            player.PlayerID = reader[0] as int? ?? default;
-                            player.PlayerName = reader[1] as string ?? default;
-                            player.PlayerTeamID = reader[2] as int? ?? default;
-                            player.PlayerRoleID = reader[3] as int? ?? default;
-                            player.PlayerPlatformID = reader[4] as int? ?? default;
-                        }
-                    }
+                    MySqlCommand cmd = new MySqlCommand("UPDATE player SET(PlayerName = ?PlayerName, PlayerPlatformID = ?PlayerPlatformID," +
+                                                        "PlayerRoleID = ?PlayerRoleID, PlayerTeamID = ?PlayerTeamID) WHERE PlayerID = ?id", conn);
+                    //where id is
+                    cmd.Parameters.AddWithValue("id", entity.PlayerID);
+                    //values
+                    cmd.Parameters.AddWithValue("PlayerName", entity.PlayerName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerPlatformID", entity.PlayerPlatformID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerRoleID", entity.PlayerRoleID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerTeamID", entity.PlayerTeamID ?? (object)DBNull.Value);
+                    //execute command
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    //should return if a row is affected or not
                 }
-                return player;
             }
             catch (Exception ex)
             {
-                throw new ContextErrorException("PlayerContext.GetByID", ex);
+                throw new ContextErrorException(ex);
             }
         }
-
+        //Delete
         public void Remove(PlayerDTO entity)
         {
             try
@@ -126,34 +153,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
             catch (Exception ex)
             {
-                throw new ContextErrorException("PlayerContext.Remove", ex);
-            }
-        }
-
-        public void Update(PlayerDTO entity)
-        {
-            try
-            {
-                using (MySqlConnection conn = _con.GetConnection())
-                {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE player SET(PlayerName = ?PlayerName, PlayerPlatformID = ?PlayerPlatformID," +
-                                                        "PlayerRoleID = ?PlayerRoleID, PlayerTeamID = ?PlayerTeamID) WHERE PlayerID = ?id", conn);
-                    //where id is
-                    cmd.Parameters.AddWithValue("id", entity.PlayerID);
-                    //values
-                    cmd.Parameters.AddWithValue("PlayerName", entity.PlayerName);
-                    cmd.Parameters.AddWithValue("PlayerPlatformID", entity.PlayerPlatformID);
-                    cmd.Parameters.AddWithValue("PlayerRoleID", entity.PlayerRoleID);
-                    cmd.Parameters.AddWithValue("PlayerTeamID", entity.PlayerTeamID);
-                    //execute command
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    //should return if a row is affected or not
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ContextErrorException("PlayerContext.Update", ex);
+                throw new ContextErrorException(ex);
             }
         }
     }

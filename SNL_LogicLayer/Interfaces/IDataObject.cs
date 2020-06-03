@@ -7,10 +7,10 @@ namespace SNL_LogicLayer.Interfaces
 { 
     interface IDataObject<TEntity> where TEntity : class
     {
+        void Add(TEntity entity);
         TEntity GetByID(int id);
         IEnumerable<TEntity> GetAll();
-        void Add(TEntity entity);
-        void Remove(TEntity entity);
         void Update(TEntity entity);
+        void Remove(TEntity entity);
     }
 }

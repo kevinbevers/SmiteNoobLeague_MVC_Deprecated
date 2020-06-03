@@ -22,6 +22,7 @@ namespace SNL_LogicLayer.Collection
             _playerContext = playerContext;
         }
 
+        //CRUD
         public void Add(Team entity)
         {
             TeamDTO tDTO = new TeamDTO
@@ -81,46 +82,33 @@ namespace SNL_LogicLayer.Collection
 
             Team t = new Team
             {
-               TeamID = tDTO.TeamID,
-               TeamName = tDTO.TeamName,
-               TeamLogo = tDTO.TeamLogo,
-               TeamCaptain = new Player {PlayerID = CaptainDTO.PlayerID, PlayerName = CaptainDTO.PlayerName},
-               TeamMembers = teamMembers,
+                TeamID = tDTO.TeamID,
+                TeamName = tDTO.TeamName,
+                TeamLogo = tDTO.TeamLogo,
+                TeamCaptain = new Player { PlayerID = CaptainDTO.PlayerID, PlayerName = CaptainDTO.PlayerName },
+                TeamMembers = teamMembers,
+                TeamDivision = new Division(),
             };
 
             return t;
         }
-
         public void Remove(Team entity)
         {
             //only need primary key id to remove
             TeamDTO tDTO = new TeamDTO
             {
                 TeamID = entity.TeamID,
-                //TeamCaptainID = entity.TeamCaptain.PlayerID,
-                //TeamDivisionID = entity.TeamDivision.DivisionID,
-                //TeamLogo = entity.TeamLogo,
-                //TeamMember2ID = entity.TeamMembers[0].PlayerID,
-                //TeamMember3ID = entity.TeamMembers[1].PlayerID,
-                //TeamMember4ID = entity.TeamMembers[2].PlayerID,
-                //TeamMember5ID = entity.TeamMembers[3].PlayerID,
             };
 
             _teamContext.Remove(tDTO);
         }
-
-        public void GetTeamRecentMatches()
-        {
-
-        }
-
         public void Update(Team entity)
         {
             TeamDTO tDTO = new TeamDTO
             {
                 TeamID = entity.TeamID as int ? ?? default,
                 TeamName = entity.TeamName as string ?? default,
-                TeamCaptainID = entity.TeamCaptain.PlayerID as int? ?? default,
+                TeamCaptainID = entity.TeamCaptain.PlayerID,
                 TeamDivisionID = entity.TeamDivision.DivisionID as int? ?? default,
                 TeamLogo = entity.TeamLogo as byte[] ?? default,
                 TeamMember2ID = entity.TeamMembers[0].PlayerID as int? ?? default,
@@ -130,6 +118,11 @@ namespace SNL_LogicLayer.Collection
             };
 
             _teamContext.Update(tDTO);
+        }
+        //Extra business logic
+        public void GetTeamRecentMatches()
+        {
+
         }
     }
 }

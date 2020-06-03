@@ -6,7 +6,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
 {
     public class RoleDTO
     {
-        public int RoleID { get; set; }
+        public int? RoleID { get; set; }
         public string RoleName { get; set; }
         public string RoleDescription { get; set; }
     }

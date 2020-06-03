@@ -6,7 +6,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
 {
     public class ItemDTO
     {
-        public int ItemID { get; set; }
+        public int? ItemID { get; set; }
         public string ItemName { get; set; }
         public byte[] ItemIcon { get; set; }
         public string ItemDescription {get; set;}
