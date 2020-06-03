@@ -24,10 +24,9 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO player VALUES(AccountID = ?AccountID, AccountName = ?AccountName, AccountEmail = ?AccountEmail," +
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO player VALUES(AccountName = ?AccountName, AccountEmail = ?AccountEmail," +
                                                         "AccountPassword = ?AccountPassword, PlayerID = ?PlayerID)", conn);
                     //values
-                    cmd.Parameters.AddWithValue("AccountID", entity.AccountID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("AccountName", entity.AccountName ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("AccountEmail", entity.AccountEmail ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("AccountPassword", entity.AccountPassword ?? (object)DBNull.Value);
@@ -52,7 +51,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select AccountID,AccountName,AccountEmail,AccountPassword,PlayerID from account", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT AccountID,AccountName,AccountEmail,AccountPassword,PlayerID FROM account", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -86,7 +85,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select AccountID,AccountName,AccountEmail,AccountPassword,PlayerID from account where AccountID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT AccountID,AccountName,AccountEmail,AccountPassword,PlayerID FROM account WHERE AccountID = ?id", conn);
                     cmd.Parameters.AddWithValue("id", id);
 
                     using (var reader = cmd.ExecuteReader())

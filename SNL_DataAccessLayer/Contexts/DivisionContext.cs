@@ -23,15 +23,17 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO player VALUES(DivisionID = ?DivisionID, DivisionName = ?DivisionName, " +
-                        "DivisionDescription = ?DivisionDescription,)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO division VALUES(DivisionName = ?DivisionName, " +
+                        "DivisionDescription = ?DivisionDescription)", conn);
                     //values
-                    cmd.Parameters.AddWithValue("DivisionID", entity.DivisionID ?? (object)DBNull.Value);
+                    //cmd.Parameters.AddWithValue("DivisionID", entity.DivisionID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DivisionName", entity.DivisionName ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DivisionDescription", entity.DivisionDescription ?? (object)DBNull.Value);
-                    //cmd.Parameters.AddWithValue("DivisionTeams", entity.DivisionTeams ?? (object)DBNull.Value);
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
+
+                    AddTeamsToDivision(entity, conn);
+
                     //should return if a row is affected or not
                 }
             }
@@ -50,7 +52,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select DivisionID,DivisionName,DivisionDescription from division", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT DivisionID,DivisionName,DivisionDescription FROM division", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -82,7 +84,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select DivisionID,DivisionName,DivisionDescription from division where DivisionID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT DivisionID,DivisionName,DivisionDescription FROM division WHERE DivisionID = ?id", conn);
                     cmd.Parameters.AddWithValue("id", id);
 
                     using (var reader = cmd.ExecuteReader())
@@ -94,7 +96,34 @@ namespace SNL_PersistenceLayer.Contexts
                             division.DivisionDescription = reader[2] as string ?? default;
                         }
                     }
+                    //get the teams that are in the division and add them in a list
+                    MySqlCommand GetDivisionTeamsCmd = new MySqlCommand("SELECT TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
+                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID FROM team WHERE TeamDivisionID = ?id", conn);
+                    GetDivisionTeamsCmd.Parameters.AddWithValue("id", id);
+                    List<TeamDTO> teamList = new List<TeamDTO>();
+
+                    using (var reader = GetDivisionTeamsCmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            teamList.Add(
+                                new TeamDTO
+                                {
+                                    TeamID = reader[0] as int? ?? default,
+                                    TeamName = reader[1] as string ?? default,
+                                    TeamLogo = reader[2] as byte[] ?? default,
+                                    TeamDivisionID = reader[3] as int? ?? default,
+                                    TeamCaptainID = reader[4] as int? ?? default,
+                                    TeamMember2ID = reader[5] as int? ?? default,
+                                    TeamMember3ID = reader[6] as int? ?? default,
+                                    TeamMember4ID = reader[7] as int? ?? default,
+                                    TeamMember5ID = reader[8] as int? ?? default,
+                                });
+                        }
+                    }
+                    division.DivisionTeams = teamList;
                 }
+
                 return division;
             }
             catch (Exception ex)
@@ -147,6 +176,23 @@ namespace SNL_PersistenceLayer.Contexts
             {
                 throw new ContextErrorException(ex);
             }
+        }
+        //Methods for division teams
+        private static void AddTeamsToDivision(DivisionDTO entity, MySqlConnection conn)
+        {
+            //build a string with all the values in it. no mysql.escapestring needed because integers cannot be used for SQL injection
+            StringBuilder sCommand = new StringBuilder("INSERT INTO divisionteam (DivisionID, TeamID) VALUES ");
+
+            List<string> Rows = new List<string>();
+            foreach (var team in entity.DivisionTeams)
+            {
+                Rows.Add(string.Format("('{0}','{1}')", entity.DivisionID, team.TeamID));
+            }
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(";");
+
+            MySqlCommand addTeamsToDivisionCmd = new MySqlCommand(sCommand.ToString(), conn);
+            addTeamsToDivisionCmd.ExecuteNonQuery();
         }
     }
 }

@@ -57,8 +57,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
-                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID from team where TeamID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
+                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID FROM team WHERE TeamID = ?id", conn);
                     cmd.Parameters.AddWithValue("id", id);
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -93,8 +93,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
-                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID  from teams", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
+                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID  FROM teams", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
