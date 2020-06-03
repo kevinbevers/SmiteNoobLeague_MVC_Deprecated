@@ -5,6 +5,7 @@ using System.Text;
 using SNL_PersistenceLayer.Interfaces;
 using SNL_InterfaceLayer.DateTransferObjects;
 using SNL_InterfaceLayer.CustomExceptions;
+using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {

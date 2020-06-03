@@ -5,6 +5,7 @@ using SNL_PersistenceLayer.Interfaces;
 using SNL_InterfaceLayer.CustomExceptions;
 using SNL_InterfaceLayer.DateTransferObjects;
 using MySql.Data.MySqlClient;
+using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
