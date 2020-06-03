@@ -16,6 +16,7 @@ namespace SNL_PersistenceLayer.Contexts
             _con = con;
         }
 
+        //Create
         public void Add(AccountDTO entity)
         {
             try
@@ -41,7 +42,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-
+        //Read
         public IEnumerable<AccountDTO> GetAll()
         {
             try
@@ -76,7 +77,6 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-
         public AccountDTO GetByID(int? id)
         {
             try
@@ -108,28 +108,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-
-        public void Remove(AccountDTO entity)
-        {
-            try
-            {
-                using (MySqlConnection conn = _con.GetConnection())
-                {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("DELETE FROM account WHERE AccountID = ?id", conn);
-                    //where id =
-                    cmd.Parameters.AddWithValue("id", entity.AccountID);
-                    //execute command
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    //should return if a row is affected or not
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ContextErrorException(ex);
-            }
-        }
-
+        //Update
         public void Update(AccountDTO entity)
         {
             try
@@ -146,6 +125,27 @@ namespace SNL_PersistenceLayer.Contexts
                     cmd.Parameters.AddWithValue("AccountEmail", entity.AccountEmail ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("AccountPassword", entity.AccountPassword ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("PlayerID", entity.PlayerID ?? (object)DBNull.Value);
+                    //execute command
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    //should return if a row is affected or not
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
+        //Delete
+        public void Remove(AccountDTO entity)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("DELETE FROM account WHERE AccountID = ?id", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("id", entity.AccountID);
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
