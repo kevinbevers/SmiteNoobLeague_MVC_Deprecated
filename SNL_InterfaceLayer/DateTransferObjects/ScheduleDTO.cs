@@ -9,6 +9,6 @@ namespace SNL_InterfaceLayer.DateTransferObjects
         public int? ScheduleID { get; set; }
         public string ScheduleName { get; set; }
         public int? DivisionID { get; set; }
-        public IEnumerable<ScheduleDetailDTO> scheduleDetailsList { get; set; }
+        public IEnumerable<ScheduleDetailDTO> ScheduleDetailsList { get; set; }
     }
 }

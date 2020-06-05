@@ -22,7 +22,7 @@ namespace SNL_PersistenceLayer.Contexts
         {
             try
             {
-                List<GodDTO> GodBanList = entity.GodBanList.ToList();
+                List<int?> GodBanList = entity.GodIDBanList.ToList();
 
                 using (MySqlConnection conn = _con.GetConnection())
                 {
@@ -85,18 +85,18 @@ namespace SNL_PersistenceLayer.Contexts
                                 WinningTeamID = reader[5] as int? ?? default,
                                 HomeTeamID = reader[6] as int? ?? default,
                                 AwayTeamID = reader[7] as int? ?? default,
-                                GodBanList = new List<GodDTO>
+                                GodIDBanList = new List<int?>
                                         {
-                                            new GodDTO {GodID = reader[8] as int? ?? default },
-                                            new GodDTO {GodID = reader[9] as int? ?? default },
-                                            new GodDTO {GodID = reader[10] as int? ?? default },
-                                            new GodDTO {GodID = reader[11] as int? ?? default },
-                                            new GodDTO {GodID = reader[12] as int? ?? default },
-                                            new GodDTO {GodID = reader[13] as int? ?? default },
-                                            new GodDTO {GodID = reader[14] as int? ?? default },
-                                            new GodDTO {GodID = reader[15] as int? ?? default },
-                                            new GodDTO {GodID = reader[16] as int? ?? default },
-                                            new GodDTO {GodID = reader[17] as int? ?? default },
+                                            reader[8] as int? ?? default,
+                                            reader[9] as int? ?? default,
+                                            reader[10] as int? ?? default,
+                                            reader[11] as int? ?? default,
+                                            reader[12] as int? ?? default,
+                                            reader[13] as int? ?? default,
+                                            reader[14] as int? ?? default,
+                                            reader[15] as int? ?? default,
+                                            reader[16] as int? ?? default,
+                                            reader[17] as int? ?? default,
                                         },
                         };
                             matchList.Add(match);
@@ -135,18 +135,18 @@ namespace SNL_PersistenceLayer.Contexts
                             match.WinningTeamID = reader[5] as int? ?? default;
                             match.HomeTeamID = reader[6] as int? ?? default;
                             match.AwayTeamID = reader[7] as int? ?? default;
-                            match.GodBanList = new List<GodDTO>
+                            match.GodIDBanList = new List<int?>
                             {
-                                new GodDTO {GodID = reader[8] as int? ?? default },
-                                new GodDTO {GodID = reader[9] as int? ?? default },
-                                new GodDTO {GodID = reader[10] as int? ?? default },
-                                new GodDTO {GodID = reader[11] as int? ?? default },
-                                new GodDTO {GodID = reader[12] as int? ?? default },
-                                new GodDTO {GodID = reader[13] as int? ?? default },
-                                new GodDTO {GodID = reader[14] as int? ?? default },
-                                new GodDTO {GodID = reader[15] as int? ?? default },
-                                new GodDTO {GodID = reader[16] as int? ?? default },
-                                new GodDTO {GodID = reader[17] as int? ?? default },
+                                reader[8] as int? ?? default,
+                                reader[9] as int? ?? default,
+                                reader[10] as int? ?? default,
+                                reader[11] as int? ?? default,
+                                reader[12] as int? ?? default,
+                                reader[13] as int? ?? default,
+                                reader[14] as int? ?? default,
+                                reader[15] as int? ?? default,
+                                reader[16] as int? ?? default,
+                                reader[17] as int? ?? default,
                             };
                         }
                     }
@@ -163,7 +163,7 @@ namespace SNL_PersistenceLayer.Contexts
         {
             try
             {
-                List<GodDTO> GodBanList = entity.GodBanList.ToList();
+                List<int?> GodBanList = entity.GodIDBanList.ToList();
 
                 using (MySqlConnection conn = _con.GetConnection())
                 {

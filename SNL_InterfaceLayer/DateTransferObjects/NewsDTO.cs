@@ -9,7 +9,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
         public int? NewsID { get; set; }
         public string NewsTitle { get; set; }
         public string NewsSubject { get; set; }
-        public DateTime NewsDate { get; set; }
+        public DateTime? NewsDate { get; set; }
         public string NewsArticle { get; set; }
     }
 }

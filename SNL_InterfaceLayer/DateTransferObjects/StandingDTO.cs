@@ -8,7 +8,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
     {
         public int? StandingID { get; set; }
         public int? DivisionID { get; set; }
-        public TeamDTO Team { get; set; }
+        public int? TeamID { get; set; }
         public int? Score { get; set; }
     }
 }

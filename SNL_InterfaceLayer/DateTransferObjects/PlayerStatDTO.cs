@@ -10,7 +10,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
         public int? PlayerID { get; set; }
         public int? TeamID { get; set; }
         public int? MatchID { get; set; }
-        public int? GodPlayerID { get; set; }
+        public int? GodPlayedID { get; set; }
         public int PlayerLevel { get; set; }
         public int PlayerKills { get; set; }
         public int PlayerDeaths { get; set; }

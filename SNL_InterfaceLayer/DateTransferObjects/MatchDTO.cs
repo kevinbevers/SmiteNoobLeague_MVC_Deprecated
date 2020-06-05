@@ -11,9 +11,9 @@ namespace SNL_InterfaceLayer.DateTransferObjects
         public int? HomeTeamID { get; set; }
         public int? AwayTeamID { get; set; }
         public int? WinningTeamID { get; set; }
-        public double MatchLength { get; set; }
-        public DateTime MatchDate { get; set; }
+        public double? MatchLength { get; set; }
+        public DateTime? MatchDate { get; set; }
         public string PatchNumber { get; set; }
-        public IEnumerable<GodDTO> GodBanList { get; set; }
+        public IEnumerable<int?> GodIDBanList { get; set; }
     }
 }
