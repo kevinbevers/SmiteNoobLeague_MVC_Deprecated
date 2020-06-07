@@ -34,7 +34,8 @@ namespace SNL_PersistenceLayer.Contexts
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
 
-                //add multiple scheduleDetails
+                    //add multiple scheduleDetails
+                    AddScheduleDetails(entity, conn);
                 }
             }
             catch (Exception ex)
@@ -64,6 +65,8 @@ namespace SNL_PersistenceLayer.Contexts
                                 DivisionID = reader[1] as int? ?? default,
                                 ScheduleName = reader[2] as string ?? default,
                             };
+                            GetScheduleDetails(schedule.ScheduleID, schedule, conn);
+
                             scheduleList.Add(schedule);
                         }
                     }
@@ -99,6 +102,7 @@ namespace SNL_PersistenceLayer.Contexts
                     }
 
                     //get scheduleDetails
+                    GetScheduleDetails(id, schedule, conn);
 
                 }
                 return schedule;
@@ -155,6 +159,46 @@ namespace SNL_PersistenceLayer.Contexts
             {
                 throw new ContextErrorException(ex);
             }
+        }
+
+        private static void GetScheduleDetails(int? id, ScheduleDTO schedule, MySqlConnection conn)
+        {
+            MySqlCommand detailCmd = new MySqlCommand("SELECT ScheduleDetailsID,ScheduleID,HomeTeamID,AwayTeamID,WeekNumber,MatchNumber FROM scheduledetails WHERE ScheduleID = ?id", conn);
+            detailCmd.Parameters.AddWithValue("id", id);
+            using (var reader = detailCmd.ExecuteReader())
+            {
+                List<ScheduleDetailDTO> detailList = new List<ScheduleDetailDTO>();
+
+                while (reader.Read())
+                {
+                    detailList.Add(new ScheduleDetailDTO
+                    {
+                        ScheduleDetailsID = reader[0] as int? ?? default,
+                        ScheduleID = reader[1] as int? ?? default,
+                        HomeTeamID = reader[2] as int? ?? default,
+                        AwayTeamID = reader[3] as int? ?? default,
+                        WeekNumber = reader[4] as int? ?? default,
+                        MatchNumber = reader[5] as int? ?? default,
+                    });
+                }
+                schedule.ScheduleDetailsList = detailList;
+            }
+        }
+        private static void AddScheduleDetails(ScheduleDTO entity, MySqlConnection conn)
+        {
+            //build a string with all the values in it. no mysql.escapestring needed because integers cannot be used for SQL injection
+            StringBuilder sCommand = new StringBuilder("INSERT INTO scheduledetails (ScheduleID, HomeTeamID,AwayTeamID,MatchNumber,WeekNumber) VALUES ");
+
+            List<string> Rows = new List<string>();
+            foreach (var detail in entity.ScheduleDetailsList)
+            {
+                Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}')", detail.ScheduleID, detail.HomeTeamID, detail.AwayTeamID, detail.MatchNumber, detail.WeekNumber));
+            }
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(";");
+
+            MySqlCommand addTeamsToDivisionCmd = new MySqlCommand(sCommand.ToString(), conn);
+            addTeamsToDivisionCmd.ExecuteNonQuery();
         }
     }
 }

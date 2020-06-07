@@ -95,34 +95,22 @@ namespace SNL_PersistenceLayer.Contexts
                             division.DivisionID = reader[0] as int? ?? default;
                             division.DivisionName = reader[1] as string ?? default;
                             division.DivisionDescription = reader[2] as string ?? default;
+
                         }
                     }
                     //get the teams that are in the division and add them in a list
-                    MySqlCommand GetDivisionTeamsCmd = new MySqlCommand("SELECT TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
-                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID FROM team WHERE TeamDivisionID = ?id", conn);
+                    MySqlCommand GetDivisionTeamsCmd = new MySqlCommand("SELECT TeamID FROM divisionteam WHERE TeamDivisionID = ?id", conn);
                     GetDivisionTeamsCmd.Parameters.AddWithValue("id", id);
-                    List<TeamDTO> teamList = new List<TeamDTO>();
+                    List<int?> teamList = new List<int?>();
 
                     using (var reader = GetDivisionTeamsCmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            teamList.Add(
-                                new TeamDTO
-                                {
-                                    TeamID = reader[0] as int? ?? default,
-                                    TeamName = reader[1] as string ?? default,
-                                    TeamLogo = reader[2] as byte[] ?? default,
-                                    TeamDivisionID = reader[3] as int? ?? default,
-                                    TeamCaptainID = reader[4] as int? ?? default,
-                                    TeamMember2ID = reader[5] as int? ?? default,
-                                    TeamMember3ID = reader[6] as int? ?? default,
-                                    TeamMember4ID = reader[7] as int? ?? default,
-                                    TeamMember5ID = reader[8] as int? ?? default,
-                                });
+                            teamList.Add(reader[0] as int? ?? default);
                         }
                     }
-                    division.DivisionTeams = teamList;
+                    division.DivisionTeamIDs = teamList;
                 }
 
                 return division;
@@ -185,9 +173,9 @@ namespace SNL_PersistenceLayer.Contexts
             StringBuilder sCommand = new StringBuilder("INSERT INTO divisionteam (DivisionID, TeamID) VALUES ");
 
             List<string> Rows = new List<string>();
-            foreach (var team in entity.DivisionTeams)
+            foreach (var team in entity.DivisionTeamIDs)
             {
-                Rows.Add(string.Format("('{0}','{1}')", entity.DivisionID, team.TeamID));
+                Rows.Add(string.Format("('{0}','{1}')", entity.DivisionID, team));
             }
             sCommand.Append(string.Join(",", Rows));
             sCommand.Append(";");
