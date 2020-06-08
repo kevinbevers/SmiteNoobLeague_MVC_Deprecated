@@ -125,6 +125,47 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        public IEnumerable<TeamDTO> GetByDivisionID(int? id)
+        {
+            try
+            {
+                List<TeamDTO> list = new List<TeamDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
+                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID  FROM teams WHERE DivisionID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TeamDTO team = new TeamDTO
+                            {
+                                TeamID = reader[0] as int? ?? default,
+                                TeamName = reader[1] as string ?? default,
+                                TeamLogo = reader[2] as byte[] ?? default,
+                                TeamDivisionID = reader[3] as int? ?? default,
+                                TeamCaptainID = reader[4] as int? ?? default,
+                                TeamMember2ID = reader[5] as int? ?? default,
+                                TeamMember3ID = reader[6] as int? ?? default,
+                                TeamMember4ID = reader[7] as int? ?? default,
+                                TeamMember5ID = reader[8] as int? ?? default,
+                            };
+
+                            list.Add(team);
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
         //Update
         public void Update(TeamDTO entity)
         {

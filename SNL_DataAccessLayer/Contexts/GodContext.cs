@@ -45,6 +45,33 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        public void AddMultiple(IEnumerable<GodDTO> entityList)
+        {
+            //build a string with all the values in it. no mysql.escapestring needed because integers cannot be used for SQL injection
+            StringBuilder sCommand = new StringBuilder("INSERT INTO god (GodID,GodName,GodTitle,GodLore,GodClass,GodIcon,GodCardArt) VALUES ");
+
+            List<string> Rows = new List<string>();
+            foreach (var entity in entityList)
+            {
+                Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}','{5}','{6}')", 
+                    entity.GodID,
+                    entity.GodName ?? (object)DBNull.Value,
+                    entity.GodTitle ?? (object)DBNull.Value,
+                    entity.GodLore ?? (object)DBNull.Value,
+                    entity.GodClass ?? (object)DBNull.Value,
+                    entity.GodIcon ?? (object)DBNull.Value,
+                    entity.GodCardArt ?? (object)DBNull.Value));
+            }
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(";");
+
+            using (MySqlConnection conn = _con.GetConnection())
+            {
+                conn.Open();
+                MySqlCommand addMultipleCMD = new MySqlCommand(sCommand.ToString(), conn);
+                addMultipleCMD.ExecuteNonQuery();
+            }
+        }
         //Read
         public IEnumerable<GodDTO> GetAll()
         {

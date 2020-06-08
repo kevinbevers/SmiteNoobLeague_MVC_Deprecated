@@ -43,6 +43,32 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        public void AddMultiple(List<PlayerDTO> entityList)
+        {
+            //build a string with all the values in it.
+            StringBuilder sCommand = new StringBuilder("INSERT INTO player (PlayerID, PlayerName, PlayerPlatformID," +
+                                                        "PlayerRoleID, PlayerTeamID) VALUES ");
+
+            List<string> Rows = new List<string>();
+            foreach (var entity in entityList)
+            {
+                Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}')",
+                    entity.PlayerID,
+                    entity.PlayerName ?? (object)DBNull.Value,
+                    entity.PlayerPlatformID ?? (object)DBNull.Value,
+                    entity.PlayerRoleID ?? (object)DBNull.Value,
+                    entity.PlayerTeamID ?? (object)DBNull.Value));
+            }
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(";");
+
+            using (MySqlConnection conn = _con.GetConnection())
+            {
+                conn.Open();
+                MySqlCommand addMultipleCMD = new MySqlCommand(sCommand.ToString(), conn);
+                addMultipleCMD.ExecuteNonQuery();
+            }
+        }
         //Read
         public PlayerDTO GetByID(int? id)
         {

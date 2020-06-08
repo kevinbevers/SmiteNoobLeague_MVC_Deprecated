@@ -112,6 +112,43 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        public IEnumerable<ScheduleDTO> GetByDivisionID(int? id)
+        {
+            try
+            {
+                List<ScheduleDTO> scheduleList = new List<ScheduleDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    //join statement for scheduleDetails
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT ScheduleID,DivisionID,ScheduleName FROM schedule WHERE DivisionID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ScheduleDTO schedule = new ScheduleDTO
+                            {
+                                ScheduleID = reader[0] as int? ?? default,
+                                DivisionID = reader[1] as int? ?? default,
+                                ScheduleName = reader[2] as string ?? default,
+                            };
+                            //get scheduleDetails
+                            schedule.ScheduleDetailsList = GetScheduleDetails(id, conn);
+                            scheduleList.Add(schedule);
+                        }
+                    }
+
+                }
+                return scheduleList;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
         //Update
         public void Update(ScheduleDTO entity)
         {

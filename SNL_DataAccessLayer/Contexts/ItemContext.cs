@@ -51,6 +51,39 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        public void AddMultiple(List<ItemDTO> entityList)
+        {
+            //build a string with all the values in it.
+            StringBuilder sCommand = new StringBuilder("INSERT INTO item (ItemID,ItemName,ItemIcon,ItemDescription," +
+                                                        "ItemShortDescription,ItemPrice,ItemStat1,ItemStat2,ItemStat3,ItemStat4) VALUES ");
+
+            List<string> Rows = new List<string>();
+            foreach (var entity in entityList)
+            {
+                List<string> ItemStats = entity.ItemStats.ToList();
+
+                Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')", 
+                    entity.ItemID,
+                    entity.ItemName ?? (object)DBNull.Value,
+                    entity.ItemIcon ?? (object)DBNull.Value, 
+                    entity.ItemDescription ?? (object)DBNull.Value,
+                    entity.ItemShortDescription ?? (object)DBNull.Value,
+                    entity.ItemPrice ?? (object)DBNull.Value,
+                    ItemStats[0] ?? (object)DBNull.Value,
+                    ItemStats[1] ?? (object)DBNull.Value,
+                    ItemStats[2] ?? (object)DBNull.Value,
+                    ItemStats[3] ?? (object)DBNull.Value));
+            }
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(";");
+
+            using (MySqlConnection conn = _con.GetConnection())
+            {
+                conn.Open();
+                MySqlCommand addMultipleCMD = new MySqlCommand(sCommand.ToString(), conn);
+                addMultipleCMD.ExecuteNonQuery();
+            }
+        }
         //Read
         public IEnumerable<ItemDTO> GetAll()
         {

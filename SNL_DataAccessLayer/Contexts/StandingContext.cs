@@ -104,6 +104,74 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        public IEnumerable<StandingDTO> GetByDivisionID(int? id)
+        {
+            try
+            {
+                List<StandingDTO> standingList = new List<StandingDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT StandingID,DivisionID,TeamID,Score FROM standing WHERE DivisionID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            StandingDTO standing = new StandingDTO
+                            {
+                                StandingID = reader[0] as int? ?? default,
+                                DivisionID = reader[1] as int? ?? default,
+                                TeamID = reader[2] as int? ?? default,
+                                Score = reader[3] as int? ?? default,
+                            };
+                            standingList.Add(standing);
+                        }
+                    }
+                }
+                return standingList;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
+        public IEnumerable<StandingDTO> GetByTeamID(int? id)
+        {
+            try
+            {
+                List<StandingDTO> standingList = new List<StandingDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT StandingID,DivisionID,TeamID,Score FROM standing WHERE TeamID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            StandingDTO standing = new StandingDTO
+                            {
+                                StandingID = reader[0] as int? ?? default,
+                                DivisionID = reader[1] as int? ?? default,
+                                TeamID = reader[2] as int? ?? default,
+                                Score = reader[3] as int? ?? default,
+                            };
+                            standingList.Add(standing);
+                        }
+                    }
+                }
+                return standingList;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
         //Update
         public void Update(StandingDTO entity)
         {

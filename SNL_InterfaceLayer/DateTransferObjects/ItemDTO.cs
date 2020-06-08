@@ -10,7 +10,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
         public string ItemName { get; set; }
         public byte[] ItemIcon { get; set; }
         public string ItemDescription {get; set;}
-        public int ItemPrice { get; set; }
+        public int? ItemPrice { get; set; }
         public string ItemShortDescription { get; set; }
         public IEnumerable<string> ItemStats { get; set; }
     }

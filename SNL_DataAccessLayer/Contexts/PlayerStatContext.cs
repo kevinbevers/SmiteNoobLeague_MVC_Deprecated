@@ -25,7 +25,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(PlayerStatID= ?PlayerStatID,PlayerID = ?PlayerID,MatchID = ?MatchID," +
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(PlayerID = ?PlayerID,MatchID = ?MatchID," +
                                                         "TeamID = ?TeamID, GodPlayedID = ?GodPlayedID,PlayerLevel = ?PlayerLevel,PlayerKills = ?PlayerKills," +
                                                         "PlayerDeaths = ?PlayerDeaths,PlayerAssists = ?PlayerAssists,PlayerDamage = ?PlayerDamage,PlayerDamageTaken = ?PlayerDamageTaken," +
                                                         "PlayerDamageMitigated = ?PlayerDamageMitigated,PlayerHealing = ?PlayerHealing,PlayerGoldEarned = ?PlayerGoldEarned," +
@@ -67,6 +67,36 @@ namespace SNL_PersistenceLayer.Contexts
             catch (Exception ex)
             {
                 throw new ContextErrorException(ex);
+            }
+        }
+        public void AddMultiple(List<PlayerStatDTO> entityList)
+        {
+            //build a string with all the values in it.
+            StringBuilder sCommand = new StringBuilder("INSERT INTO playerstat (PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel," +
+                                                       "PlayerKills,PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
+                                                       "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
+                                                       "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID," +
+                                                       "PlayerRelic1ID,PlayerRelic2ID,PlayerWon,PlayerRoleID,PlayerPickOrder) VALUES ");
+
+            List<string> Rows = new List<string>();
+            foreach (var entity in entityList)
+            {
+                Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}'," +
+                                       "'{17}','{18}','{19}','{20}','{21}','{22}','{23}','{24}','{25}')", 
+                                       entity.PlayerID,entity.MatchID,entity.TeamID,entity.GodPlayedID,entity.PlayerLevel,entity.PlayerKills,
+                                       entity.PlayerDeaths,entity.PlayerAssists,entity.PlayerDamage,entity.PlayerDamageTaken,entity.PlayerDamageMitigated,
+                                       entity.PlayerHealing,entity.PlayerGoldEarned,entity.PlayerGoldPerMinute,entity.PlayerItem1ID,entity.PlayerItem2ID,
+                                       entity.PlayerItem3ID,entity.PlayerItem4ID,entity.PlayerItem5ID,entity.PlayerItem6ID,entity.PlayerRelic1ID,
+                                       entity.PlayerRelic2ID,entity.PlayerWon,entity.PlayerRoleID,entity.PlayerPickOrder));
+            }
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(";");
+
+            using (MySqlConnection conn = _con.GetConnection())
+            {
+                conn.Open();
+                MySqlCommand addMultipleCMD = new MySqlCommand(sCommand.ToString(), conn);
+                addMultipleCMD.ExecuteNonQuery();
             }
         }
         //Read
@@ -180,6 +210,246 @@ namespace SNL_PersistenceLayer.Contexts
                     }
                 }
                 return playerStat;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
+        public IEnumerable<PlayerStatDTO> GetByPlayerID(int? id)
+        {
+            try
+            {
+                List<PlayerStatDTO> playerStatsList = new List<PlayerStatDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT PlayerStatID,PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel,PlayerKills," +
+                                                        "PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
+                                                        "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
+                                                        "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID,PlayerRelic1ID,PlayerRelic2ID," +
+                                                        "PlayerWon,PlayerRoleID,PlayerPickOrder FROM playerstat WHERE PlayerID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PlayerStatDTO playerStat = new PlayerStatDTO
+                            {
+                                PlayerStatID = reader[0] as int? ?? default,
+                                PlayerID = reader[1] as int? ?? default,
+                                MatchID = reader[2] as int? ?? default,
+                                TeamID = reader[3] as int? ?? default,
+                                GodPlayedID = reader[4] as int? ?? default,
+                                PlayerLevel = reader[5] as int? ?? default,
+                                PlayerKills = reader[6] as int? ?? default,
+                                PlayerDeaths = reader[7] as int? ?? default,
+                                PlayerAssists = reader[8] as int? ?? default,
+                                PlayerDamage = reader[9] as int? ?? default,
+                                PlayerDamageTaken = reader[10] as int? ?? default,
+                                PlayerDamageMitigated = reader[11] as int? ?? default,
+                                PlayerHealing = reader[12] as int? ?? default,
+                                PlayerGoldEarned = reader[13] as int? ?? default,
+                                PlayerGoldPerMinute = reader[14] as int? ?? default,
+                                PlayerItem1ID = reader[15] as int? ?? default,
+                                PlayerItem2ID = reader[16] as int? ?? default,
+                                PlayerItem3ID = reader[17] as int? ?? default,
+                                PlayerItem4ID = reader[18] as int? ?? default,
+                                PlayerItem5ID = reader[19] as int? ?? default,
+                                PlayerItem6ID = reader[20] as int? ?? default,
+                                PlayerRelic1ID = reader[21] as int? ?? default,
+                                PlayerRelic2ID = reader[22] as int? ?? default,
+                                PlayerWon = reader[23] as bool? ?? default,
+                                PlayerRoleID = reader[24] as int? ?? default,
+                                PlayerPickOrder = reader[25] as int? ?? default,
+                            };
+                            playerStatsList.Add(playerStat);
+                        }
+                    }
+                }
+                return playerStatsList;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
+        public IEnumerable<PlayerStatDTO> GetByGodID(int? id)
+        {
+            try
+            {
+                List<PlayerStatDTO> playerStatsList = new List<PlayerStatDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT PlayerStatID,PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel,PlayerKills," +
+                                                        "PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
+                                                        "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
+                                                        "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID,PlayerRelic1ID,PlayerRelic2ID," +
+                                                        "PlayerWon,PlayerRoleID,PlayerPickOrder FROM playerstat WHERE GodPlayedID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PlayerStatDTO playerStat = new PlayerStatDTO
+                            {
+                                PlayerStatID = reader[0] as int? ?? default,
+                                PlayerID = reader[1] as int? ?? default,
+                                MatchID = reader[2] as int? ?? default,
+                                TeamID = reader[3] as int? ?? default,
+                                GodPlayedID = reader[4] as int? ?? default,
+                                PlayerLevel = reader[5] as int? ?? default,
+                                PlayerKills = reader[6] as int? ?? default,
+                                PlayerDeaths = reader[7] as int? ?? default,
+                                PlayerAssists = reader[8] as int? ?? default,
+                                PlayerDamage = reader[9] as int? ?? default,
+                                PlayerDamageTaken = reader[10] as int? ?? default,
+                                PlayerDamageMitigated = reader[11] as int? ?? default,
+                                PlayerHealing = reader[12] as int? ?? default,
+                                PlayerGoldEarned = reader[13] as int? ?? default,
+                                PlayerGoldPerMinute = reader[14] as int? ?? default,
+                                PlayerItem1ID = reader[15] as int? ?? default,
+                                PlayerItem2ID = reader[16] as int? ?? default,
+                                PlayerItem3ID = reader[17] as int? ?? default,
+                                PlayerItem4ID = reader[18] as int? ?? default,
+                                PlayerItem5ID = reader[19] as int? ?? default,
+                                PlayerItem6ID = reader[20] as int? ?? default,
+                                PlayerRelic1ID = reader[21] as int? ?? default,
+                                PlayerRelic2ID = reader[22] as int? ?? default,
+                                PlayerWon = reader[23] as bool? ?? default,
+                                PlayerRoleID = reader[24] as int? ?? default,
+                                PlayerPickOrder = reader[25] as int? ?? default,
+                            };
+                            playerStatsList.Add(playerStat);
+                        }
+                    }
+                }
+                return playerStatsList;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
+        public IEnumerable<PlayerStatDTO> GetByTeamID(int? id)
+        {
+            try
+            {
+                List<PlayerStatDTO> playerStatsList = new List<PlayerStatDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT PlayerStatID,PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel,PlayerKills," +
+                                                        "PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
+                                                        "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
+                                                        "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID,PlayerRelic1ID,PlayerRelic2ID," +
+                                                        "PlayerWon,PlayerRoleID,PlayerPickOrder FROM playerstat WHERE TeamID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PlayerStatDTO playerStat = new PlayerStatDTO
+                            {
+                                PlayerStatID = reader[0] as int? ?? default,
+                                PlayerID = reader[1] as int? ?? default,
+                                MatchID = reader[2] as int? ?? default,
+                                TeamID = reader[3] as int? ?? default,
+                                GodPlayedID = reader[4] as int? ?? default,
+                                PlayerLevel = reader[5] as int? ?? default,
+                                PlayerKills = reader[6] as int? ?? default,
+                                PlayerDeaths = reader[7] as int? ?? default,
+                                PlayerAssists = reader[8] as int? ?? default,
+                                PlayerDamage = reader[9] as int? ?? default,
+                                PlayerDamageTaken = reader[10] as int? ?? default,
+                                PlayerDamageMitigated = reader[11] as int? ?? default,
+                                PlayerHealing = reader[12] as int? ?? default,
+                                PlayerGoldEarned = reader[13] as int? ?? default,
+                                PlayerGoldPerMinute = reader[14] as int? ?? default,
+                                PlayerItem1ID = reader[15] as int? ?? default,
+                                PlayerItem2ID = reader[16] as int? ?? default,
+                                PlayerItem3ID = reader[17] as int? ?? default,
+                                PlayerItem4ID = reader[18] as int? ?? default,
+                                PlayerItem5ID = reader[19] as int? ?? default,
+                                PlayerItem6ID = reader[20] as int? ?? default,
+                                PlayerRelic1ID = reader[21] as int? ?? default,
+                                PlayerRelic2ID = reader[22] as int? ?? default,
+                                PlayerWon = reader[23] as bool? ?? default,
+                                PlayerRoleID = reader[24] as int? ?? default,
+                                PlayerPickOrder = reader[25] as int? ?? default,
+                            };
+                            playerStatsList.Add(playerStat);
+                        }
+                    }
+                }
+                return playerStatsList;
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+        }
+        public IEnumerable<PlayerStatDTO> GetByMatchID(int? id)
+        {
+            try
+            {
+                List<PlayerStatDTO> playerStatsList = new List<PlayerStatDTO>();
+
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT PlayerStatID,PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel,PlayerKills," +
+                                                        "PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
+                                                        "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
+                                                        "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID,PlayerRelic1ID,PlayerRelic2ID," +
+                                                        "PlayerWon,PlayerRoleID,PlayerPickOrder FROM playerstat WHERE MatchID = ?id", conn);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PlayerStatDTO playerStat = new PlayerStatDTO
+                            {
+                                PlayerStatID = reader[0] as int? ?? default,
+                                PlayerID = reader[1] as int? ?? default,
+                                MatchID = reader[2] as int? ?? default,
+                                TeamID = reader[3] as int? ?? default,
+                                GodPlayedID = reader[4] as int? ?? default,
+                                PlayerLevel = reader[5] as int? ?? default,
+                                PlayerKills = reader[6] as int? ?? default,
+                                PlayerDeaths = reader[7] as int? ?? default,
+                                PlayerAssists = reader[8] as int? ?? default,
+                                PlayerDamage = reader[9] as int? ?? default,
+                                PlayerDamageTaken = reader[10] as int? ?? default,
+                                PlayerDamageMitigated = reader[11] as int? ?? default,
+                                PlayerHealing = reader[12] as int? ?? default,
+                                PlayerGoldEarned = reader[13] as int? ?? default,
+                                PlayerGoldPerMinute = reader[14] as int? ?? default,
+                                PlayerItem1ID = reader[15] as int? ?? default,
+                                PlayerItem2ID = reader[16] as int? ?? default,
+                                PlayerItem3ID = reader[17] as int? ?? default,
+                                PlayerItem4ID = reader[18] as int? ?? default,
+                                PlayerItem5ID = reader[19] as int? ?? default,
+                                PlayerItem6ID = reader[20] as int? ?? default,
+                                PlayerRelic1ID = reader[21] as int? ?? default,
+                                PlayerRelic2ID = reader[22] as int? ?? default,
+                                PlayerWon = reader[23] as bool? ?? default,
+                                PlayerRoleID = reader[24] as int? ?? default,
+                                PlayerPickOrder = reader[25] as int? ?? default,
+                            };
+                            playerStatsList.Add(playerStat);
+                        }
+                    }
+                }
+                return playerStatsList;
             }
             catch (Exception ex)
             {
