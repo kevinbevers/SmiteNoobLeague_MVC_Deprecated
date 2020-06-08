@@ -30,5 +30,7 @@ namespace SNL_LogicLayer.Models
         public int? PlayerRelic1ID { get; set; }
         public int? PlayerRelic2ID { get; set; }
         public bool PlayerWon { get; set; }
+        public Role PlayerRole { get; set; }
+        public int PlayerPickOrder { get; set; }
     }
 }

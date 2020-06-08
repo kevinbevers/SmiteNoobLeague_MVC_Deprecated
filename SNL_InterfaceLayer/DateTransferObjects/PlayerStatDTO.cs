@@ -30,5 +30,7 @@ namespace SNL_InterfaceLayer.DateTransferObjects
         public int? PlayerRelic1ID { get; set; }
         public int? PlayerRelic2ID { get; set; }
         public bool PlayerWon { get; set; }
+        public int? PlayerRoleID { get; set; }
+        public int PlayerPickOrder { get; set; }
     }
 }

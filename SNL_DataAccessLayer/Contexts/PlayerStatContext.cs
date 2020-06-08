@@ -31,7 +31,7 @@ namespace SNL_PersistenceLayer.Contexts
                                                         "PlayerDamageMitigated = ?PlayerDamageMitigated,PlayerHealing = ?PlayerHealing,PlayerGoldEarned = ?PlayerGoldEarned," +
                                                         "PlayerGoldPerMinute = ?PlayerGoldPerMinute,PlayerItem1ID = ?PlayerItem1ID,PlayerItem2ID = ?PlayerItem2ID," +
                                                         "PlayerItem3ID = ?PlayerItem3ID,PlayerItem4ID = ?PlayerItem4ID,PlayerItem5ID = ?PlayerItem5ID,PlayerItem6ID = ?PlayerItem6ID," +
-                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon)", conn);
+                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon, PlayerRoleID = ?PlayerRoleID, PlayerPickOrder = ?PlayerPickOrder)", conn);
                     //values
                     //values
                     cmd.Parameters.AddWithValue("PlayerID", entity.PlayerID ?? (object)DBNull.Value);
@@ -57,6 +57,8 @@ namespace SNL_PersistenceLayer.Contexts
                     cmd.Parameters.AddWithValue("PlayerRelic1ID", entity.PlayerRelic1ID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("PlayerRelic2ID", entity.PlayerRelic2ID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("PlayerWon", entity.PlayerWon);
+                    cmd.Parameters.AddWithValue("PlayerRoleID", entity.PlayerRoleID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerPickOrder", entity.PlayerPickOrder);
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
@@ -81,7 +83,7 @@ namespace SNL_PersistenceLayer.Contexts
                                                         "PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
                                                         "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
                                                         "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID,PlayerRelic1ID,PlayerRelic2ID," +
-                                                        "PlayerWon FROM playerstat", conn);
+                                                        "PlayerWon,PlayerRoleID,PlayerPickOrder FROM playerstat", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -113,6 +115,8 @@ namespace SNL_PersistenceLayer.Contexts
                                 PlayerRelic1ID = reader[21] as int? ?? default,
                                 PlayerRelic2ID = reader[22] as int? ?? default,
                                 PlayerWon = reader[23] as bool? ?? default,
+                                PlayerRoleID = reader[24] as int? ?? default,
+                                PlayerPickOrder = reader[25] as int? ?? default,
                             };
                             playerStatsList.Add(playerStat);
                         }
@@ -138,7 +142,7 @@ namespace SNL_PersistenceLayer.Contexts
                                                         "PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
                                                         "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
                                                         "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID,PlayerRelic1ID,PlayerRelic2ID," +
-                                                        "PlayerWon FROM playerstat WHERE PlayerStatID = ?id", conn);
+                                                        "PlayerWon,PlayerRoleID,PlayerPickOrder FROM playerstat WHERE PlayerStatID = ?id", conn);
                     cmd.Parameters.AddWithValue("id", id);
 
                     using (var reader = cmd.ExecuteReader())
@@ -169,6 +173,8 @@ namespace SNL_PersistenceLayer.Contexts
                             playerStat.PlayerRelic1ID = reader[21] as int? ?? default;
                             playerStat.PlayerRelic2ID = reader[22] as int? ?? default;
                             playerStat.PlayerWon = reader[23] as bool? ?? default;
+                            playerStat.PlayerRoleID = reader[24] as int? ?? default;
+                            playerStat.PlayerPickOrder = reader[25] as int? ?? default;
 
                         }
                     }
@@ -194,7 +200,7 @@ namespace SNL_PersistenceLayer.Contexts
                                                         "PlayerDamageMitigated = ?PlayerDamageMitigated,PlayerHealing = ?PlayerHealing,PlayerGoldEarned = ?PlayerGoldEarned," +
                                                         "PlayerGoldPerMinute = ?PlayerGoldPerMinute,PlayerItem1ID = ?PlayerItem1ID,PlayerItem2ID = ?PlayerItem2ID," +
                                                         "PlayerItem3ID = ?PlayerItem3ID,PlayerItem4ID = ?PlayerItem4ID,PlayerItem5ID = ?PlayerItem5ID,PlayerItem6ID = ?PlayerItem6ID," +
-                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon) WHERE PlayerStatID = ?id", conn);
+                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon, PlayerRoleID = ?PlayerRoleID, PlayerPickOrder = ?PlayerPickOrder) WHERE PlayerStatID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.PlayerStatID);
                     //values
@@ -221,6 +227,8 @@ namespace SNL_PersistenceLayer.Contexts
                     cmd.Parameters.AddWithValue("PlayerRelic1ID", entity.PlayerRelic1ID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("PlayerRelic2ID", entity.PlayerRelic2ID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("PlayerWon", entity.PlayerWon);
+                    cmd.Parameters.AddWithValue("PlayerRoleID", entity.PlayerRoleID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("PlayerPickOrder", entity.PlayerPickOrder);
 
 
                     //execute command
