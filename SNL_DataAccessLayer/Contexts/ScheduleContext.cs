@@ -35,7 +35,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //should return if a row is affected or not
 
                     //add multiple scheduleDetails
-                    AddScheduleDetails(entity, conn);
+                    AddScheduleDetails(entity.ScheduleDetailsList, conn);
                 }
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace SNL_PersistenceLayer.Contexts
                                 DivisionID = reader[1] as int? ?? default,
                                 ScheduleName = reader[2] as string ?? default,
                             };
-                            GetScheduleDetails(schedule.ScheduleID, schedule, conn);
+                            schedule.ScheduleDetailsList = GetScheduleDetails(schedule.ScheduleID, conn);
 
                             scheduleList.Add(schedule);
                         }
@@ -102,7 +102,7 @@ namespace SNL_PersistenceLayer.Contexts
                     }
 
                     //get scheduleDetails
-                    GetScheduleDetails(id, schedule, conn);
+                    schedule.ScheduleDetailsList = GetScheduleDetails(id, conn);
 
                 }
                 return schedule;
@@ -131,6 +131,11 @@ namespace SNL_PersistenceLayer.Contexts
                     //should return if a row is affected or not
 
                     //update scheduleDetails
+                    UpdateScheduleDetails(entity, conn);
+                    //get all then compare and delete the ones that are not in the list anymore then update all the rest.
+                    //easier to just drop details and then insert new ones?!
+
+
                 }
             }
             catch (Exception ex)
@@ -161,7 +166,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
 
-        private static void GetScheduleDetails(int? id, ScheduleDTO schedule, MySqlConnection conn)
+        private List<ScheduleDetailDTO> GetScheduleDetails(int? id, MySqlConnection conn)
         {
             MySqlCommand detailCmd = new MySqlCommand("SELECT ScheduleDetailsID,ScheduleID,HomeTeamID,AwayTeamID,WeekNumber,MatchNumber FROM scheduledetails WHERE ScheduleID = ?id", conn);
             detailCmd.Parameters.AddWithValue("id", id);
@@ -181,16 +186,16 @@ namespace SNL_PersistenceLayer.Contexts
                         MatchNumber = reader[5] as int? ?? default,
                     });
                 }
-                schedule.ScheduleDetailsList = detailList;
+                return detailList;
             }
         }
-        private static void AddScheduleDetails(ScheduleDTO entity, MySqlConnection conn)
+        private void AddScheduleDetails(IEnumerable<ScheduleDetailDTO> scheduleDetailsList, MySqlConnection conn)
         {
             //build a string with all the values in it. no mysql.escapestring needed because integers cannot be used for SQL injection
             StringBuilder sCommand = new StringBuilder("INSERT INTO scheduledetails (ScheduleID, HomeTeamID,AwayTeamID,MatchNumber,WeekNumber) VALUES ");
 
             List<string> Rows = new List<string>();
-            foreach (var detail in entity.ScheduleDetailsList)
+            foreach (var detail in scheduleDetailsList)
             {
                 Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}')", detail.ScheduleID, detail.HomeTeamID, detail.AwayTeamID, detail.MatchNumber, detail.WeekNumber));
             }
@@ -199,6 +204,58 @@ namespace SNL_PersistenceLayer.Contexts
 
             MySqlCommand addTeamsToDivisionCmd = new MySqlCommand(sCommand.ToString(), conn);
             addTeamsToDivisionCmd.ExecuteNonQuery();
+        }
+        private void UpdateScheduleDetails(ScheduleDTO entity, MySqlConnection conn)
+        {
+            List<ScheduleDetailDTO> currentDetails = GetScheduleDetails(entity.ScheduleID, conn);
+            List<ScheduleDetailDTO> UpdatedDetails = entity.ScheduleDetailsList.ToList();
+            List<ScheduleDetailDTO> DeleteList = new List<ScheduleDetailDTO>();
+            List<ScheduleDetailDTO> UpdateList = new List<ScheduleDetailDTO>();
+
+            foreach (var PossibleDelete in currentDetails)
+            {
+                if (UpdatedDetails.Where(item => item.ScheduleDetailsID == PossibleDelete.ScheduleDetailsID).Count() > 0)
+                {
+                    UpdateList.Add(PossibleDelete);
+                }
+                else
+                {
+                    DeleteList.Add(PossibleDelete);
+                }
+            }
+
+            MySqlCommand deleteDetailCmd = new MySqlCommand("DELETE FROM scheduledetails WHERE ScheduleDetailsID IN (?ids)", conn);
+            //where id is
+            string IdList = String.Join(',', DeleteList.Select(item => item.ScheduleDetailsID));
+            deleteDetailCmd.Parameters.AddWithValue("ids", MySqlHelper.EscapeString(IdList));
+
+            foreach (var ScheduleDetail in UpdateList)
+            {
+                if (currentDetails.Where(e => e.ScheduleDetailsID == ScheduleDetail.ScheduleDetailsID).Count() == 1)
+                {
+                    //update command
+                    MySqlCommand updateDetailCmd = new MySqlCommand("UPDATE scheduledetails SET(HomeTeamID = ?HomeTeamID, AwayTeamID = ?AwayTeamID, WeekNumber = ?WeekNumber, MatchNumber = ?MatchNumber) WHERE ScheduleDetailsID = ?id", conn);
+                    //where id is
+                    updateDetailCmd.Parameters.AddWithValue("id", ScheduleDetail.ScheduleDetailsID);
+                    //values
+                    updateDetailCmd.Parameters.AddWithValue("HomeTeamID", ScheduleDetail.HomeTeamID);
+                    updateDetailCmd.Parameters.AddWithValue("AwayTeamID", ScheduleDetail.AwayTeamID);
+                    updateDetailCmd.Parameters.AddWithValue("WeekNumber", ScheduleDetail.WeekNumber);
+                    updateDetailCmd.Parameters.AddWithValue("MatchNumber", ScheduleDetail.MatchNumber);
+                    updateDetailCmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    //add command
+                    MySqlCommand AddDetailCmd = new MySqlCommand("INSERT INTO scheduledetails VALUES(HomeTeamID = ?HomeTeamID, AwayTeamID = ?AwayTeamID, WeekNumber = ?WeekNumber, MatchNumber = ?MatchNumber)", conn);
+                    //values
+                    AddDetailCmd.Parameters.AddWithValue("HomeTeamID", ScheduleDetail.HomeTeamID);
+                    AddDetailCmd.Parameters.AddWithValue("AwayTeamID", ScheduleDetail.AwayTeamID);
+                    AddDetailCmd.Parameters.AddWithValue("WeekNumber", ScheduleDetail.WeekNumber);
+                    AddDetailCmd.Parameters.AddWithValue("MatchNumber", ScheduleDetail.MatchNumber);
+                    AddDetailCmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
