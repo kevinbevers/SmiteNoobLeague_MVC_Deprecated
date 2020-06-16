@@ -8,17 +8,18 @@ using SNL_LogicLayer;
 using SNL_PersistenceLayer.Contexts;
 using SNL_InterfaceLayer.DateTransferObjects;
 using SNL_LogicLayer.Models;
+using SNL_InterfaceLayer.Interfaces;
 
-namespace SNL_LogicLayer.Collection
+namespace SNL_LogicLayer.Services
 {
-    public class TeamCollection : IDataObject<Team>
+    public class TeamService : IDataObject<Team>
     {
-        private readonly TeamContext _teamContext;
-        private readonly PlayerContext _playerContext;
+        private readonly ITeamContext _teamContext;
+        private readonly IPlayerContext _playerContext;
         private readonly Rolecontext _roleContext;
         private readonly DivisionContext _divisionContext;
 
-        public TeamCollection(TeamContext teamContext, PlayerContext playerContext, Rolecontext roleContext, DivisionContext divisionContext)
+        public TeamService(ITeamContext teamContext, IPlayerContext playerContext, Rolecontext roleContext, DivisionContext divisionContext)
         {
             _teamContext = teamContext;
             _playerContext = playerContext;
@@ -32,6 +33,7 @@ namespace SNL_LogicLayer.Collection
             TeamDTO tDTO = new TeamDTO
             {
                 TeamID = entity.TeamID,
+                TeamName = entity.TeamName,
                 TeamCaptainID = entity.TeamCaptain.PlayerID,
                 TeamDivisionID = entity.TeamDivision.DivisionID,
                 TeamLogo = entity.TeamLogo,
@@ -75,11 +77,11 @@ namespace SNL_LogicLayer.Collection
             PlayerDTO tm5DTO = _playerContext.GetByID(tDTO.TeamMember5ID);
             //get player role with the role context
             var roles = _roleContext.GetAll();
-            var cRole = roles.Where(i => i.RoleID == CaptainDTO.PlayerRoleID).First();
-            var t2Role = roles.Where(i => i.RoleID == tm2DTO.PlayerRoleID).First();
-            var t3Role = roles.Where(i => i.RoleID == tm3DTO.PlayerRoleID).First();
-            var t4Role = roles.Where(i => i.RoleID == tm4DTO.PlayerRoleID).First();
-            var t5Role = roles.Where(i => i.RoleID == tm5DTO.PlayerRoleID).First();
+            var cRole = roles.Where(i => i.RoleID == CaptainDTO.PlayerRoleID).FirstOrDefault() ?? new RoleDTO();
+            var t2Role = roles.Where(i => i.RoleID == tm2DTO.PlayerRoleID).FirstOrDefault() ?? new RoleDTO();
+            var t3Role = roles.Where(i => i.RoleID == tm3DTO.PlayerRoleID).FirstOrDefault() ?? new RoleDTO();
+            var t4Role = roles.Where(i => i.RoleID == tm4DTO.PlayerRoleID).FirstOrDefault() ?? new RoleDTO();
+            var t5Role = roles.Where(i => i.RoleID == tm5DTO.PlayerRoleID).FirstOrDefault() ?? new RoleDTO();
             //create list of team members excluding the captain
             List<Player> teamMembers = new List<Player>
             {

@@ -9,14 +9,14 @@ namespace SNL_PersistenceLayer
 {
     public class ConnectionContext
     {
-        public string ConnectionString { get; set; }
+        private string ConnectionString { get;  set; }
 
         public ConnectionContext(string connectionString)
         {
             ConnectionString = connectionString;
         }
 
-        public MySqlConnection GetConnection()
+        internal MySqlConnection GetConnection()
         {
             return new MySqlConnection(ConnectionString);
         }

@@ -1,0 +1,183 @@
+﻿@model SmiteNoobLeague.Models.AdminPageViews.AdminPageViewCollection
+@{
+    //Layout = "adminlayout.cshtml";
+    ViewData["Title"] = "Admin";
+}
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+    <body class="adminBG">
+        <div id="groupedAdminPanels" class="mb-2">
+            <div class="row m-2 mt-3">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title">Update local database</h1>
+                            <p class="card-text">Make a call to the Smite API to update te stored items and gods to the current game patch.</p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary btn-lg btn-block">Update gods</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary btn-lg btn-block">Update items</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title">Manage Schedules</h1>
+                            <p class="card-text">Generate a new schedule for a division or edit an existing one.</p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary btn-lg btn-block">Create schedule</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary btn-lg btn-block">Edit schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-2 mt-3">
+
+                <div class="col-sm-6 p-0">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 class="card-title">Manage accounts</h1>
+                                <p class="card-text">Manage existing accounts or create a new one.</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary btn-lg btn-block">Create account</button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary btn-lg btn-block">Manage accounts</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 class="card-title">Manage teams</h1>
+                                <p class="card-text">Manage existing teams or create a new one.</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#CreateTeamModal">Create team</button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary btn-lg btn-block">Manage teams</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 class="card-title">Manage divisions</h1>
+                                <p class="card-text">Manage existing divisions or create a new one.</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary btn-lg btn-block">Create division</button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-primary btn-lg btn-block">Manage divisions</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h1 class="card-title">Admin log</h1>
+                            <p class="card-text">a log where everything that the site has processed is logged</p>
+                            <div class="container bg-dark h-75 text-light overflow-auto">
+                                <ul class="list-unstyled">
+                                    <li>A log entry</li>
+                                    <li>A log entry</li>
+                                    <li>A log entry</li>
+                                    <li>A log entry</li>
+                                    <li>A log entry</li>
+                                    <li>A log entry</li>
+                                    <li>A log entry</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* content end *@
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="CreateTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="CreateTeamModalTitle">Create team</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form asp-action="Index" asp-controller="Admin">
+                            <div class="form-group">
+                                <label>Team Name</label>
+                                <input asp-for="@Model.TeamCreateModel.TeamName" id="teamname" class="form-control" />
+                                <span asp-validation-for="@Model.TeamCreateModel.TeamName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Team Logo</label>
+                                <button class="btn btn-primary form-control-file" onclick="$('#teamlogo').click()">Upload image</button>
+                                <input id="teamlogo" type="file" class="form-control-file" hidden required />
+                            </div>
+                            <div class="form-group">
+                                <label>Team Captain</label>
+                                <select class="form-control">
+                                    <option>Account playername, id in back</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Team Member 2</label>
+                                <input type="text" id="tm2Name" class="form-control" />
+                                <a class="btn btn-primary" onclick="SearchPlayer('#tm2Name','#tm2ID')">Search player</a>
+                                <input asp-for="@Model.TeamCreateModel.TeamMember2ID" id="tm2ID" class="form-control" hidden>
+                                <span asp-validation-for="@Model.TeamCreateModel.TeamMember2ID" class="text-danger"></span>
+                            </div>
+                            <input type="submit" id="createTeamSubmit" value="Create Team" hidden />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                        <button type="button" class="btn btn-primary" onclick="$('#createTeamSubmit').click()">Create Team</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-TeamMemberSearchModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="CreateTeamModalTitle">OOPS!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>                  
+                    <div class="modal-body">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>

@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 using SNL_PersistenceLayer;
-using SNL_LogicLayer.Collection;
+using SNL_LogicLayer.Services;
 using SNL_PersistenceLayer.Contexts;
 
 namespace SNL_LogicLayer
 {
     public class LogicFactory
     {
-        private readonly ConnectionContext _context;
+        private readonly ConnectionContext _conn;
         public LogicFactory(ConnectionContext context)
         {
-            _context = context;
+            _conn = context;
         }
 
-        public TeamCollection GetTeamCollection()
+        public TeamService GetTeamService()
         {
-            return new TeamCollection(new TeamContext(_context), new PlayerContext(_context), new Rolecontext(_context), new DivisionContext(_context));
+            return new TeamService(new TeamContext(_conn), new PlayerContext(_conn), new Rolecontext(_conn), new DivisionContext(_conn));
         }
     }
 }

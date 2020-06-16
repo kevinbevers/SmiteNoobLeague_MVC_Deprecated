@@ -5,12 +5,13 @@ using System.Text;
 using SNL_PersistenceLayer.Interfaces;
 using SNL_InterfaceLayer.DateTransferObjects;
 using SNL_InterfaceLayer.CustomExceptions;
+using SNL_InterfaceLayer.Interfaces;
 using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
    
-    public class TeamContext : IContext<TeamDTO>
+    public class TeamContext : ITeamContext
     {
         private readonly ConnectionContext _con;
         public TeamContext(ConnectionContext con)

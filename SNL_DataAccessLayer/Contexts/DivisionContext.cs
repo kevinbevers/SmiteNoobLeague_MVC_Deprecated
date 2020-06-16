@@ -99,7 +99,7 @@ namespace SNL_PersistenceLayer.Contexts
                         }
                     }
                     //get the teams that are in the division and add them in a list
-                    MySqlCommand GetDivisionTeamsCmd = new MySqlCommand("SELECT TeamID FROM divisionteam WHERE TeamDivisionID = ?id", conn);
+                    MySqlCommand GetDivisionTeamsCmd = new MySqlCommand("SELECT TeamID FROM team WHERE TeamDivisionID = ?id", conn);
                     GetDivisionTeamsCmd.Parameters.AddWithValue("id", id);
                     List<int?> teamList = new List<int?>();
 

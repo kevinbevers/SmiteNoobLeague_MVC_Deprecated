@@ -21,7 +21,7 @@ namespace SmiteNoobLeague.Controllers
 
         public IActionResult Index()
         {
-            var TeamCol = _logicFactory.GetTeamCollection();
+            var TeamCol = _logicFactory.GetTeamService();
 
             var t = TeamCol.GetByID(1);
             var t2 = TeamCol.GetByID(2);
@@ -29,7 +29,7 @@ namespace SmiteNoobLeague.Controllers
             t2.TeamName = "This is a new name";
 
             TeamCol.Update(t2);
-            
+
 
             ViewBag.test = t.TeamName;
 

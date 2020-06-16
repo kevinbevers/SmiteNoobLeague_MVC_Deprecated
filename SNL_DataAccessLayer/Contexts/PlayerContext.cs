@@ -4,12 +4,13 @@ using System.Text;
 using SNL_PersistenceLayer.Interfaces;
 using SNL_InterfaceLayer.CustomExceptions;
 using SNL_InterfaceLayer.DateTransferObjects;
+using SNL_InterfaceLayer.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class PlayerContext : IContext<PlayerDTO>
+    public class PlayerContext : IPlayerContext
     {
         private readonly ConnectionContext _con;
         public PlayerContext(ConnectionContext con)
@@ -43,7 +44,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-        public void AddMultiple(List<PlayerDTO> entityList)
+        public void AddMultiple(IEnumerable<PlayerDTO> entityList)
         {
             //build a string with all the values in it.
             StringBuilder sCommand = new StringBuilder("INSERT INTO player (PlayerID, PlayerName, PlayerPlatformID," +
