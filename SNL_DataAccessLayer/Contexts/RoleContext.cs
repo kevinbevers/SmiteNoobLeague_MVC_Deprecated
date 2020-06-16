@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SNL_PersistenceLayer.Interfaces;
+using SNL_InterfaceLayer.Interfaces;
 using SNL_InterfaceLayer.CustomExceptions;
 using SNL_InterfaceLayer.DateTransferObjects;
 using MySql.Data.MySqlClient;
@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class Rolecontext : IContext<RoleDTO>
+    public class Rolecontext : IRoleContext
     {
         private readonly ConnectionContext _con;
         public Rolecontext(ConnectionContext con)

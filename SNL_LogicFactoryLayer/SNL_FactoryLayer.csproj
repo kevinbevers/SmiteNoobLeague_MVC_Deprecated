@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SNL_InterfaceLayer\SNL_InterfaceLayer.csproj" />
+    <ProjectReference Include="..\SNL_DataAccessLayer\SNL_PersistenceLayer.csproj" />
+    <ProjectReference Include="..\SNL_LogicLayer\SNL_LogicLayer.csproj" />
   </ItemGroup>
 
 </Project>

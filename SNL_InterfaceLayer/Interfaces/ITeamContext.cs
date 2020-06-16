@@ -5,12 +5,8 @@ using SNL_InterfaceLayer.DateTransferObjects;
 
 namespace SNL_InterfaceLayer.Interfaces
 {
-    public interface ITeamContext
+    public interface ITeamContext : IContext<TeamDTO>
     {
-        void Add(TeamDTO entity);
-        TeamDTO GetByID(int? id);
-        IEnumerable<TeamDTO> GetAll();
-        void Update(TeamDTO entity);
-        void Remove(TeamDTO entity);
+        //extra functions for team context
     }
 }

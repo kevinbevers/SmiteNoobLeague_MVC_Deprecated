@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNL_LogicLayer", "..\SNL_Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNL_InterfaceLayer", "..\SNL_InterfaceLayer\SNL_InterfaceLayer.csproj", "{138148BC-52C1-406F-B582-A6AF514A06AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNL_UnitTest", "..\SNL_UnitTest\SNL_UnitTest.csproj", "{05C73196-5140-4300-B09F-71A16FE95B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNL_UnitTest", "..\SNL_UnitTest\SNL_UnitTest.csproj", "{05C73196-5140-4300-B09F-71A16FE95B1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNL_FactoryLayer", "..\SNL_LogicFactoryLayer\SNL_FactoryLayer.csproj", "{8CBBFADB-E7A1-4AED-B7D8-BE583BBCC2D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{05C73196-5140-4300-B09F-71A16FE95B1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05C73196-5140-4300-B09F-71A16FE95B1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05C73196-5140-4300-B09F-71A16FE95B1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CBBFADB-E7A1-4AED-B7D8-BE583BBCC2D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CBBFADB-E7A1-4AED-B7D8-BE583BBCC2D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CBBFADB-E7A1-4AED-B7D8-BE583BBCC2D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CBBFADB-E7A1-4AED-B7D8-BE583BBCC2D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,8 +4,9 @@ using System.Text;
 using SNL_PersistenceLayer;
 using SNL_LogicLayer.Services;
 using SNL_PersistenceLayer.Contexts;
+using SNL_LogicLayer.ServiceInterfaces;
 
-namespace SNL_LogicLayer
+namespace SNL_FactoryLayer
 {
     public class LogicFactory
     {
@@ -14,9 +15,10 @@ namespace SNL_LogicLayer
         {
             _conn = context;
         }
-
-        public TeamService GetTeamService()
+        
+        public ITeamService GetTeamService()
         {
+            //factory layer get TeamService
             return new TeamService(new TeamContext(_conn), new PlayerContext(_conn), new Rolecontext(_conn), new DivisionContext(_conn));
         }
     }

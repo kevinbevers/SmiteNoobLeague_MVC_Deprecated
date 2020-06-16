@@ -5,14 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SNL_LogicLayer;
 using SmiteNoobLeague.Models;
+using SNL_FactoryLayer;
+using SNL_LogicLayer.ServiceInterfaces;
 
 namespace SmiteNoobLeague.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly LogicFactory _logicFactory;
+        private readonly  LogicFactory _logicFactory;
 
         public HomeController(LogicFactory logicFactory)
         {
@@ -21,7 +22,7 @@ namespace SmiteNoobLeague.Controllers
 
         public IActionResult Index()
         {
-            var TeamCol = _logicFactory.GetTeamService();
+            ITeamService TeamCol = _logicFactory.GetTeamService();
 
             var t = TeamCol.GetByID(1);
             var t2 = TeamCol.GetByID(2);

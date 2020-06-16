@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Text;
-using SNL_LogicLayer.Interfaces;
 using SNL_LogicLayer;
-using SNL_PersistenceLayer.Contexts;
 using SNL_InterfaceLayer.DateTransferObjects;
 using SNL_LogicLayer.Models;
 using SNL_InterfaceLayer.Interfaces;
+using SNL_LogicLayer.ServiceInterfaces;
 
 namespace SNL_LogicLayer.Services
 {
-    public class TeamService : IDataObject<Team>
+    public class TeamService : ITeamService
     {
+        //bovenste gebruiken inteface
         private readonly ITeamContext _teamContext;
         private readonly IPlayerContext _playerContext;
-        private readonly Rolecontext _roleContext;
-        private readonly DivisionContext _divisionContext;
+        private readonly IRoleContext _roleContext;
+        private readonly IDivisionContext _divisionContext;
 
-        public TeamService(ITeamContext teamContext, IPlayerContext playerContext, Rolecontext roleContext, DivisionContext divisionContext)
+        public TeamService(ITeamContext teamContext, IPlayerContext playerContext, IRoleContext roleContext, IDivisionContext divisionContext)
         {
             _teamContext = teamContext;
             _playerContext = playerContext;

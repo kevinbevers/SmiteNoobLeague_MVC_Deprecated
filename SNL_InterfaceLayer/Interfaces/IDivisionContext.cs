@@ -5,8 +5,8 @@ using SNL_InterfaceLayer.DateTransferObjects;
 
 namespace SNL_InterfaceLayer.Interfaces
 {
-    public interface IPlayerContext : IContext<PlayerDTO>
+    public interface IDivisionContext : IContext<DivisionDTO>
     {
-        void AddMultiple(IEnumerable<PlayerDTO> entity);
+        //division calls
     }
 }

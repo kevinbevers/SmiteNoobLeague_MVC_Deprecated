@@ -23,3 +23,6 @@
 /SNL_InterfaceLayer/bin/Debug/netcoreapp3.1
 /SNL_UnitTest/bin/Debug/netcoreapp3.1
 /SNL_UnitTest/obj
+/SNL_LogicFactoryLayer/bin/Debug/netcoreapp3.1
+/SNL_LogicFactoryLayer/obj/Debug/netcoreapp3.1
+/SNL_LogicFactoryLayer/obj

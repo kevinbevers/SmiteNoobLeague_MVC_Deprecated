@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SNL_PersistenceLayer.Interfaces;
+using SNL_InterfaceLayer.Interfaces;
 using SNL_InterfaceLayer.CustomExceptions;
 using SNL_InterfaceLayer.DateTransferObjects;
 using MySql.Data.MySqlClient;

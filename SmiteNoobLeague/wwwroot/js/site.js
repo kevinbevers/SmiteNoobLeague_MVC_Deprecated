@@ -9,8 +9,10 @@ function SearchPlayer(inputID,targetInputID) {
         // do a jquery call to get playerid, platform and name by playername via the Smite API
         modalObj.find('.modal-title').text('Players found with name: ' + playername);
         modalObj.find('.modal-body').html("");
-        modalObj.find('.modal-body').append('<a onclick="SendBackID(' + 2 + ",'" + targetInputID + "'" + ')" href="#">Playername playerid</a>');
-        modalObj.find('.modal-body').append('<a onclick="SendBackID(' + 3 + ",'" + targetInputID + "'" + ')" href="#">Playername playerid</a>');
+        modalObj.find('.modal-body').append("<ul>");
+        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 2 + ",'" + targetInputID + "'" + ')" href="#">Playername playerid</a></li>');
+        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 3 + ",'" + targetInputID + "'" + ')" href="#">Playername playerid</a></li>');
+        modalObj.find('.modal-body').append("</ul>");
         modalObj.modal();
     }
     else

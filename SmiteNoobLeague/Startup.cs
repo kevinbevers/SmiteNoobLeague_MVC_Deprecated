@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SNL_PersistenceLayer;
-using SNL_LogicLayer;
+using SNL_FactoryLayer;
 
 namespace SmiteNoobLeague
 {
