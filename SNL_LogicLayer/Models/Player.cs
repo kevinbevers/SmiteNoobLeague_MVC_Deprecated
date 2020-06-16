@@ -8,6 +8,7 @@ namespace SNL_LogicLayer.Models
     {
         public int? PlayerID { get; set; }
         public string PlayerName { get; set; }
+        public int? PlayerPlatformID { get; set; }
         public Role PlayerRole { get; set; }
     }
 }
