@@ -69,7 +69,7 @@ function TeamCreatedSuccess() {
 
     window.setTimeout(function () {
         MessageModal.modal('hide');       
-    }, 1200);      
+    }, 1600);      
 }
 
 function TeamCreatedError() {

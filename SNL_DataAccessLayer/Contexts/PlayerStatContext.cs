@@ -25,13 +25,15 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(PlayerID = ?PlayerID,MatchID = ?MatchID," +
-                                                        "TeamID = ?TeamID, GodPlayedID = ?GodPlayedID,PlayerLevel = ?PlayerLevel,PlayerKills = ?PlayerKills," +
-                                                        "PlayerDeaths = ?PlayerDeaths,PlayerAssists = ?PlayerAssists,PlayerDamage = ?PlayerDamage,PlayerDamageTaken = ?PlayerDamageTaken," +
-                                                        "PlayerDamageMitigated = ?PlayerDamageMitigated,PlayerHealing = ?PlayerHealing,PlayerGoldEarned = ?PlayerGoldEarned," +
-                                                        "PlayerGoldPerMinute = ?PlayerGoldPerMinute,PlayerItem1ID = ?PlayerItem1ID,PlayerItem2ID = ?PlayerItem2ID," +
-                                                        "PlayerItem3ID = ?PlayerItem3ID,PlayerItem4ID = ?PlayerItem4ID,PlayerItem5ID = ?PlayerItem5ID,PlayerItem6ID = ?PlayerItem6ID," +
-                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon, PlayerRoleID = ?PlayerRoleID, PlayerPickOrder = ?PlayerPickOrder)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god (PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel," +
+                                                       "PlayerKills,PlayerDeaths,PlayerAssists,PlayerDamage,PlayerDamageTaken,PlayerDamageMitigated," +
+                                                       "PlayerHealing,PlayerGoldEarned,PlayerGoldPerMinute,PlayerItem1ID,PlayerItem2ID," +
+                                                       "PlayerItem3ID,PlayerItem4ID,PlayerItem5ID,PlayerItem6ID," +
+                                                       "PlayerRelic1ID,PlayerRelic2ID,PlayerWon,PlayerRoleID,PlayerPickOrder) VALUES(?PlayerID,?MatchID,?TeamID,?GodPlayedID,?PlayerLevel," +
+                                                       "?PlayerKills,?PlayerDeaths,?PlayerAssists,?PlayerDamage,?PlayerDamageTaken,?PlayerDamageMitigated," +
+                                                       "?PlayerHealing,?PlayerGoldEarned,?PlayerGoldPerMinute,?PlayerItem1ID,?PlayerItem2ID," +
+                                                       "?PlayerItem3ID,?PlayerItem4ID,?PlayerItem5ID,?PlayerItem6ID," +
+                                                       "?PlayerRelic1ID,?PlayerRelic2ID,?PlayerWon,?PlayerRoleID,?PlayerPickOrder)", conn);
                     //values
                     //values
                     cmd.Parameters.AddWithValue("PlayerID", entity.PlayerID ?? (object)DBNull.Value);

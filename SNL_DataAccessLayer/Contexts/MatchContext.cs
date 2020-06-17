@@ -27,9 +27,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO match VALUES(ApiMatchID = ?ApiMatchID,MatchDate = ?MatchDate, MatchLength = ?MatchLength," +
-                                                        "PatchNumber = ?PatchNumber, WinningTeamID = ?WinningTeamID, HomeTeamID = ?HomeTeamID, AwayTeamID = ?AwayTeamID" +
-                                                        "GodBan1ID = ?GodBan1ID, GodBan2ID = ?GodBan2ID, GodBan3ID = ?GodBan3ID, GodBan4ID = ?GodBan4ID, GodBan5ID = ?GodBan5ID, GodBan6ID = ?GodBan6ID, GodBan7ID = ?GodBan7ID, GodBan8ID = ?GodBan8ID, GodBan9ID = ?GodBan9ID, GodBan10ID = ?GodBan10ID)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO match (ApiMatchID,MatchDate,MatchLength,PatchNumber,WinningTeamID,HomeTeamID,AwayTeamID,GodBan1ID,GodBan2ID,GodBan3ID,GodBan4ID,GodBan5ID,GodBan6ID,GodBan7ID,GodBan8ID,GodBan9ID,GodBan10ID) " +
+                        "VALUES(?ApiMatchID,?MatchDate,?MatchLength,?PatchNumber,?WinningTeamID,?HomeTeamID,?AwayTeamID,?GodBan1ID,?GodBan2ID,?GodBan3ID,?GodBan4ID,?GodBan5ID,?GodBan6ID,?GodBan7ID,?GodBan8ID,?GodBan9ID,?GodBan10ID)", conn);
                     //values
                     cmd.Parameters.AddWithValue("ApiMatchID", entity.ApiMatchID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("MatchDate", entity.MatchDate);

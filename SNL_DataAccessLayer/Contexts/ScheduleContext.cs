@@ -25,7 +25,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(ScheduleID = ?ScheduleID, DivisionID = ?DivisionID, ScheduleName = ?ScheduleName)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO schedule (ScheduleID,DivisionID,ScheduleName) VALUES(?ScheduleID,?DivisionID,?ScheduleName)", conn);
                     //values
                     cmd.Parameters.AddWithValue("ScheduleID", entity.ScheduleID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DivisionID", entity.DivisionID ?? (object)DBNull.Value);
@@ -284,7 +284,7 @@ namespace SNL_PersistenceLayer.Contexts
                 else
                 {
                     //add command
-                    MySqlCommand AddDetailCmd = new MySqlCommand("INSERT INTO scheduledetails VALUES(HomeTeamID = ?HomeTeamID, AwayTeamID = ?AwayTeamID, WeekNumber = ?WeekNumber, MatchNumber = ?MatchNumber)", conn);
+                    MySqlCommand AddDetailCmd = new MySqlCommand("INSERT INTO scheduledetails (HomeTeamID,AwayTeamID,WeekNumber,MatchNumber) VALUES(?HomeTeamID,?AwayTeamID,?WeekNumber,?MatchNumber)", conn);
                     //values
                     AddDetailCmd.Parameters.AddWithValue("HomeTeamID", ScheduleDetail.HomeTeamID);
                     AddDetailCmd.Parameters.AddWithValue("AwayTeamID", ScheduleDetail.AwayTeamID);

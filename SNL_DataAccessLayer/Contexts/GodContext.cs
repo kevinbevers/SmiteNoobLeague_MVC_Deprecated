@@ -25,8 +25,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(GodID = ?GodID, GodName = ?GodName," +
-                                                        "GodTitle = ?GodTitle, GodLore = ?GodLore, GodClass = ?GodClass, GodIcon = ?GodIcon, GodCardArt = ?GodCardArt)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god (GodIDGodName,GodTitle,GodLore,GodClass,GodIcon,GodCardArt) VALUES(?GodID,?GodName," +
+                                                        "?GodTitle,?GodLore,?GodClass,?GodIcon,?GodCardArt)", conn);
                     //values
                     cmd.Parameters.AddWithValue("GodID", entity.GodID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("GodName", entity.GodName ?? (object)DBNull.Value);

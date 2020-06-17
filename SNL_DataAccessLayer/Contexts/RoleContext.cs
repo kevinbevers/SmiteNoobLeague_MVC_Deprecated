@@ -25,7 +25,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(RoleName = ?RoleName, RoleDescription = ?RoleDescription)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO role (RoleName,RoleDescription) VALUES(?RoleName,?RoleDescription)", conn);
                     //values
                     cmd.Parameters.AddWithValue("RoleName", entity.RoleName ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("RoleDescription", entity.RoleDescription ?? (object)DBNull.Value);

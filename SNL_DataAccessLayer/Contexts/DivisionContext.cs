@@ -24,8 +24,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO division VALUES(DivisionName = ?DivisionName, " +
-                        "DivisionDescription = ?DivisionDescription)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO division (DivisionName,DivisionDescription) VALUES(?DivisionName, " +
+                        "?DivisionDescription)", conn);
                     //values
                     //cmd.Parameters.AddWithValue("DivisionID", entity.DivisionID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DivisionName", entity.DivisionName ?? (object)DBNull.Value);

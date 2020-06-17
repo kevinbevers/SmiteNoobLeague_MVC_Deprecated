@@ -25,8 +25,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO player VALUES(PlayerID = ?PlayerID, PlayerName = ?PlayerName, PlayerPlatformID = ?PlayerPlatformID," +
-                                                        "PlayerRoleID = ?PlayerRoleID, PlayerTeamID = ?PlayerTeamID)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO player (PlayerID,PlayerName,PlayerPlatformID,PlayerRoleID,PlayerTeamID) " +
+                        "VALUES(?PlayerID,?PlayerName,?PlayerPlatformID,?PlayerRoleID,?PlayerTeamID)", conn);
                     //values
                     cmd.Parameters.AddWithValue("PlayerID", entity.PlayerID ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("PlayerName", entity.PlayerName ?? (object)DBNull.Value);

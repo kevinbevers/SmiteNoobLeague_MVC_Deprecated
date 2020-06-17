@@ -25,8 +25,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO god VALUES(NewsTitle = ?NewsTitle,NewsSubject = ?NewsSubject, NewsDate = ?NewsDate, " +
-                                                        "NewsArticle = ?NewsArticle)", conn);
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO news (NewsTitle,NewsSubject,NewsDate,NewsArticle) " +
+                                                        "VALUES(?NewsTitle,?NewsSubject,?NewsDate,?NewsArticle)", conn);
                     //values
                     cmd.Parameters.AddWithValue("NewsTitle", entity.NewsTitle ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("NewsSubject", entity.NewsSubject ?? (object)DBNull.Value);
@@ -116,7 +116,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE god SET(NewsTitle = ?NewsTitle,NewsSubject = ?NewsSubject, NewsDate = ?NewsDate, " +
+                    MySqlCommand cmd = new MySqlCommand("UPDATE news SET(NewsTitle = ?NewsTitle,NewsSubject = ?NewsSubject, NewsDate = ?NewsDate, " +
                                                         "NewsArticle = ?NewsArticle) WHERE NewsID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.NewsID);
