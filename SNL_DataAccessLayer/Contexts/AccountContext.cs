@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class AccountContext : IContext<AccountDTO>
+    public class AccountContext : IAccountContext
     {
         private readonly ConnectionContext _con;
         public AccountContext(ConnectionContext con)

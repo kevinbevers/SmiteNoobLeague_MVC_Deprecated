@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class NewsContext : IContext<NewsDTO>
+    public class NewsContext : INewsContext
     {
         private readonly ConnectionContext _con;
         public NewsContext(ConnectionContext con)

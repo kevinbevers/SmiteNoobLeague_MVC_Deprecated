@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class MatchContext : IContext<MatchDTO>
+    public class MatchContext : IMatchContext
     {
         private readonly ConnectionContext _con;
         public MatchContext(ConnectionContext con)

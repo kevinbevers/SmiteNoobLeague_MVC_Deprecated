@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class PlayerStatContext : IContext<PlayerStatDTO>
+    public class PlayerStatContext : IPlayerStatContext
     {
         private readonly ConnectionContext _con;
         public PlayerStatContext(ConnectionContext con)
@@ -71,7 +71,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-        public void AddMultiple(List<PlayerStatDTO> entityList)
+        public void AddMultiple(IEnumerable<PlayerStatDTO> entityList)
         {
             //build a string with all the values in it.
             StringBuilder sCommand = new StringBuilder("INSERT INTO playerstat (PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel," +

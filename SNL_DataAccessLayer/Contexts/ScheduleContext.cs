@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class ScheduleContext : IContext<ScheduleDTO>
+    public class ScheduleContext : IScheduleContext
     {
         private readonly ConnectionContext _con;
         public ScheduleContext(ConnectionContext con)

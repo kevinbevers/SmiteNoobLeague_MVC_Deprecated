@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class ItemContext : IContext<ItemDTO>
+    public class ItemContext : IItemContext
     {
         private readonly ConnectionContext _con;
         public ItemContext(ConnectionContext con)
@@ -51,7 +51,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-        public void AddMultiple(List<ItemDTO> entityList)
+        public void AddMultiple(IEnumerable<ItemDTO> entityList)
         {
             try
             {

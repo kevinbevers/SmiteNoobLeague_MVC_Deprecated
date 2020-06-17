@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class GodContext : IContext<GodDTO>
+    public class GodContext : IGodContext
     {
         private readonly ConnectionContext _con;
         public GodContext(ConnectionContext con)

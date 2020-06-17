@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SNL_PersistenceLayer.Contexts
 {
-    public class StandingContext : IContext<StandingDTO>
+    public class StandingContext : IStandingContext
     {
         private readonly ConnectionContext _con;
         public StandingContext(ConnectionContext con)
