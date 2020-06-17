@@ -34,16 +34,15 @@ namespace SNL_LogicLayer.Services
             {
                 TeamID = entity.TeamID,
                 TeamName = entity.TeamName,
-                TeamCaptainID = entity.TeamCaptain.PlayerID,
-                TeamDivisionID = entity.TeamDivision.DivisionID,
+                TeamCaptainID = entity.TeamCaptain?.PlayerID, //null propagation
+                TeamDivisionID = entity.TeamDivision?.DivisionID, // null propagation
                 TeamLogo = entity.TeamLogo,
-                TeamMember2ID = entity.TeamMembers[0].PlayerID,
-                TeamMember3ID = entity.TeamMembers[1].PlayerID,
-                TeamMember4ID = entity.TeamMembers[2].PlayerID,
-                TeamMember5ID = entity.TeamMembers[3].PlayerID,
+                TeamMember2ID = entity.TeamMembers?.Count > 0 ? entity.TeamMembers[0].PlayerID : null,
+                TeamMember3ID = entity.TeamMembers?.Count > 1 ? entity.TeamMembers[1].PlayerID : null,
+                TeamMember4ID = entity.TeamMembers?.Count > 2 ? entity.TeamMembers[2].PlayerID : null,
+                TeamMember5ID = entity.TeamMembers?.Count > 3 ? entity.TeamMembers[3].PlayerID : null,
             };
-
-            _teamContext.Add(tDTO);
+                _teamContext.Add(tDTO);
         }
         public IEnumerable<Team> GetAll()
         {
@@ -121,15 +120,15 @@ namespace SNL_LogicLayer.Services
         {
             TeamDTO tDTO = new TeamDTO
             {
-                TeamID = entity.TeamID as int ? ?? default,
-                TeamName = entity.TeamName as string ?? default,
-                TeamCaptainID = entity.TeamCaptain.PlayerID,
-                TeamDivisionID = entity.TeamDivision.DivisionID as int? ?? default,
-                TeamLogo = entity.TeamLogo as byte[] ?? default,
-                TeamMember2ID = entity.TeamMembers[0].PlayerID as int? ?? default,
-                TeamMember3ID = entity.TeamMembers[1].PlayerID as int? ?? default,
-                TeamMember4ID = entity.TeamMembers[2].PlayerID as int? ?? default,
-                TeamMember5ID = entity.TeamMembers[3].PlayerID as int? ?? default,
+                TeamID = entity.TeamID, //normal values are nullable
+                TeamName = entity.TeamName,
+                TeamCaptainID = entity.TeamCaptain?.PlayerID, //null propagation because this comes from an object
+                TeamDivisionID = entity.TeamDivision?.DivisionID, // null propagation
+                TeamLogo = entity.TeamLogo,
+                TeamMember2ID = entity.TeamMembers?.Count > 0 ? entity.TeamMembers[0].PlayerID : null,
+                TeamMember3ID = entity.TeamMembers?.Count > 1 ? entity.TeamMembers[1].PlayerID : null,
+                TeamMember4ID = entity.TeamMembers?.Count > 2 ? entity.TeamMembers[2].PlayerID : null,
+                TeamMember5ID = entity.TeamMembers?.Count > 3 ? entity.TeamMembers[3].PlayerID : null,
             };
 
             _teamContext.Update(tDTO);

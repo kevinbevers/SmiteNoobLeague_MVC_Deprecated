@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace SNL_InterfaceLayer.CustomExceptions
@@ -12,9 +13,10 @@ namespace SNL_InterfaceLayer.CustomExceptions
         }
 
         public ContextErrorException(Exception ex)
-            : base(String.Format($"Something went wrong at {ex.Source}. \n{ex.Message} \n{ex.StackTrace}"))
+            : base(String.Format($"Something went wrong at {ex.Source}. {ex.Message}"))
         {
 
         }
+
     }
 }

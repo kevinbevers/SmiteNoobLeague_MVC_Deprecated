@@ -3,8 +3,10 @@
     //Layout = "adminlayout.cshtml";
     ViewData["Title"] = "Admin";
 }
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
         <script type="text/javascript">
             // By default validator ignores hidden fields.
             // change the setting here to ignore nothing
@@ -76,7 +78,7 @@
                             <p class="card-text">Manage existing teams or create a new one.</p>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#CreateTeamModal">Create team</button>
+                                    <button class="btn btn-primary btn-lg btn-block" onclick="CreateTeamPopUp()">Create team</button>
                                 </div>
                                 <div class="col-sm-6">
                                     <button class="btn btn-primary btn-lg btn-block">Manage teams</button>
@@ -125,7 +127,7 @@
         @* content end *@
     </div>
 
-    <!-- Modal -->
+    <!-- CreateTeamModal -->
     <div class="modal fade" id="CreateTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -136,82 +138,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="CreateTeamForm" asp-action="Index" asp-controller="Admin">
-                        <div class="form-group">
-                            <label>* Team Name</label>
-                            <input asp-for="@Model.TeamCreateModel.TeamName" id="teamname" class="form-control" />
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Team Logo</label>
-                            <button type="button" class="btn btn-primary form-control-file" onclick="$('#teamlogo').click()">Upload image</button>
-                            <input id="teamlogo" asp-for="@Model.TeamCreateModel.TeamLogoFile" type="file" class="form-control-file" accept="image/*" hidden/>
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamLogoFile" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>* Team Captain</label>
-                            <select asp-for="@Model.TeamCreateModel.TeamCaptainID" class="form-control">
-                                <option></option>
-                                <option value="5">Example Captain with ID 5</option>
-                            </select>
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamCaptainID" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>* Team Member 2</label>
-                            <div class="input-group">
-                                <input asp-for="@Model.TeamCreateModel.TeamMember2Name" id="tm2Name" class="form-control" />
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm2Name','#tm2ID')">Search player</button>
-                                </div>
-                            </div>
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember2Name" class="text-danger"></span>
-                            <input asp-for="@Model.TeamCreateModel.TeamMember2ID" id="tm2ID" class="form-control" hidden>
-                            @* input hidden validation does not work, input needs to be seen for the validation message *@
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember2ID" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>* Team Member 3</label>
-                            <div class="input-group">
-                                <input asp-for="@Model.TeamCreateModel.TeamMember3Name" id="tm3Name" class="form-control" />
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm3Name','#tm3ID')">Search player</button>
-                                </div>
-                            </div>
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember3Name" class="text-danger"></span>
-                            <input asp-for="@Model.TeamCreateModel.TeamMember3ID" id="tm3ID" class="form-control" hidden>
-                            @* input hidden validation does not work, input needs to be seen for the validation message *@
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember3ID" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>* Team Member 4</label>
-                            <div class="input-group">
-                                <input asp-for="@Model.TeamCreateModel.TeamMember4Name" id="tm4Name" class="form-control" />
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm4Name','#tm4ID')">Search player</button>
-                                </div>
-                            </div>
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember4Name" class="text-danger"></span>
-                            <input asp-for="@Model.TeamCreateModel.TeamMember4ID" id="tm4ID" class="form-control" hidden>
-                            @* input hidden validation does not work, input needs to be seen for the validation message *@
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember4ID" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>* Team Member 5</label>
-                            <div class="input-group">
-                                <input asp-for="@Model.TeamCreateModel.TeamMember5Name" id="tm5Name" class="form-control" />
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm5Name','#tm5ID')">Search player</button>
-                                </div>
-                            </div>
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember5Name" class="text-danger"></span>
-                            <input asp-for="@Model.TeamCreateModel.TeamMember5ID" id="tm5ID" class="form-control" hidden>
-                            @* input hidden validation does not work, input needs to be seen for the validation message *@
-                            <span asp-validation-for="@Model.TeamCreateModel.TeamMember5ID" class="text-danger"></span>
-                        </div>
-                        @* End of Create Team Form *@
-                    <p>* is required</p>
-                        <input type="submit" id="createTeamSubmit" value="Create Team" hidden />
-                    </form>
+                    <div id="FormContentCreateTeam">
+                        @* @{await Html.RenderPartialAsync("_CreateTeamFormPartial");}*@
+                    </div>
                 </div>
                 <div class="modal-footer">
                     @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
@@ -220,7 +149,7 @@
             </div>
         </div>
     </div>
-
+    <!--Player Search Modal-->
     <div class="modal fade bd-TeamMemberSearchModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -232,6 +161,22 @@
                 </div>
                 <div class="modal-body">
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="CreateTeamModalTitle">Create team</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
                 </div>
             </div>
         </div>

@@ -5,6 +5,10 @@
     {
       "library": "font-awesome@5.12.0-2",
       "destination": "wwwroot/font-awesome/"
+    },
+    {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "destination": "wwwroot/jquery-ajax-unobtrusive/"
     }
   ]
 }
