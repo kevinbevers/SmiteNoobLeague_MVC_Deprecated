@@ -27,8 +27,8 @@ namespace SNL_PersistenceLayer.Contexts
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand("INSERT INTO team (TeamName,TeamLogo,TeamDivisionID,TeamCaptainID,TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID)" +
-                                                        " VALUES(?TeamName,?TeamLogo,?TeamDivisionID,TeamCaptainID," +
-                                                        "?TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID)", conn);
+                                                        " VALUES(?TeamName,?TeamLogo,?TeamDivisionID,?TeamCaptainID," +
+                                                        "?TeamMember2ID,?TeamMember3ID,?TeamMember4ID,?TeamMember5ID)", conn);
 
                     //values
                     cmd.Parameters.AddWithValue("TeamName", entity.TeamName ?? (object)DBNull.Value);
