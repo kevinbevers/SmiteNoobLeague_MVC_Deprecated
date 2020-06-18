@@ -11,6 +11,7 @@
             // change the setting here to ignore nothing
             $.validator.setDefaults({ ignore: null });
         </script>
+        <script src="~/js/AdminPageScripts.js"></script>
     }
 }
 
@@ -126,7 +127,7 @@
         @* content end *@
     </div>
 
-@{await Html.RenderPartialAsync("_TeamModalsPartial"); }
+    @{await Html.RenderPartialAsync("_TeamModalsPartial"); }
 
     <!-- Message Modal -->
     <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog" aria-hidden="true">

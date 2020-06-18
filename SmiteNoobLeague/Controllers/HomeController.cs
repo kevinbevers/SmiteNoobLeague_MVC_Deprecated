@@ -27,25 +27,6 @@ namespace SmiteNoobLeague.Controllers
 
         public IActionResult Index()
         {
-            try
-            {
-                ITeamService TeamCol = _logicFactory.GetTeamService();
-
-                var t = TeamCol.GetByID(1);
-                var t2 = TeamCol.GetByID(2);
-
-                t2.TeamName = "This is a new name";
-
-                TeamCol.Update(t2);
-
-
-                ViewBag.test = t.TeamName;
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message); ;
-            }
-
             return View();
         }
     }

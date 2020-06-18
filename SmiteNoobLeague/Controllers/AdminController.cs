@@ -7,6 +7,7 @@ using SNL_FactoryLayer;
 using SmiteNoobLeague.Models.AdminPageViews.TeamViewModels;
 using SNL_LogicLayer.Models;
 using Microsoft.Extensions.Logging;
+using SmiteNoobLeague.HelperClasses;
 
 namespace SmiteNoobLeague.Controllers
 {
@@ -27,10 +28,14 @@ namespace SmiteNoobLeague.Controllers
         }
 
         #region CreateTeam
+        [HttpGet]
+        [AjaxOnly]
         public IActionResult CreateTeam()
         {
             return PartialView("_CreateTeamFormPartial");
         }
+        [HttpPost]
+        [AjaxOnly]
         public IActionResult CreateTeamModel(AdminTeamCreateView model)
         {
             if(ModelState.IsValid)
@@ -73,6 +78,9 @@ namespace SmiteNoobLeague.Controllers
         #endregion CreateTeam
 
         #region ManageTeam
+        [HttpGet]
+        //custom ajax only extension
+        [AjaxOnly]
         public IActionResult ManageTeam()
         {
             try
@@ -99,6 +107,8 @@ namespace SmiteNoobLeague.Controllers
                 return NotFound();
             }
         }
+        [HttpPost]
+        [AjaxOnly]
         public IActionResult DeleteTeam(int id)
         {
             try
@@ -131,6 +141,8 @@ namespace SmiteNoobLeague.Controllers
                 return NotFound();
             }
         }
+        [HttpGet]
+        [AjaxOnly]
         public IActionResult EditGetTeam(int id)
         {
             try
@@ -165,13 +177,26 @@ namespace SmiteNoobLeague.Controllers
                 return NotFound();
             }
         }
-
+        [HttpPost]
+        [AjaxOnly]
         public IActionResult EditTeam(AdminTeamEditView model)
         {
             if(ModelState.IsValid)
             {
+                var teamService =_logicFactory.GetTeamService();
 
-                return View(); //success
+                teamService.Update(new Team
+                {
+                    TeamID = model.TeamID,
+                    TeamName = model.TeamName,
+                    TeamCaptain = new Player { PlayerID = model.TeamCaptainID},
+                    TeamMembers = new List<Player> { new Player { PlayerID = model.TeamMember2ID },
+                                                       new Player { PlayerID = model.TeamMember3ID },
+                                                       new Player { PlayerID = model.TeamMember4ID },
+                                                       new Player { PlayerID = model.TeamMember5ID }},                   
+            });
+
+                return PartialView("_EditSuccess"); //success
             }
             else
             {
@@ -180,7 +205,7 @@ namespace SmiteNoobLeague.Controllers
             
         }
             #endregion
-            public IActionResult CheckTeamNameTaken(string teamname)
+        public IActionResult CheckTeamNameTaken(string teamname)
         {
 
             //teamservice.NameAvailable(); function
