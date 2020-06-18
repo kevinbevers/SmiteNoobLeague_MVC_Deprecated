@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SNL_LogicLayer\SNL_LogicLayer.csproj" />
+    <ProjectReference Include="..\SNL_LogicFactoryLayer\SNL_FactoryLayer.csproj" />
   </ItemGroup>
 
 </Project>
