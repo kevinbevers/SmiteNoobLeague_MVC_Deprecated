@@ -2,6 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+//move all these functions to an adminpage javascript file so it is not accessible on the whole site
 function SearchPlayer(inputID,targetInputID) {
     var playername = $(inputID).val();
     var modalObj = $('.bd-TeamMemberSearchModal');
@@ -102,4 +104,40 @@ function CreateManagePopUp() {
     });
 
     ManageTeamsModal.modal();
+}
+
+function DeleteTeam(Id) {
+        // create a json object
+        // then stringify the whole object
+        //dataToPost = JSON.stringify({ methodParam: object });
+
+        var ManageTeamsModal = $('#ManageTeamModal');
+        var Content = ManageTeamsModal.find('.modal-body');
+
+        $.ajax({
+            type: "POST",
+            url: "/Admin/DeleteTeam",
+            //contentType: "application/json; charset=utf-8", // specify the content type
+            dataType: 'html',
+            data: { id: Id },
+            traditional: true,
+            success: function (partialview) {
+                Content.html(partialview);
+            },
+            error: function (data) {
+                ManageTeamsError('Something went wrong trying to deleting the team');               
+            }
+        });
+}
+
+function ManageTeamsError(msg) {
+
+    var ManageTeamModal = $('#ManageTeamModal');
+    ManageTeamModal.modal('hide');
+
+    var failedMessage = '<h3 style="color:red;">' + msg + '<i class="fas fa-times-circle"></i></h3>';
+    var MessageModal = $('#MessageModal');
+    MessageModal.find('.modal-body').html("");
+    MessageModal.find('.modal-body').append(failedMessage);
+    MessageModal.modal('show');
 }

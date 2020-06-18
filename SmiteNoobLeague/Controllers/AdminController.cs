@@ -44,7 +44,7 @@ namespace SmiteNoobLeague.Controllers
                     //basic info about team. this is always filled in when adding
                     Team t = new Team();
                     t.TeamName = model.basic.TeamName;
-                    t.TeamCaptain = new Player {PlayerID = model.basic.TeamCaptainID };
+                    //t.TeamCaptain = new Player {PlayerID = model.basic.TeamCaptainID };
 
                     //team members can be chosen to be toggled and not filled in in the view
                     if (model.members != null)
@@ -78,11 +78,44 @@ namespace SmiteNoobLeague.Controllers
             var teamservice = _logicFactory.GetTeamService();
             var allTeams = teamservice.GetAll();
             AdminManageTeamListView model = new AdminManageTeamListView();
+            model.TeamList = new List<TeamListView>();
             foreach(Team team in allTeams)
             {
-                model.TeamList.Add(new TeamListView { Teamname = team.TeamName, TeamcaptainName = team.TeamCaptain.PlayerName, TeamID = team.TeamID });
+                model.TeamList.Add(new TeamListView { Teamname = team.TeamName,
+                                                      TeamcaptainName = team.TeamCaptain?.PlayerName,
+                                                      TeamID = team.TeamID });
             }          
             return PartialView("_ManageTeamListPartial", model);
+        }
+
+        public IActionResult DeleteTeam(int id)
+        {
+            try
+            {
+                var teamservice = _logicFactory.GetTeamService();
+                //delete the team
+                teamservice.Remove(new Team { TeamID = id });
+                //get all the teams that remain to update the view
+                var allTeams = teamservice.GetAll();
+                AdminManageTeamListView model = new AdminManageTeamListView();
+                model.TeamList = new List<TeamListView>();
+                foreach (Team team in allTeams)
+                {
+                    model.TeamList.Add(new TeamListView
+                    {
+                        Teamname = team.TeamName,
+                        TeamcaptainName = team.TeamCaptain?.PlayerName,
+                        TeamID = team.TeamID
+                    });
+                }
+
+                return PartialView("_ManageTeamListPartial", model);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong trying to delete a team to the database. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                return Json(new { success = false });
+            }
         }
         #endregion
         public IActionResult CheckTeamNameTaken(string teamname)

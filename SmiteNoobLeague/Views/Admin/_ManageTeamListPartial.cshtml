@@ -3,33 +3,38 @@
 <style>
 
     .buttons {
-        display: none;
-        background-color: rgba(0,0,0,0);
+        display: none;      
     }
 
     .team:hover > .buttons {
-        display: inline-block;
+        display: flex;
     }
 
-    header {
-        display: none !important;
-    }
+    /* Important part */
+.modal-dialog{
+    overflow-y: initial !important;
+}
+.modal-body{
+    max-height: 700px;
+    overflow-y: auto;
+}
+
 </style>
-<div class="container justify-content-center">
-    <div class="row centered">
-        <div class="col-lg-8 d-flex flex-column centered">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
             <div class="list-group">
                 <div id="grouped-teams">
                     @foreach (var team in Model.TeamList)
                     {
-                     <div class="row team">
+                    <div class="row team">
                         <p class="list-group-item list-group-item-action col-lg-10">@team.Teamname</p>
-                        <div class="col-lg-2 buttons">
-                            <a href="#" class="btn-danger"><i class="fas fa-trash-alt"></i></a>
-                            <a href="#" class="btn-danger"><i class="fas fa-trash-alt"></i></a>
+                        <div class="col-lg-2 buttons btn-group">
+                            <a href="#" class="btn-sm adminEditButton"><i class="fas fa-edit fa-2x"></i></a>
+                            <a href="#" class="btn-sm adminDeleteButton" onclick="return confirm('Are you want to delete @team.Teamname sure? \n there is no going back!')?DeleteTeam(@team.TeamID):'';"><i class="fas fa-trash-alt fa-2x"></i></a>
                         </div>
                     </div>
-                    }
+                        }
                 </div>
             </div>
         </div>
