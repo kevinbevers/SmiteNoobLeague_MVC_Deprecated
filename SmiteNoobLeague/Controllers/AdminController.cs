@@ -75,17 +75,29 @@ namespace SmiteNoobLeague.Controllers
         #region ManageTeam
         public IActionResult ManageTeam()
         {
-            var teamservice = _logicFactory.GetTeamService();
-            var allTeams = teamservice.GetAll();
-            AdminManageTeamListView model = new AdminManageTeamListView();
-            model.TeamList = new List<TeamListView>();
-            foreach(Team team in allTeams)
+            try
             {
-                model.TeamList.Add(new TeamListView { Teamname = team.TeamName,
-                                                      TeamcaptainName = team.TeamCaptain?.PlayerName,
-                                                      TeamID = team.TeamID });
-            }          
-            return PartialView("_ManageTeamListPartial", model);
+                var teamservice = _logicFactory.GetTeamService();
+                var allTeams = teamservice.GetAll();
+                AdminManageTeamListView model = new AdminManageTeamListView();
+                model.TeamList = new List<TeamListView>();
+                foreach (Team team in allTeams)
+                {
+                    model.TeamList.Add(new TeamListView
+                    {
+                        Teamname = team.TeamName,
+                        TeamcaptainName = team.TeamCaptain?.PlayerName,
+                        TeamID = team.TeamID
+                    });
+                }
+                return PartialView("_ManageTeamListPartial", model);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong trying to get all teams for the manage modal. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                //notfound will result in a ajax error result. this will show a message to the user.
+                return NotFound();
+            }
         }
 
         public IActionResult DeleteTeam(int id)
@@ -114,7 +126,10 @@ namespace SmiteNoobLeague.Controllers
             catch(Exception ex)
             {
                 _logger.LogError($"Something went wrong trying to delete a team to the database. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
-                return Json(new { success = false });
+                //notfound will result in a ajax error result. this will show a message to the user. 
+                //could also return a partial view with a script that runs to show the messagebox. this feels cleaner. 
+                //i couldn't find a way to send a Json result with partial view and success yes or no
+                return NotFound();
             }
         }
         #endregion

@@ -49,14 +49,13 @@ function CreateTeamPopUp() {
             dataType: "html",
             success: function (partialview) {
                 FormContent.html(partialview);
-                jQuery.validator.unobtrusive.parse('#CreateTeamForm')
+                jQuery.validator.unobtrusive.parse('#CreateTeamForm');
+                CreateTeamModal.modal();
             },
             error: function (data) {
                 console.log(data);
             }
         });
-
-    CreateTeamModal.modal();
 }
 
 function TeamCreatedSuccess() {
@@ -94,16 +93,15 @@ function CreateManagePopUp() {
         type: "GET",
         url: "/Admin/ManageTeam",
         //contentType: "application/json; charset=utf-8", // specify the content type
-        dataType: "html",
+        //dataType: "html",
         success: function (partialview) {
             Content.html(partialview);
+            ManageTeamsModal.modal();
         },
         error: function (data) {
-            console.log(data);
+            ManageTeamsError('Something went wrong trying to get teams'); 
         }
-    });
-
-    ManageTeamsModal.modal();
+    });    
 }
 
 function DeleteTeam(Id) {
@@ -118,7 +116,7 @@ function DeleteTeam(Id) {
             type: "POST",
             url: "/Admin/DeleteTeam",
             //contentType: "application/json; charset=utf-8", // specify the content type
-            dataType: 'html',
+            //dataType: 'html',
             data: { id: Id },
             traditional: true,
             success: function (partialview) {
