@@ -13,7 +13,9 @@ namespace SmiteNoobLeague.Models.AdminPageViews
         public string AccountName { get; set; }
         [Required]
         public string AccountEmail { get; set; }
+        [Required]
         public string AccountPassword { get; set; } //only for input not output
+        [Required]
         public int PlayerID { get; set; }
         [Required]
         public string PlayerName { get; set; }

@@ -1,5 +1,4 @@
-﻿@model SmiteNoobLeague.Models.AdminPageViews.AdminPageViewCollection
-@{
+﻿@{
     //Layout = "adminlayout.cshtml";
     ViewData["Title"] = "Admin";
 }
@@ -81,7 +80,7 @@
                                     <button class="btn btn-primary btn-lg btn-block" onclick="CreateTeamPopUp()">Create team</button>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary btn-lg btn-block">Manage teams</button>
+                                    <button class="btn btn-primary btn-lg btn-block" onclick="CreateManagePopUp()">Manage teams</button>
                                 </div>
                             </div>
                         </div>
@@ -127,44 +126,7 @@
         @* content end *@
     </div>
 
-    <!-- CreateTeamModal -->
-    <div class="modal fade" id="CreateTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="CreateTeamModalTitle">Create team</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="FormContentCreateTeam">
-                        @* @{await Html.RenderPartialAsync("_CreateTeamFormPartial");}*@
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                    <button type="button" class="btn btn-primary" onclick="$('#createTeamSubmit').click()">Create Team</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Player Search Modal-->
-    <div class="modal fade bd-TeamMemberSearchModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="CreateTeamModalTitle">OOPS!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                </div>
-            </div>
-        </div>
-    </div>
+@{await Html.RenderPartialAsync("_TeamModalsPartial"); }
 
     <!-- Message Modal -->
     <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog" aria-hidden="true">

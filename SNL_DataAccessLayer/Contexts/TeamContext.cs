@@ -96,7 +96,7 @@ namespace SNL_PersistenceLayer.Contexts
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand("SELECT TeamID,TeamName,TeamLogo,TeamDivisionID,TeamCaptainID," +
-                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID  FROM teams", conn);
+                                                        "TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID  FROM team", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {

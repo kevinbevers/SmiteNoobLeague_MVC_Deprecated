@@ -1,73 +1,73 @@
-﻿@model SmiteNoobLeague.Models.AdminPageViews.AdminTeamCreateView
+﻿@model SmiteNoobLeague.Models.AdminPageViews.TeamViewModels.AdminTeamCreateView
     <form id="CreateTeamForm" asp-action="CreateTeamModel" asp-controller="Admin" enctype="multipart/form-data" data-ajax="true" data-ajax-update="#FormContentCreateTeam" data-ajax-method="post">
         <div class="form-group">
             <label>* Team Name</label>
-            <input asp-for="@Model.TeamName" id="teamname" class="form-control" />
-            <span asp-validation-for="@Model.TeamName" class="text-danger"></span>
+            <input asp-for="@Model.basic.TeamName" id="teamname" class="form-control" />
+            <span asp-validation-for="@Model.basic.TeamName" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>Team Logo</label>
             <button type="button" class="btn btn-primary form-control-file" onclick="$('#teamlogo').click()">Upload image</button>
-            <input id="teamlogo" asp-for="@Model.TeamLogoFile" type="file" class="form-control-file" accept="image/*" hidden />
-            <span asp-validation-for="@Model.TeamLogoFile" class="text-danger"></span>
+            <input id="teamlogo" asp-for="@Model.basic.TeamLogoFile" type="file" class="form-control-file" accept="image/*" hidden />
+            <span asp-validation-for="@Model.basic.TeamLogoFile" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>* Team Captain</label>
-            <select asp-for="@Model.TeamCaptainID" class="form-control">
+            <select asp-for="@Model.basic.TeamCaptainID" class="form-control">
                 <option></option>
                 <option value="5">Example Captain with ID 5</option>
             </select>
-            <span asp-validation-for="@Model.TeamCaptainID" class="text-danger"></span>
+            <span asp-validation-for="@Model.basic.TeamCaptainID" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>* Team Member 2</label>
             <div class="input-group">
-                <input asp-for="@Model.TeamMember2Name" id="tm2Name" class="form-control" />
+                <input asp-for="@Model.members.TeamMember2Name" id="tm2Name" class="form-control" />
                 <div class="input-group-append">
                     <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm2Name','#tm2')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember2Name" class="text-danger"></span>
-            <input asp-for="@Model.TeamMember2ID" id="tm2ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.members.TeamMember2Name" class="text-danger"></span>
+            <input asp-for="@Model.members.TeamMember2ID" id="tm2ID" class="form-control" hidden>
             @* input hidden validation does not work, input needs to be seen for the validation message *@
-            <span asp-validation-for="@Model.TeamMember2ID" class="text-danger"></span>
+            <span asp-validation-for="@Model.members.TeamMember2ID" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>* Team Member 3</label>
             <div class="input-group">
-                <input asp-for="@Model.TeamMember3Name" id="tm3Name" class="form-control" />
+                <input asp-for="@Model.members.TeamMember3Name" id="tm3Name" class="form-control" />
                 <div class="input-group-append">
                     <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm3Name','#tm3')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember3Name" class="text-danger"></span>
-            <input asp-for="@Model.TeamMember3ID" id="tm3ID" class="form-control" hidden>
-            <span asp-validation-for="@Model.TeamMember3ID" class="text-danger"></span>
+            <span asp-validation-for="@Model.members.TeamMember3Name" class="text-danger"></span>
+            <input asp-for="@Model.members.TeamMember3ID" id="tm3ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.members.TeamMember3ID" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>* Team Member 4</label>
             <div class="input-group">
-                <input asp-for="@Model.TeamMember4Name" id="tm4Name" class="form-control" />
+                <input asp-for="@Model.members.TeamMember4Name" id="tm4Name" class="form-control" />
                 <div class="input-group-append">
                     <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm4Name','#tm4')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember4Name" class="text-danger"></span>
-            <input asp-for="@Model.TeamMember4ID" id="tm4ID" class="form-control" hidden>
-            <span asp-validation-for="@Model.TeamMember4ID" class="text-danger"></span>
+            <span asp-validation-for="@Model.members.TeamMember4Name" class="text-danger"></span>
+            <input asp-for="@Model.members.TeamMember4ID" id="tm4ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.members.TeamMember4ID" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>* Team Member 5</label>
             <div class="input-group">
-                <input asp-for="@Model.TeamMember5Name" id="tm5Name" class="form-control" />
+                <input asp-for="@Model.members.TeamMember5Name" id="tm5Name" class="form-control" />
                 <div class="input-group-append">
                     <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm5Name','#tm5')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember5Name" class="text-danger"></span>
-            <input asp-for="@Model.TeamMember5ID" id="tm5ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.members.TeamMember5Name" class="text-danger"></span>
+            <input asp-for="@Model.members.TeamMember5ID" id="tm5ID" class="form-control" hidden>
             @* input hidden validation does not work, input needs to be seen for the validation message *@
-            <span asp-validation-for="@Model.TeamMember5ID" class="text-danger"></span>
+            <span asp-validation-for="@Model.members.TeamMember5ID" class="text-danger"></span>
         </div>
         @* End of Create Team Form *@
         <p>* is required</p>

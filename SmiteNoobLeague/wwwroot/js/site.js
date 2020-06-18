@@ -38,7 +38,7 @@ function CreateTeamPopUp() {
 
         // create a json object
         // then stringify the whole object
-        //dataToPost = JSON.stringify({ methodParam: IntrestList });
+        //dataToPost = JSON.stringify({ methodParam: object });
 
         $.ajax({
             type: "GET",
@@ -81,6 +81,25 @@ function TeamCreatedError() {
     var MessageModal = $('#MessageModal');
     MessageModal.find('.modal-body').html("");
     MessageModal.find('.modal-body').append(failedMessage);
-    MessageModal.modal('show');
-    
+    MessageModal.modal('show');    
+}
+
+function CreateManagePopUp() {
+    var ManageTeamsModal = $('#ManageTeamModal');
+    var Content = ManageTeamsModal.find('.modal-body');
+
+    $.ajax({
+        type: "GET",
+        url: "/Admin/ManageTeam",
+        //contentType: "application/json; charset=utf-8", // specify the content type
+        dataType: "html",
+        success: function (partialview) {
+            Content.html(partialview);
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+
+    ManageTeamsModal.modal();
 }

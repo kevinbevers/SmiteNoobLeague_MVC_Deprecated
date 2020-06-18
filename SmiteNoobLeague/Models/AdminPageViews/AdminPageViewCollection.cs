@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmiteNoobLeague.Models.AdminPageViews.TeamViewModels;
 
 namespace SmiteNoobLeague.Models.AdminPageViews
 {
+    //THIS BADBOY IS NOT NEEDED, i use ajax to get my viewmodels with partial views. so it is loaded dynamically on button click
     public class AdminPageViewCollection
     {
         //empty models for create

@@ -1,0 +1,37 @@
+﻿@model SmiteNoobLeague.Models.AdminPageViews.TeamViewModels.AdminManageTeamListView
+
+<style>
+
+    .buttons {
+        display: none;
+        background-color: rgba(0,0,0,0);
+    }
+
+    .team:hover > .buttons {
+        display: inline-block;
+    }
+
+    header {
+        display: none !important;
+    }
+</style>
+<div class="container justify-content-center">
+    <div class="row centered">
+        <div class="col-lg-8 d-flex flex-column centered">
+            <div class="list-group">
+                <div id="grouped-teams">
+                    @foreach (var team in Model.TeamList)
+                    {
+                     <div class="row team">
+                        <p class="list-group-item list-group-item-action col-lg-10">@team.Teamname</p>
+                        <div class="col-lg-2 buttons">
+                            <a href="#" class="btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            <a href="#" class="btn-danger"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
