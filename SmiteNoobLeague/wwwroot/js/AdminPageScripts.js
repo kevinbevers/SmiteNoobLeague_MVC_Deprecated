@@ -160,14 +160,10 @@ function TeamEditSuccess() {
     var ManageTeamModal = $('#ManageTeamModal');
     ManageTeamModal.modal('hide');
 
-    var succesMessage = '<div class="modal-header">' +
-        '<h5 class="modal-title" id="CreateTeamModalTitle">Message</h5>' +
-        '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span></button></div > <div class="modal-body text-center">' +
-        '</div> <h3 style="color:green;">Team successfully Edited <i class="fas fa-check-circle"></i></h3>';
+    var succesMessage = '<h3 style="color:green;">Team successfully Edited <i class="fas fa-check-circle"></i></h3>';
     var MessageModal = $('#MessageModal');
-    MessageModal.find('.modal-content').html("");
-    MessageModal.find('.modal-content').append(succesMessage);
+    MessageModal.find('.modal-body').html("");
+    MessageModal.find('.modal-body').append(succesMessage);
     MessageModal.modal('show');
 
     window.setTimeout(function () {
