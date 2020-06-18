@@ -48,6 +48,7 @@ function CreateTeamPopUp() {
             //contentType: "application/json; charset=utf-8", // specify the content type
             dataType: "html",
             success: function (partialview) {
+                FormContent.html("");
                 FormContent.html(partialview);
                 jQuery.validator.unobtrusive.parse('#CreateTeamForm');
                 CreateTeamModal.modal();
@@ -87,14 +88,15 @@ function TeamCreatedError() {
 
 function CreateManagePopUp() {
     var ManageTeamsModal = $('#ManageTeamModal');
-    var Content = ManageTeamsModal.find('.modal-body');
+    var Content = ManageTeamsModal.find('.modal-content');
 
     $.ajax({
         type: "GET",
         url: "/Admin/ManageTeam",
         //contentType: "application/json; charset=utf-8", // specify the content type
-        //dataType: "html",
+        dataType: "html",
         success: function (partialview) {
+            Content.html("");
             Content.html(partialview);
             ManageTeamsModal.modal();
         },
@@ -116,7 +118,7 @@ function DeleteTeam(Id) {
             type: "POST",
             url: "/Admin/DeleteTeam",
             //contentType: "application/json; charset=utf-8", // specify the content type
-            //dataType: 'html',
+            dataType: 'html',
             data: { id: Id },
             traditional: true,
             success: function (partialview) {
@@ -138,4 +140,25 @@ function ManageTeamsError(msg) {
     MessageModal.find('.modal-body').html("");
     MessageModal.find('.modal-body').append(failedMessage);
     MessageModal.modal('show');
+}
+
+function CreateEditTeamPopUp(Id) {
+    var ManageTeamsModal = $('#ManageTeamModal');
+    var Content = ManageTeamsModal.find('.modal-content');
+
+    $.ajax({
+        type: "GET",
+        url: "/Admin/EditGetTeam",
+        //contentType: "application/json; charset=utf-8", // specify the content type
+        dataType: "html",
+        data: { id: Id },
+        success: function (partialview) {
+            Content.html("");
+            Content.html(partialview);
+            jQuery.validator.unobtrusive.parse('#EditTeamForm');
+        },
+        error: function (data) {
+            ManageTeamsError('Something went wrong trying to get team info');
+        }
+    });
 }

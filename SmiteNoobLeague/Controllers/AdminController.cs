@@ -99,7 +99,6 @@ namespace SmiteNoobLeague.Controllers
                 return NotFound();
             }
         }
-
         public IActionResult DeleteTeam(int id)
         {
             try
@@ -132,8 +131,56 @@ namespace SmiteNoobLeague.Controllers
                 return NotFound();
             }
         }
-        #endregion
-        public IActionResult CheckTeamNameTaken(string teamname)
+        public IActionResult EditGetTeam(int id)
+        {
+            try
+            {
+                var teamService = _logicFactory.GetTeamService();
+                //get the team
+                Team t = teamService.GetByID(id);
+                //create the view model
+                AdminTeamEditView editTeamView = new AdminTeamEditView
+                {
+                    TeamID = t.TeamID,
+                    TeamName = t.TeamName,
+                    TeamCaptainID = t.TeamCaptain?.PlayerID,
+                    TeamMember2ID = t.TeamMembers[0].PlayerID,
+                    TeamMember2Name = t.TeamMembers[0].PlayerName,
+                    TeamMember3ID = t.TeamMembers[1].PlayerID,
+                    TeamMember3Name = t.TeamMembers[1].PlayerName,
+                    TeamMember4ID = t.TeamMembers[2].PlayerID,
+                    TeamMember4Name = t.TeamMembers[2].PlayerName,
+                    TeamMember5ID = t.TeamMembers[3].PlayerID,
+                    TeamMember5Name = t.TeamMembers[3].PlayerName,
+                };
+
+
+
+                return PartialView("_EditTeamFormPartial", editTeamView);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong trying to get a team to edit. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                //notfound will result in a ajax error result. this will show a message to the user. 
+                return NotFound();
+            }
+        }
+
+        public IActionResult EditTeam(AdminTeamEditView model)
+        {
+            if(ModelState.IsValid)
+            {
+
+                return View(); //success
+            }
+            else
+            {
+                return PartialView("_EditTeamFormPartial", model);
+            }
+            
+        }
+            #endregion
+            public IActionResult CheckTeamNameTaken(string teamname)
         {
 
             //teamservice.NameAvailable(); function

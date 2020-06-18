@@ -1,0 +1,86 @@
+﻿@model SmiteNoobLeague.Models.AdminPageViews.TeamViewModels.AdminTeamEditView
+
+<div class="modal-header">
+    <h5 class="modal-title" id="CreateTeamModalTitle">Edit @Model.TeamName</h5>
+    <button type="button" class="close" onclick="CreateManagePopUp()" aria-label="Return">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <form id="EditTeamForm" asp-action="EditTeam" asp-controller="Admin" enctype="multipart/form-data" data-ajax="true" data-ajax-update="#EditTeamForm" data-ajax-method="post">
+        <input asp-for="@Model.TeamID" hidden>
+        <div class="form-group">
+            <label>* Team Name</label>
+            <input asp-for="@Model.TeamName" id="teamname" class="form-control" />
+            <span asp-validation-for="@Model.TeamName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Team Logo</label>
+            <button type="button" class="btn btn-primary form-control-file" onclick="$('#teamlogo').click()">Upload image</button>
+            <input id="teamlogo" asp-for="@Model.TeamLogoFile" type="file" class="form-control-file" accept="image/*" hidden />
+            <span asp-validation-for="@Model.TeamLogoFile" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Team Captain</label>
+            <select asp-for="@Model.TeamCaptainID" class="form-control">
+                <option></option>
+                <option value="5">Example Captain with ID 5</option>
+            </select>
+            <span asp-validation-for="@Model.TeamCaptainID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Team Member 2</label>
+            <div class="input-group">
+                <input asp-for="@Model.TeamMember2Name" id="tm2Name" class="form-control" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm2Name','#tm2')">Search player</button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.TeamMember2Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember2ID" id="tm2ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.TeamMember2ID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Team Member 3</label>
+            <div class="input-group">
+                <input asp-for="@Model.TeamMember3Name" id="tm3Name" class="form-control" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm3Name','#tm3')">Search player</button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.TeamMember3Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember3ID" id="tm3ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.TeamMember3ID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Team Member 4</label>
+            <div class="input-group">
+                <input asp-for="@Model.TeamMember4Name" id="tm4Name" class="form-control" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm4Name','#tm4')">Search player</button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.TeamMember4Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember4ID" id="tm4ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.TeamMember4ID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Team Member 5</label>
+            <div class="input-group">
+                <input asp-for="@Model.TeamMember5Name" id="tm5Name" class="form-control" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm5Name','#tm5')">Search player</button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.TeamMember5Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember5ID" id="tm5ID" class="form-control" hidden>
+            <span asp-validation-for="@Model.TeamMember5ID" class="text-danger"></span>
+        </div>
+        @* End of Edit Team Form *@
+        <p>* is required</p>
+        <input type="submit" id="EditTeamSubmit" value="Save changes" hidden />
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="$('#EditTeamSubmit').click()">Save changes</button>
+</div>
