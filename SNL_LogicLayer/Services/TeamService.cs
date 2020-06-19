@@ -102,11 +102,11 @@ namespace SNL_LogicLayer.Services
         private Team BuildTeamModel(TeamDTO tDTO)
         {
             //team members
-            PlayerDTO CaptainDTO = _playerContext.GetByID(tDTO.TeamCaptainID);
-            PlayerDTO tm2DTO = _playerContext.GetByID(tDTO.TeamMember2ID);
-            PlayerDTO tm3DTO = _playerContext.GetByID(tDTO.TeamMember3ID);
-            PlayerDTO tm4DTO = _playerContext.GetByID(tDTO.TeamMember4ID);
-            PlayerDTO tm5DTO = _playerContext.GetByID(tDTO.TeamMember5ID);
+            PlayerDTO CaptainDTO = _playerContext.GetByID(tDTO.TeamCaptainID) ?? new PlayerDTO();
+            PlayerDTO tm2DTO = _playerContext.GetByID(tDTO.TeamMember2ID) ?? new PlayerDTO();
+            PlayerDTO tm3DTO = _playerContext.GetByID(tDTO.TeamMember3ID) ?? new PlayerDTO();
+            PlayerDTO tm4DTO = _playerContext.GetByID(tDTO.TeamMember4ID) ?? new PlayerDTO();
+            PlayerDTO tm5DTO = _playerContext.GetByID(tDTO.TeamMember5ID) ?? new PlayerDTO();
             //get player role with the role context
             var roles = _roleContext.GetAll();
             var cRole = roles.Where(i => i.RoleID == CaptainDTO.PlayerRoleID).FirstOrDefault() ?? new RoleDTO();
@@ -124,7 +124,7 @@ namespace SNL_LogicLayer.Services
 
             };
             //TeamDivision
-            DivisionDTO div = _divisionContext.GetByID(tDTO.TeamDivisionID); //could do something with the division
+            DivisionDTO div = _divisionContext.GetByID(tDTO.TeamDivisionID) ?? new DivisionDTO(); //could do something with the division
 
 
             Team t = new Team
