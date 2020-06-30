@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(StandingDTO entity)
+        public int? Add(StandingDTO entity)
         {
             try
             {
@@ -33,6 +33,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -173,14 +174,14 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(StandingDTO entity)
+        public int? Update(StandingDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE standing SET(DivisionID = ?DivisionID, TeamID = ?TeamID, Score = ?Score) WHERE StandingID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE standing SET DivisionID = ?DivisionID, TeamID = ?TeamID, Score = ?Score WHERE StandingID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.StandingID);
                     //values
@@ -190,6 +191,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -198,7 +200,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(StandingDTO entity)
+        public int? Remove(StandingDTO entity)
         {
             try
             {
@@ -211,6 +213,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

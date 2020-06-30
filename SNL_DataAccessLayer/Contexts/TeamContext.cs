@@ -19,7 +19,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(TeamDTO entity)
+        public int? Add(TeamDTO entity)
         {
             try
             {
@@ -42,6 +42,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return LastIdAdded();
                 }
             }
             catch (Exception ex)
@@ -168,7 +169,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(TeamDTO entity)
+        public int? Update(TeamDTO entity)
         {
             try
             {
@@ -191,6 +192,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -199,7 +201,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(TeamDTO entity)
+        public int? Remove(TeamDTO entity)
         {
             try
             {
@@ -212,12 +214,91 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
             {
                 throw new ContextErrorException(ex);
             }
+        }
+        public bool NameAvailable(string teamname)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM team WHERE TeamName = ?name", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("name", MySqlHelper.EscapeString(teamname));
+                    //execute command
+                    int count = 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                    //should return if a row is affected or not
+                    return count > 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+
+           
+        }
+        public bool CaptainAvailable(int captainid)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM team WHERE TeamCaptainID = ?id", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("id", captainid);
+                    //execute command
+                    int count = 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                    //should return if a row is affected or not
+                    return count > 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+
+
+        }
+        private int? LastIdAdded()
+        {
+            int? lastRowID = null;
+
+            using (MySqlConnection conn = _con.GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT MAX(TeamID) as LastID FROM team", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lastRowID = reader[0] as int? ?? default;
+                    }
+                }
+            }
+                return lastRowID;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(PlayerDTO entity)
+        public int? Add(PlayerDTO entity)
         {
             try
             {
@@ -36,6 +36,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -136,15 +137,15 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(PlayerDTO entity)
+        public int? Update(PlayerDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE player SET(PlayerName = ?PlayerName, PlayerPlatformID = ?PlayerPlatformID," +
-                                                        "PlayerRoleID = ?PlayerRoleID, PlayerTeamID = ?PlayerTeamID) WHERE PlayerID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE player SET PlayerName = ?PlayerName, PlayerPlatformID = ?PlayerPlatformID," +
+                                                        "PlayerRoleID = ?PlayerRoleID, PlayerTeamID = ?PlayerTeamID  WHERE PlayerID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.PlayerID);
                     //values
@@ -155,6 +156,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -163,7 +165,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(PlayerDTO entity)
+        public int? Remove(PlayerDTO entity)
         {
             try
             {
@@ -176,6 +178,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

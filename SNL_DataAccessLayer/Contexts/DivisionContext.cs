@@ -17,7 +17,7 @@ namespace SNL_PersistenceLayer.Contexts
             _con = con;
         }
         //Create
-        public void Add(DivisionDTO entity)
+        public int? Add(DivisionDTO entity)
         {
             try
             {
@@ -36,6 +36,7 @@ namespace SNL_PersistenceLayer.Contexts
                     AddTeamsToDivision(entity, conn);
 
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -121,15 +122,15 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(DivisionDTO entity)
+        public int? Update(DivisionDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE account SET(DivisionName = ?DivisionName," +
-                                                        "DivisionDescription = ?DivisionDescription) WHERE DivisionID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE division SET DivisionName = ?DivisionName," +
+                                                        "DivisionDescription = ?DivisionDescription WHERE DivisionID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.DivisionID);
                     //values
@@ -138,6 +139,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -146,7 +148,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(DivisionDTO entity)
+        public int? Remove(DivisionDTO entity)
         {
             try
             {
@@ -159,6 +161,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

@@ -11,7 +11,8 @@
             // change the setting here to ignore nothing
             $.validator.setDefaults({ ignore: null });
         </script>
-        <script src="~/js/AdminPageScripts.js"></script>
+        <script src="~/js/AdminPageScripts.js"></script>   
+        <script type="text/javascript" src="~/js/TeamNameCheck.js"></script>
     }
 }
 
@@ -109,7 +110,7 @@
                     <div class="card-body">
                         <h1 class="card-title">Admin log</h1>
                         <p class="card-text">a log where everything that the site has processed is logged</p>
-                        <div class="container bg-dark h-75 text-light overflow-auto">
+                        <div class="container bg-dark adminlog text-light overflow-auto">
                             <ul class="list-unstyled">
                                 <li>A log entry</li>
                                 <li>A log entry</li>
@@ -144,4 +145,7 @@
             </div>
         </div>
     </div>
+
+    <div id="dynamicModalContainer"></div>
+
 </body>

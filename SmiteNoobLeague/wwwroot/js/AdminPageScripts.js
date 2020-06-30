@@ -1,4 +1,5 @@
-﻿function SearchPlayer(inputID, targetInputID) {
+﻿/*Team scripts*/
+function SearchPlayer(inputID, targetInputID) {
     var playername = $(inputID).val();
     var modalObj = $('.bd-TeamMemberSearchModal');
     if (playername != "") {
@@ -29,7 +30,7 @@ function SendBackID(id, targetInputID, name) {
 
 function CreateTeamPopUp() {
     var CreateTeamModal = $('#CreateTeamModal');
-    var FormContent = $('#FormContentCreateTeam')
+    var FormContent = $('#FormContentCreateTeam');
 
     // create a json object
     // then stringify the whole object
@@ -45,6 +46,9 @@ function CreateTeamPopUp() {
             FormContent.html(partialview);
             jQuery.validator.unobtrusive.parse('#CreateTeamForm');
             CreateTeamModal.modal();
+            CreateTeamModal.hover(function () {
+                this.focus();
+            });
         },
         error: function (data) {
             console.log(data);
@@ -104,8 +108,16 @@ function DeleteTeam(Id) {
     // then stringify the whole object
     //dataToPost = JSON.stringify({ methodParam: object });
 
+
+    //delete the are you sure pop up from the html code
+    var modalContainer = $('#dynamicModalContainer');
+    var areyousure = modalContainer.find('#PopUpModal');
+    areyousure.modal('hide');
+    //modalContainer.html("");
+
+    //get the modal view to update
     var ManageTeamsModal = $('#ManageTeamModal');
-    var Content = ManageTeamsModal.find('.modal-body');
+    var Content = ManageTeamsModal.find('.modal-content');
 
     $.ajax({
         type: "POST",
@@ -171,3 +183,29 @@ function TeamEditSuccess() {
         CreateManagePopUp();
     }, 1600);
 }
+/*Are you sure pop up*/
+function AreYouSure(id,teamname) {
+
+   
+    var PopUpModal = '<div class="modal fade" id="PopUpModal" tabindex="-1" role="dialog" aria-hidden="true">' +
+        '<div class="modal-dialog" role="document">' +
+            '<div class="modal-content">' +
+                '<div class="modal-body text-center">' +
+                     '<h5>Are you sure you want to delete ' + teamname + '?</h4>' +
+                     '<p>there is no going back!</p>' +
+                '</div>' +
+                '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>' +
+                    '<button type="button" class="btn btn-danger" onclick="DeleteTeam(' + id + ')">Delete Team</button>' +
+                '</div>' +
+            '</div>' +
+    '</div>' +
+        '</div';
+
+    var modalContainer = $('#dynamicModalContainer');        
+    modalContainer.html("");
+    modalContainer.append(PopUpModal);
+    var areyousure = modalContainer.find('#PopUpModal');
+    areyousure.modal('show');
+}
+/*Team name available*/

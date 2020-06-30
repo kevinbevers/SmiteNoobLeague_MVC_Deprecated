@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" maximum-scale="1" />
     <title>@ViewData["Title"] - SmiteNoobLeague</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -63,18 +63,20 @@
         </nav>
     </header>
     <div class="jumbotron-fluid">
-            @RenderBody()
+        @RenderBody()
     </div>
-
-    <footer class="border-top footer text-muted bg-white">
-        <div class="ml-2 mr-2 text-center">
-            <div class="float-left m-0">&copy; 2020 - Smite Noob League Website made by Kevin Bevers</div>
-            <div class="float-right m-0">Social links?!</div>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    <wrapper class="d-flex flex-column">
+        <footer class="border-top footer text-muted bg-white">
+            <div class="ml-2 mr-2 text-center">
+                <div class="float-left footertext m-0">&copy; 2020 - Smite Noob League Website made by Kevin Bevers</div>
+                <div class="float-right footertext m-0">Social links?!</div>
+            </div>
+        </footer>
+        </wrapper>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+        @RenderSection("PartialScripts", required: false)
 </body>
 </html>

@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(ItemDTO entity)
+        public int? Add(ItemDTO entity)
         {
             try
             {
@@ -44,6 +44,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -174,7 +175,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(ItemDTO entity)
+        public int? Update(ItemDTO entity)
         {
             List<string> ItemStats = entity.ItemStats.ToList();
 
@@ -183,8 +184,8 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE account SET(ItemName = ?ItemName,ItemIcon = ?ItemIcon, ItemDescription = ?ItemDescription," +
-                                                        "ItemShortDescription = ?ItemShortDescription, ItemPrice = ?ItemPrice, ItemStat1 = ?ItemStat1, ItemStat2 = ?ItemStat2, ItemStat3 = ?ItemStat3, ItemStat4 = ?ItemStat4) WHERE ItemID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE account SET ItemName = ?ItemName,ItemIcon = ?ItemIcon, ItemDescription = ?ItemDescription," +
+                                                        "ItemShortDescription = ?ItemShortDescription, ItemPrice = ?ItemPrice, ItemStat1 = ?ItemStat1, ItemStat2 = ?ItemStat2, ItemStat3 = ?ItemStat3, ItemStat4 = ?ItemStat4 WHERE ItemID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.ItemID);
                     //values
@@ -201,6 +202,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -209,7 +211,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(ItemDTO entity)
+        public int? Remove(ItemDTO entity)
         {
             try
             {
@@ -222,6 +224,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

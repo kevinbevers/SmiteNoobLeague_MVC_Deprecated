@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(AccountDTO entity)
+        public int? Add(AccountDTO entity)
         {
             try
             {
@@ -35,6 +35,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -109,15 +110,15 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(AccountDTO entity)
+        public int? Update(AccountDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE account SET(AccountName = ?AccountName," +
-                                                        "AccountEmail = ?AccountEmail, AccountPassword = ?AccountPassword, PlayerID = ?PlayerID) WHERE AccountID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE account SET AccountName = ?AccountName," +
+                                                        "AccountEmail = ?AccountEmail, AccountPassword = ?AccountPassword, PlayerID = ?PlayerID WHERE AccountID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.AccountID);
                     //values
@@ -128,6 +129,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -136,7 +138,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(AccountDTO entity)
+        public int? Remove(AccountDTO entity)
         {
             try
             {
@@ -149,6 +151,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

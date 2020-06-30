@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(PlayerStatDTO entity)
+        public int? Add(PlayerStatDTO entity)
         {
             try
             {
@@ -64,6 +64,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -459,20 +460,20 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(PlayerStatDTO entity)
+        public int? Update(PlayerStatDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE playerstat SET(PlayerID = ?PlayerID,MatchID = ?MatchID," +
+                    MySqlCommand cmd = new MySqlCommand("UPDATE playerstat SET PlayerID = ?PlayerID,MatchID = ?MatchID," +
                                                         "TeamID = ?TeamID, GodPlayedID = ?GodPlayedID,PlayerLevel = ?PlayerLevel,PlayerKills = ?PlayerKills," +
                                                         "PlayerDeaths = ?PlayerDeaths,PlayerAssists = ?PlayerAssists,PlayerDamage = ?PlayerDamage,PlayerDamageTaken = ?PlayerDamageTaken," +
                                                         "PlayerDamageMitigated = ?PlayerDamageMitigated,PlayerHealing = ?PlayerHealing,PlayerGoldEarned = ?PlayerGoldEarned," +
                                                         "PlayerGoldPerMinute = ?PlayerGoldPerMinute,PlayerItem1ID = ?PlayerItem1ID,PlayerItem2ID = ?PlayerItem2ID," +
                                                         "PlayerItem3ID = ?PlayerItem3ID,PlayerItem4ID = ?PlayerItem4ID,PlayerItem5ID = ?PlayerItem5ID,PlayerItem6ID = ?PlayerItem6ID," +
-                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon, PlayerRoleID = ?PlayerRoleID, PlayerPickOrder = ?PlayerPickOrder) WHERE PlayerStatID = ?id", conn);
+                                                        "PlayerRelic1ID = ?PlayerRelic1ID,PlayerRelic2ID = ?PlayerRelic2ID,PlayerWon = ?PlayerWon, PlayerRoleID = ?PlayerRoleID, PlayerPickOrder = ?PlayerPickOrder WHERE PlayerStatID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.PlayerStatID);
                     //values
@@ -506,6 +507,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -514,7 +516,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(PlayerStatDTO entity)
+        public int? Remove(PlayerStatDTO entity)
         {
             try
             {
@@ -527,6 +529,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

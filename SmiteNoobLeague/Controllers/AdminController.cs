@@ -32,7 +32,8 @@ namespace SmiteNoobLeague.Controllers
         [AjaxOnly]
         public IActionResult CreateTeam()
         {
-            return PartialView("_CreateTeamFormPartial");
+            //return PartialView("_CreateTeamFormPartial");
+            return PartialView("_CreateBasicTeamFormPartial");
         }
         [HttpPost]
         [AjaxOnly]
@@ -45,12 +46,10 @@ namespace SmiteNoobLeague.Controllers
                     //before adding should check if player is already in a team
                     //check teamname
                     var teamService = _logicFactory.GetTeamService();
-
                     //basic info about team. this is always filled in when adding
                     Team t = new Team();
                     t.TeamName = model.basic.TeamName;
-                    //t.TeamCaptain = new Player {PlayerID = model.basic.TeamCaptainID };
-
+                    t.TeamCaptain = new Player {PlayerID = model.basic.TeamCaptainID };
                     //team members can be chosen to be toggled and not filled in in the view
                     if (model.members != null)
                     {
@@ -76,7 +75,37 @@ namespace SmiteNoobLeague.Controllers
             }         
         }
         #endregion CreateTeam
+        [HttpPost]
+        [AjaxOnly]
+        public IActionResult CreateTeamBasicModel(AdminTeamBasicCreateView model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //before adding should check if player is already in a team
+                    //check teamname
+                    var teamService = _logicFactory.GetTeamService();
+                    //basic info about team. this is always filled in when adding
+                    Team t = new Team();
+                    t.TeamName = model.TeamName;
+                    t.TeamCaptain = new Player { PlayerID = model.TeamCaptainID, PlayerName = "test captain" };
 
+                    teamService.Add(t);
+
+                    return PartialView("_Success");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Something went wrong trying to add a new team to the database. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                    return PartialView("_Failed");
+                }
+            }
+            else
+            {
+                return PartialView("_CreateTeamFormPartial", model);
+            }
+        }
         #region ManageTeam
         [HttpGet]
         //custom ajax only extension
@@ -207,11 +236,33 @@ namespace SmiteNoobLeague.Controllers
             #endregion
         public IActionResult CheckTeamNameTaken(string teamname)
         {
-
-            //teamservice.NameAvailable(); function
-
+            var teamService = _logicFactory.GetTeamService();
+        
             //return taken or not taken, javascript will handle accordingly
-            return Json(new { success = true });
+            return Json(new { success = teamService.TeamNameAvailable(teamname) });
+        }
+
+        public IActionResult TeamNameTaken(string TeamName)
+        {
+            var teamService = _logicFactory.GetTeamService();
+
+            if (!teamService.TeamNameAvailable(TeamName))
+            {
+                return Json($"Teamname '{TeamName}' is already in use.");
+            }
+
+            return Json(true);
+        }
+        public IActionResult CaptainTaken(int TeamCaptainID)
+        {
+            var teamService = _logicFactory.GetTeamService();
+
+            if (!teamService.CaptainAvailable(TeamCaptainID))
+            {
+                return Json($"This Captain is already linked to a team.");
+            }
+
+            return Json(true);
         }
 
     }

@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(MatchDTO entity)
+        public int? Add(MatchDTO entity)
         {
             try
             {
@@ -50,6 +50,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -158,7 +159,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(MatchDTO entity)
+        public int? Update(MatchDTO entity)
         {
             try
             {
@@ -167,9 +168,9 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE match SET(ApiMatchID = ?ApiMatchID,MatchDate = ?MatchDate, MatchLength = ?MatchLength," +
+                    MySqlCommand cmd = new MySqlCommand("UPDATE match SET ApiMatchID = ?ApiMatchID,MatchDate = ?MatchDate, MatchLength = ?MatchLength," +
                                                         "PatchNumber = ?PatchNumber, WinningTeamID = ?WinningTeamID, HomeTeamID = ?HomeTeamID, AwayTeamID = ?AwayTeamID" +
-                                                        "GodBan1ID = ?GodBan1ID, GodBan2ID = ?GodBan2ID, GodBan3ID = ?GodBan3ID, GodBan4ID = ?GodBan4ID, GodBan5ID = ?GodBan5ID, GodBan6ID = ?GodBan6ID, GodBan7ID = ?GodBan7ID, GodBan8ID = ?GodBan8ID, GodBan9ID = ?GodBan9ID, GodBan10ID = ?GodBan10ID) WHERE MatchID = ?id", conn);
+                                                        "GodBan1ID = ?GodBan1ID, GodBan2ID = ?GodBan2ID, GodBan3ID = ?GodBan3ID, GodBan4ID = ?GodBan4ID, GodBan5ID = ?GodBan5ID, GodBan6ID = ?GodBan6ID, GodBan7ID = ?GodBan7ID, GodBan8ID = ?GodBan8ID, GodBan9ID = ?GodBan9ID, GodBan10ID = ?GodBan10ID WHERE MatchID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.MatchID);
                     //values
@@ -194,6 +195,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -202,7 +204,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(MatchDTO entity)
+        public int? Remove(MatchDTO entity)
         {
             try
             {
@@ -215,6 +217,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

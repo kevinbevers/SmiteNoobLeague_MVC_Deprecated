@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(NewsDTO entity)
+        public int? Add(NewsDTO entity)
         {
             try
             {
@@ -35,6 +35,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -109,15 +110,15 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(NewsDTO entity)
+        public int? Update(NewsDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE news SET(NewsTitle = ?NewsTitle,NewsSubject = ?NewsSubject, NewsDate = ?NewsDate, " +
-                                                        "NewsArticle = ?NewsArticle) WHERE NewsID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE news SET NewsTitle = ?NewsTitle,NewsSubject = ?NewsSubject, NewsDate = ?NewsDate, " +
+                                                        "NewsArticle = ?NewsArticle WHERE NewsID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.NewsID);
                     //values
@@ -128,6 +129,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -136,7 +138,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(NewsDTO entity)
+        public int? Remove(NewsDTO entity)
         {
             try
             {
@@ -149,6 +151,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

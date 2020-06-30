@@ -74,6 +74,8 @@ body {
 /*Custom CSS*/
 .fullBG {
     background-image: url('../Images/dark_bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .halfTransparent {
@@ -97,6 +99,8 @@ body {
 
 .adminBG {
     background-image: url('../Images/AdminBG.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .adminDeleteButton {
@@ -117,4 +121,28 @@ body {
 
 .adminEditButton:hover {
     color: #e0a800;
+}
+
+.errspan {
+    float: right;
+    margin-right: 6px;
+    margin-top: -27px;
+    position: relative;
+    z-index: 2;
+}
+
+.adminlog {
+    height: 75% !important;
+}
+
+@media (max-width: 767.98px) {
+    .errspan {
+        margin-top: -24px;
+    }
+    .adminlog {
+        height: auto !important;
+    }
+    .footertext {
+        font-size: 10px;
+    }
 }

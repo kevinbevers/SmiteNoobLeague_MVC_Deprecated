@@ -7,6 +7,8 @@ namespace SNL_LogicLayer.ServiceInterfaces
 {
     public interface ITeamService : IService<Team>
     {
-       void GetTeamRecentMatches();
+       bool TeamNameAvailable(string teamname);
+       bool CaptainAvailable(int captainid);
+       bool IsPlayerPickable(Player player, int? teamID);
     }
 }

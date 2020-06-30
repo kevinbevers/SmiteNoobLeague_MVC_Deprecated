@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(ScheduleDTO entity)
+        public int? Add(ScheduleDTO entity)
         {
             try
             {
@@ -33,9 +33,11 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
-
+                   
                     //add multiple scheduleDetails
                     AddScheduleDetails(entity.ScheduleDetailsList, conn);
+
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -150,14 +152,14 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(ScheduleDTO entity)
+        public int? Update(ScheduleDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE schedule SET(DivisionID = ?DivisionID, ScheduleName = ?ScheduleName) WHERE ScheduleID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE schedule SET DivisionID = ?DivisionID, ScheduleName = ?ScheduleName WHERE ScheduleID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.ScheduleID);
                     //values
@@ -171,6 +173,7 @@ namespace SNL_PersistenceLayer.Contexts
                     UpdateScheduleDetails(entity, conn);
                     //get all then compare and delete the ones that are not in the list anymore then update all the rest.
                     //easier to just drop details and then insert new ones?!
+                    return rowsAffected;
 
 
                 }
@@ -181,7 +184,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(ScheduleDTO entity)
+        public int? Remove(ScheduleDTO entity)
         {
             try
             {
@@ -195,6 +198,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

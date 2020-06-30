@@ -18,7 +18,7 @@ namespace SNL_PersistenceLayer.Contexts
         }
 
         //Create
-        public void Add(GodDTO entity)
+        public int? Add(GodDTO entity)
         {
             try
             {
@@ -38,6 +38,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -143,15 +144,15 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Update
-        public void Update(GodDTO entity)
+        public int? Update(GodDTO entity)
         {
             try
             {
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UPDATE god SET(GodName = ?GodName,GodTitle = ?GodTitle, GodLore = ?GodLore, " +
-                                                        "GodClass = ?GodClass, GodIcon = ?GodIcon, GodCardArt = ?GodCardArt) WHERE GodID = ?id", conn);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE god SET GodName = ?GodName,GodTitle = ?GodTitle, GodLore = ?GodLore, " +
+                                                        "GodClass = ?GodClass, GodIcon = ?GodIcon, GodCardArt = ?GodCardArt WHERE GodID = ?id", conn);
                     //where id is
                     cmd.Parameters.AddWithValue("id", entity.GodID);
                     //values
@@ -164,6 +165,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)
@@ -172,7 +174,7 @@ namespace SNL_PersistenceLayer.Contexts
             }
         }
         //Delete
-        public void Remove(GodDTO entity)
+        public int? Remove(GodDTO entity)
         {
             try
             {
@@ -185,6 +187,7 @@ namespace SNL_PersistenceLayer.Contexts
                     //execute command
                     int rowsAffected = cmd.ExecuteNonQuery();
                     //should return if a row is affected or not
+                    return rowsAffected;
                 }
             }
             catch (Exception ex)

@@ -7,10 +7,10 @@ namespace SNL_InterfaceLayer.Interfaces
 {
     public interface IContext<TEntity> where TEntity : class
     {
-        void Add(TEntity entity);
+        int? Add(TEntity entity);
         TEntity GetByID(int? id);
         IEnumerable<TEntity> GetAll();
-        void Update(TEntity entity);
-        void Remove(TEntity entity);
+        int? Update(TEntity entity);
+        int? Remove(TEntity entity);
     }
 }
