@@ -222,6 +222,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
+        //already taken functions
         public bool NameAvailable(string teamname)
         {
             try
@@ -279,8 +280,34 @@ namespace SNL_PersistenceLayer.Contexts
             {
                 throw new ContextErrorException(ex);
             }
-
-
+        }
+        public bool PlayerAvailable(int playerid)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM team WHERE ?id IN(TeamCaptainID,TeamMember2ID,TeamMember3ID,TeamMember4ID,TeamMember5ID)", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("id", playerid);
+                    //execute command
+                    int count = 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                    //should return if a row is affected or not
+                    return count > 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
         }
         private int? LastIdAdded()
         {
@@ -298,7 +325,7 @@ namespace SNL_PersistenceLayer.Contexts
                     }
                 }
             }
-                return lastRowID;
+            return lastRowID;
         }
     }
 }

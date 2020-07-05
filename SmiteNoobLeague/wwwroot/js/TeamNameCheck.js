@@ -3,25 +3,25 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });
 
-function checkTyping() {
+function checkTyping(senderID) {
     timeout = null;
     clearTimeout(timeout);
 
     timeout = setTimeout(function () {
         //do stuff here
-        doneTyping();
+        doneTyping(senderID);
     }, 500);
 }
 
 
 
 //user is "finished typing," do something
-function doneTyping() {
+function doneTyping(senderID) {
     //do something
     // create a json object
     // then stringify the whole object
     //dataToPost = JSON.stringify({ methodParam: IntrestList });
-    var name = $('#testname').val().replace(/^\s+/, '').replace(/\s+$/, '');;
+    var name = $(senderID).val().replace(/^\s+/, '').replace(/\s+$/, '');;
 
     if (name != "" && name.length > 3) {
         $.ajax({

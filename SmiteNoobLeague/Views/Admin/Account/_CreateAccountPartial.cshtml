@@ -1,0 +1,53 @@
+﻿@model SmiteNoobLeague.Models.AdminPageViews.AdminAccountCreateView
+
+    <div class="modal-header">
+        <h5 class="modal-title">Create new account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<div class="modal-body">
+    <form id="AccountForm" asp-action="CreateAccount" asp-controller="Admin" enctype="multipart/form-data" data-ajax="true" data-ajax-update="#AccountForm" data-ajax-method="post">
+        <div class="form-group">
+            <label>* Account Name</label>
+            <input asp-for="@Model.AccountName" class="form-control" />
+            <span asp-validation-for="@Model.AccountName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Password</label>
+            <div class="input-group">
+                <input asp-for="@Model.AccountPassword" id="pw" class="form-control" />
+                <div class="input-group-append">
+                    <button type='button' class="btn btn-primary" onclick='document.getElementById("pw").value = generatePassword(12)'>Generate Password</button>
+                </div>
+            </div>
+            
+            <span asp-validation-for="@Model.AccountPassword" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* E-mailaddress</label>
+            <input asp-for="@Model.AccountEmail" class="form-control" />
+            <span asp-validation-for="@Model.AccountEmail" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>* Linked player account</label>
+            <div class="input-group">
+                <input asp-for="@Model.PlayerName" id="PlayerName" class="form-control" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#PlayerName','#Player','#playerplatform')">Search player</button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.PlayerName" class="text-danger"></span>
+            <input asp-for="@Model.PlayerID" id="PlayerID" class="form-control" hidden>
+            <span asp-validation-for="@Model.PlayerID" class="text-danger"></span>
+            <input asp-for="@Model.PlayerPlatformID" id="PlayerPlatformID" class="form-control" hidden>
+            <span asp-validation-for="@Model.PlayerPlatformID" class="text-danger"></span>
+        </div>
+        @* End of Edit Team Form *@
+        <p>* is required</p>
+        <input type="submit" id="CreateAccountButton" value="Create account" hidden />
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="$('#CreateAccountButton').click()">Save changes</button>
+</div>

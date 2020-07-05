@@ -10,5 +10,6 @@ namespace SNL_InterfaceLayer.Interfaces
         //extra functions for team context
         bool NameAvailable(string name);
         bool CaptainAvailable(int captainid);
+        bool PlayerAvailable(int playerid);
     }
 }

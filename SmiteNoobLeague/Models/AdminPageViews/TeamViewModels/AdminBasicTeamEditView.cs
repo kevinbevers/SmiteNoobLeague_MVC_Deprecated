@@ -1,33 +1,31 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SmiteNoobLeague.HelperClasses;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-using SmiteNoobLeague.HelperClasses;
-using SNL_FactoryLayer;
-using SNL_LogicLayer.ServiceInterfaces;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Threading.Tasks;
 
 namespace SmiteNoobLeague.Models.AdminPageViews.TeamViewModels
 {
-    public class AdminTeamBasicCreateView
-    {      
+    public class AdminBasicTeamEditView
+    {
+        [Required]
         [Key]
-        public int TeamID { get; set; }
+        public int? TeamID { get; set; }
         //Team needs a name
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter a teamname")]
         [MinLength(3, ErrorMessage = "Teamname needs to be atleast 3 characters long")]
-        [Remote(action: "TeamNameTaken", controller: "Admin")]
+        [Remote(action: "TeamNameTakenEdit", controller: "Admin", AdditionalFields = nameof(TeamID))]
         public string TeamName { get; set; }
         [Required(ErrorMessage = "Please select a teamcaptain")]
-        [Remote(action: "CaptainTaken", controller: "Admin")]
-        public int TeamCaptainID { get; set; }
+        [Remote(action: "CaptainTakenEdit", controller: "Admin", AdditionalFields = nameof(TeamID))]
+        public int? TeamCaptainID { get; set; }
         //Team logo not required, it will be replaced with a local image if empty
         [MaxFileSize(29 * 1024 * 1024)]
         [AllowedExtensions(new[] { ".jpg", ".png", ".jpeg,", ".bmp" })]
-        public IFormFile TeamLogoFile { get; set; }  
+        public IFormFile TeamLogoFile { get; set; }
+        public string TeamLogoString64 { get; set; }
     }
 }

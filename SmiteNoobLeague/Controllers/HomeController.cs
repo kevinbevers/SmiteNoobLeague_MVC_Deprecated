@@ -16,7 +16,7 @@ namespace SmiteNoobLeague.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly  LogicFactory _logicFactory;
+        private readonly LogicFactory _logicFactory;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(LogicFactory logicFactory, ILogger<HomeController> logger)

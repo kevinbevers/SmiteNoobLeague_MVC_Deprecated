@@ -13,7 +13,7 @@ namespace SNL_LogicLayer.Services
 {
     public class TeamService : ITeamService
     {
-        //bovenste gebruiken inteface
+        //contexts
         private readonly ITeamContext _teamContext;
         private readonly IPlayerContext _playerContext;
         private readonly IRoleContext _roleContext;
@@ -74,18 +74,6 @@ namespace SNL_LogicLayer.Services
                         var captain = _playerContext.GetByID(entity.TeamCaptain.PlayerID);
                         captain.PlayerTeamID = entity.TeamID;
                          _playerContext.Update(captain);
-                    }
-                    else
-                    {
-                        PlayerDTO captain = new PlayerDTO
-                        {
-                            PlayerID = entity.TeamCaptain.PlayerID,
-                            PlayerName = entity.TeamCaptain.PlayerName,
-                            PlayerPlatformID = entity.TeamCaptain.PlayerPlatformID,
-                            PlayerRoleID = entity.TeamCaptain.PlayerRole?.RoleID,
-                            PlayerTeamID = entity.TeamID
-                        };
-                        if (_playerContext.GetByID(captain.PlayerID).PlayerID == null) { _playerContext.Add(captain); } else { _playerContext.Update(captain); }
                     }
                 }
         }
@@ -155,7 +143,7 @@ namespace SNL_LogicLayer.Services
                 TeamID = entity.TeamID, //normal values are nullable
                 TeamName = entity.TeamName,
                 TeamCaptainID = entity.TeamCaptain?.PlayerID, //null propagation because this comes from an object
-                TeamDivisionID = entity.TeamDivision?.DivisionID, // null propagation
+                TeamDivisionID = oldValues.TeamDivisionID, // null propagation teamdivision doesn't get edited in manage teams
                 TeamLogo = entity.TeamLogo,
                 TeamMember2ID = entity.TeamMembers?.Count > 0 ? entity.TeamMembers[0].PlayerID : null,
                 TeamMember3ID = entity.TeamMembers?.Count > 1 ? entity.TeamMembers[1].PlayerID : null,
@@ -164,51 +152,57 @@ namespace SNL_LogicLayer.Services
             };
             _teamContext.Update(tDTO);
             //add players to DB
-            foreach (var player in entity?.TeamMembers)
+            if (entity?.TeamMembers != null)
             {
+                foreach (var player in entity?.TeamMembers)
+                {
                     if (player.PlayerID != null)
                     {
-                    if (currentPlayers.Contains(player.PlayerID))
-                    {
-                        PlayerDTO p = new PlayerDTO
+                        if (currentPlayers.Contains(player.PlayerID))
                         {
-                            PlayerID = player.PlayerID,
-                            PlayerName = player.PlayerName,
-                            PlayerPlatformID = player.PlayerPlatformID,
-                            PlayerRoleID = player.PlayerRole?.RoleID,
-                            PlayerTeamID = entity.TeamID
-                        };
-                        //if the player does or does not exist in the current database
-                        if (_playerContext.GetByID(p.PlayerID).PlayerID == null) { _playerContext.Add(p); } else { _playerContext.Update(p); }
-                    }
-                    else
-                    {
-                        var pID = currentPlayers.Where(p => p.Value == player.PlayerID).First();
+                            PlayerDTO p = new PlayerDTO
+                            {
+                                PlayerID = player.PlayerID,
+                                PlayerName = player.PlayerName,
+                                PlayerPlatformID = player.PlayerPlatformID,
+                                PlayerRoleID = player.PlayerRole?.RoleID,
+                                PlayerTeamID = entity.TeamID
+                            };
+                            //if the player does or does not exist in the current database
+                            if (_playerContext.GetByID(p.PlayerID).PlayerID == null) { _playerContext.Add(p); } else { _playerContext.Update(p); }
+                        }
+                        else
+                        {
+                            var pID = currentPlayers.Where(p => p.Value == player.PlayerID).FirstOrDefault();
 
-                        var pToUpdate = _playerContext.GetByID(pID);
-                        pToUpdate.PlayerTeamID = null;
-                        _playerContext.Update(pToUpdate);
+                            var pToUpdate = _playerContext.GetByID(pID);
+                            pToUpdate.PlayerTeamID = null;
+                            _playerContext.Update(pToUpdate);
+                        }
                     }
                 }
             }
-            //add captain to DB
+            //add captain to DB //captain always exists in the database because it is required when an account is made 
             if (entity.TeamCaptain?.PlayerID != null)
             {
                 if (oldValues.TeamCaptainID == entity.TeamCaptain.PlayerID)
                 {
+                    var captainValues = _playerContext.GetByID(oldValues.TeamCaptainID);
+
                     PlayerDTO captain = new PlayerDTO
                     {
                         PlayerID = entity.TeamCaptain.PlayerID,
-                        PlayerName = entity.TeamCaptain.PlayerName,
-                        PlayerPlatformID = entity.TeamCaptain.PlayerPlatformID,
+                        PlayerName = captainValues.PlayerName,
+                        PlayerPlatformID = captainValues.PlayerPlatformID,
                         PlayerRoleID = entity.TeamCaptain.PlayerRole?.RoleID,
                         PlayerTeamID = entity.TeamID
                     };
-                    if (_playerContext.GetByID(captain.PlayerID).PlayerID == null) { _playerContext.Add(captain); } else { _playerContext.Update(captain); }
+                    _playerContext.Update(captain);
                 }
                 else
                 {
-                    var pToUpdate = _playerContext.GetByID(entity.TeamCaptain.PlayerID);
+                    //remove team from the previous captain
+                    var pToUpdate = _playerContext.GetByID(oldValues.TeamCaptainID);
                     pToUpdate.PlayerTeamID = null;
                     _playerContext.Update(pToUpdate);
                 }
@@ -223,6 +217,12 @@ namespace SNL_LogicLayer.Services
         {
             return _teamContext.CaptainAvailable(captainid);
         }
+        public bool PlayerAvailable(int playerid)
+        {
+            return _teamContext.PlayerAvailable(playerid);
+        }
+
+        //move to playerService later
         public bool IsPlayerPickable(Player player, int? teamID)
         {
             if(_playerContext.GetByID(player.PlayerID)?.PlayerTeamID != null)

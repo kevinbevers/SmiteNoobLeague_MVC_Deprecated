@@ -7,8 +7,8 @@ function SearchPlayer(inputID, targetInputID) {
         modalObj.find('.modal-title').text('Players found with name: ' + playername);
         modalObj.find('.modal-body').html("");
         modalObj.find('.modal-body').append("<ul>");
-        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 2 + ",'" + targetInputID + "','" + playername + "'" + ')" href="#">' + playername + ' Playstation</a></li>');
-        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 3 + ",'" + targetInputID + "','" + playername + "'" + ')" href="#">' + playername + ' PC</a></li>');
+        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 2 + ",'" + targetInputID + "','" + playername + "','" + 9 + "'" + ')" href="#">' + playername + ' Playstation</a></li>');
+        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 3 + ",'" + targetInputID + "','" + playername + "','" + 1 + "'" + ')" href="#">' + playername + ' PC</a></li>');
         modalObj.find('.modal-body').append("</ul>");
         modalObj.modal();
     }
@@ -17,13 +17,15 @@ function SearchPlayer(inputID, targetInputID) {
     }
 }
 
-function SendBackID(id, targetInputID, name) {
+function SendBackID(id, targetInputID, name, platformID) {
 
     var ID = targetInputID + "ID";
     var Name = targetInputID + "Name";
+    var Platform = targetInputID + "PlatformID"
 
     $(ID).val(id);
     $(Name).val(name);
+    $(Platform).val(platformID);
     var modalObj = $('.bd-TeamMemberSearchModal');
     modalObj.modal('hide');
 }
@@ -45,7 +47,7 @@ function CreateTeamPopUp() {
             FormContent.html("");
             FormContent.html(partialview);
             jQuery.validator.unobtrusive.parse('#CreateTeamForm');
-            CreateTeamModal.modal();
+            CreateTeamModal.modal('show');
             CreateTeamModal.hover(function () {
                 this.focus();
             });
@@ -59,7 +61,9 @@ function CreateTeamPopUp() {
 function TeamCreatedSuccess() {
 
     var CreateTeamModal = $('#CreateTeamModal');
+    var FormContent = $('#FormContentCreateTeam');
     CreateTeamModal.modal('hide');
+    FormContent.html("");
     var succesMessage = '<h3 style="color:green;">Team successfully Created <i class="fas fa-check-circle"></i></h3>';
     var MessageModal = $('#MessageModal');
     MessageModal.find('.modal-body').html("");
@@ -74,8 +78,9 @@ function TeamCreatedSuccess() {
 function TeamCreatedError() {
 
     var CreateTeamModal = $('#CreateTeamModal');
+    var FormContent = $('#FormContentCreateTeam');
     CreateTeamModal.modal('hide');
-
+    FormContent.html("");
     var failedMessage = '<h3 style="color:red;">Something went wrong trying to create a team <i class="fas fa-times-circle"></i></h3>';
     var MessageModal = $('#MessageModal');
     MessageModal.find('.modal-body').html("");
@@ -208,4 +213,114 @@ function AreYouSure(id,teamname) {
     var areyousure = modalContainer.find('#PopUpModal');
     areyousure.modal('show');
 }
-/*Team name available*/
+function DetailedTeamCreate(toggle) {
+    var CreateTeamModal = $('#CreateTeamModal');
+    var FormContent = $('#FormContentCreateTeam');
+
+    if (toggle == true) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/CreateTeamWithMembers",
+            data: $('#CreateTeamForm').serialize(),   //your form name.it takes all the values of model   
+            //contentType: "application/json; charset=utf-8", // specify the content type
+            dataType: "html",
+            success: function (partialview) {
+                FormContent.html("");
+                FormContent.html(partialview);
+                jQuery.validator.unobtrusive.parse('#CreateTeamForm');
+                CreateTeamModal.modal('show');
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    else {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/CreateTeamWithoutMembers",
+            data: $('#CreateTeamForm').serialize(),   //your form name.it takes all the values of model   
+            //contentType: "application/json; charset=utf-8", // specify the content type
+            dataType: "html",
+            success: function (partialview) {
+                FormContent.html("");
+                FormContent.html(partialview);
+                jQuery.validator.unobtrusive.parse('#CreateTeamForm');
+                CreateTeamModal.modal('show');
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+}
+function DetailedTeamEdit(toggle) {
+    var ManageTeamsModal = $('#ManageTeamModal');
+    var Content = ManageTeamsModal.find('.modal-content');
+
+    if (toggle == true) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/EditGetDetailedTeam",
+            data: $('#EditTeamForm').serialize(),   //your form name.it takes all the values of model   
+            //contentType: "application/json; charset=utf-8", // specify the content type
+            dataType: "html",
+            success: function (partialview) {
+                Content.html("");
+                Content.html(partialview);
+                jQuery.validator.unobtrusive.parse('#EditTeamForm');
+            },
+            error: function (data) {
+                console.log(data);
+                ManageTeamsError('Something went wrong trying to get team info');
+            }
+        });
+    }
+    else {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/EditGetBasicTeam",
+            data: $('#EditTeamForm').serialize(),   //your form name.it takes all the values of model   
+            //contentType: "application/json; charset=utf-8", // specify the content type
+            dataType: "html",
+            success: function (partialview) {
+                Content.html("");
+                Content.html(partialview);
+                jQuery.validator.unobtrusive.parse('#EditTeamForm');
+            },
+            error: function (data) {
+                console.log(data);
+                ManageTeamsError('Something went wrong trying to get team info');
+            }
+        });
+    }
+}
+/*Remove content from create team modal when getting closed*/
+$('#CreateTeamModal').on('hidden.bs.modal', function () {
+    // do something…
+    var FormContent = $('#FormContentCreateTeam');
+    FormContent.html("");
+});
+
+function CreateAccountPopUp() {
+    var AccountModal = $('#AccountModal');
+    var Content = AccountModal.find('.modal-content');
+
+    $.ajax({
+        type: "GET",
+        url: "/Admin/CreateAccount",
+        //contentType: "application/json; charset=utf-8", // specify the content type
+        dataType: "html",
+        //data: { id: Id },
+        success: function (partialview) {
+            Content.html("");
+            Content.html(partialview);
+            jQuery.validator.unobtrusive.parse('#AccountForm');
+            AccountModal.modal('show');
+        },
+        error: function (data) {
+            //something went wrong
+            console.log(data);
+        }
+    });
+}

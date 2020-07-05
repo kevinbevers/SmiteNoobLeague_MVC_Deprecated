@@ -63,7 +63,7 @@
                             <p class="card-text">Manage existing accounts or create a new one.</p>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary btn-lg btn-block">Create account</button>
+                                    <button class="btn btn-primary btn-lg btn-block" onclick="CreateAccountPopUp()">Create account</button>
                                 </div>
                                 <div class="col-sm-6">
                                     <button class="btn btn-primary btn-lg btn-block">Manage accounts</button>
@@ -126,6 +126,14 @@
             </div>
         </div>
         @* content end *@
+    </div>
+
+    <!-- AccountModal -->
+    <div class="modal fade" id="AccountModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
     </div>
 
     @{await Html.RenderPartialAsync("_TeamModalsPartial"); }

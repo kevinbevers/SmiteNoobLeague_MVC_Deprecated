@@ -18,7 +18,7 @@ namespace SmiteNoobLeague.HelperClasses
         protected override ValidationResult IsValid(
         object value, ValidationContext validationContext)
         {
-            var file = value as IFormFile;
+            IFormFile file = value as IFormFile;
             //var extension = Path.GetExtension(file.FileName);
             //var allowedExtensions = new[] { ".jpg", ".png" };`enter code here`
             if (file != null)

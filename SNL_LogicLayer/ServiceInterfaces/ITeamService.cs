@@ -9,6 +9,7 @@ namespace SNL_LogicLayer.ServiceInterfaces
     {
        bool TeamNameAvailable(string teamname);
        bool CaptainAvailable(int captainid);
+       bool PlayerAvailable(int playerid);
        bool IsPlayerPickable(Player player, int? teamID);
     }
 }

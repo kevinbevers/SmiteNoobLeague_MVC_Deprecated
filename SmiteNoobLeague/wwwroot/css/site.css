@@ -146,3 +146,10 @@ body {
         font-size: 10px;
     }
 }
+
+.teamLogo {
+    height: 200px;
+    width: 200px;
+    border: 1px solid #ced4da;
+    margin-bottom: 5px;
+}
