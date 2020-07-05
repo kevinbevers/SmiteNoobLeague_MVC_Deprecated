@@ -7,5 +7,7 @@ namespace SNL_InterfaceLayer.Interfaces
 {
     public interface IAccountContext : IContext<AccountDTO>
     {
+        bool AccountNameAvailable(string name);
+        bool EmailAvailable(string name);
     }
 }

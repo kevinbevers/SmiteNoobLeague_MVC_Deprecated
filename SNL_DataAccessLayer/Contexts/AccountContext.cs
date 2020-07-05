@@ -25,7 +25,7 @@ namespace SNL_PersistenceLayer.Contexts
                 using (MySqlConnection conn = _con.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO player (AccountName, AccountEmail,AccountPassword,PlayerID) " +
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO account (AccountName, AccountEmail,AccountPassword,PlayerID) " +
                         "                               VALUES(?AccountName,?AccountEmail,?AccountPassword,?PlayerID)", conn);
                     //values
                     cmd.Parameters.AddWithValue("AccountName", entity.AccountName ?? (object)DBNull.Value);
@@ -158,6 +158,67 @@ namespace SNL_PersistenceLayer.Contexts
             {
                 throw new ContextErrorException(ex);
             }
+        }
+        //already taken functions
+        public bool AccountNameAvailable(string accountname)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM account WHERE AccountName = ?name", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("name", MySqlHelper.EscapeString(accountname));
+                    //execute command
+                    int count = 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                    //should return if a row is affected or not
+                    return count > 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+
+
+        }
+        public bool EmailAvailable(string email)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM account WHERE AccountEmail = ?name", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("name", MySqlHelper.EscapeString(email));
+                    //execute command
+                    int count = 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                    //should return if a row is affected or not
+                    return count > 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+
+
         }
     }
 }

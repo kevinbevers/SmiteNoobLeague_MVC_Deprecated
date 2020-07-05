@@ -16,17 +16,17 @@
         <div class="form-group">
             <label>* Password</label>
             <div class="input-group">
-                <input asp-for="@Model.AccountPassword" id="pw" class="form-control" />
+                <input asp-for="@Model.AccountPassword" type="password" id="pw" class="form-control" />
                 <div class="input-group-append">
                     <button type='button' class="btn btn-primary" onclick='document.getElementById("pw").value = generatePassword(12)'>Generate Password</button>
                 </div>
             </div>
-            
+            <span><input type="checkbox" onclick="togglePW('#pw')">Show Password</span>
             <span asp-validation-for="@Model.AccountPassword" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>* E-mailaddress</label>
-            <input asp-for="@Model.AccountEmail" class="form-control" />
+            <input asp-for="@Model.AccountEmail" type="email" class="form-control" />
             <span asp-validation-for="@Model.AccountEmail" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -49,5 +49,5 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" onclick="$('#CreateAccountButton').click()">Save changes</button>
+    <button type="button" class="btn btn-primary" onclick="$('#CreateAccountButton').click()">Create account</button>
 </div>

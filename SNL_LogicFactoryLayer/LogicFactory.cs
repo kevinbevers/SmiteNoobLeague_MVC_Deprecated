@@ -21,5 +21,9 @@ namespace SNL_FactoryLayer
             //factory layer get TeamService
             return new TeamService(new TeamContext(_conn), new PlayerContext(_conn), new Rolecontext(_conn), new DivisionContext(_conn));
         }
+        public IAccountService GetAccountService()
+        {
+            return new AccountService(new PlayerContext(_conn),new AccountContext(_conn));
+        }
     }
 }

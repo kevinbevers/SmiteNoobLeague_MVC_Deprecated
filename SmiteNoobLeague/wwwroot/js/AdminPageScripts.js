@@ -321,6 +321,35 @@ function CreateAccountPopUp() {
         error: function (data) {
             //something went wrong
             console.log(data);
+            ManageAccountError("Something went wrong during account creation");
+
         }
     });
+}
+function ManageAccountError(msg) {
+    var AccountModal = $('#AccountModal');
+    AccountModal.modal('hide');
+    var Content = AccountModal.find('.modal-content');
+    Content.html("");
+    var failedMessage = '<h3 style="color:red;">' + msg + '<i class="fas fa-times-circle"></i></h3>';
+    var MessageModal = $('#MessageModal');
+    MessageModal.find('.modal-body').html("");
+    MessageModal.find('.modal-body').append(failedMessage);
+    MessageModal.modal('show');
+}
+function AccountCreateSuccess() {
+    var AccountModal = $('#AccountModal');
+    AccountModal.modal('hide');
+    var Content = AccountModal.find('.modal-content');
+    Content.html("");
+
+    var succesMessage = '<h3 style="color:green;">Account successfully created <i class="fas fa-check-circle"></i></h3>';
+    var MessageModal = $('#MessageModal');
+    MessageModal.find('.modal-body').html("");
+    MessageModal.find('.modal-body').append(succesMessage);
+    MessageModal.modal('show');
+
+    window.setTimeout(function () {
+        MessageModal.modal('hide');
+    }, 1600);
 }

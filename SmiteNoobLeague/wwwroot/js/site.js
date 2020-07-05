@@ -41,3 +41,12 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+function togglePW(id) {
+    var x = $(id);
+    if (x.attr('type') === "password") {
+        x.attr('type', 'text');
+    } else {
+        x.attr('type', 'password');
+    }
+}

@@ -49,8 +49,17 @@ namespace SmiteNoobLeague.Controllers
                 try
                 {
                     //save account to DB
+                    var accountService = _logicFactory.GetAccountService();
+
+                    accountService.Add(new Account
+                    {
+                        AccountName = model.AccountName,
+                        AccountEmail = model.AccountEmail,
+                        AccountPassword = model.AccountPassword,
+                        AccountPlayer = new Player {PlayerID = model.PlayerID, PlayerName = model.PlayerName, PlayerPlatformID = model.PlayerPlatformID }
+                    });
                     //return success
-                    return NotFound();
+                    return PartialView("Account/_AccountSuccess");
                 }
                 catch (Exception ex)
                 {
@@ -64,6 +73,30 @@ namespace SmiteNoobLeague.Controllers
                 return PartialView("Account/_CreateAccountPartial", model);
             }
         }
+        #region TakenValidationAccount
+        public IActionResult UserNameTaken(string AccountName)
+        {
+            var accountService = _logicFactory.GetAccountService();
+
+            if (!accountService.UserNameTaken(AccountName))
+            {
+                return Json($"Accountname '{AccountName}' is already taken.");
+            }
+
+            return Json(true);
+        }
+        public IActionResult EmailTaken(string AccountEmail)
+        {
+            var accountService = _logicFactory.GetAccountService();
+
+            if (!accountService.EmailTaken(AccountEmail))
+            {
+                return Json($"e-mailaddress '{AccountEmail}' is already taken.");
+            }
+
+            return Json(true);
+        }
+        #endregion
         #endregion
 
         #region CreateTeam

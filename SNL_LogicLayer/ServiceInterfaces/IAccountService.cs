@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SNL_LogicLayer.ServiceInterfaces
 {
-    interface IAccountService : IService<Account>
+    public interface IAccountService : IService<Account>
     {
         bool UserNameTaken(string username);
         bool EmailTaken(string email);
