@@ -7,6 +7,6 @@ namespace SNL_InterfaceLayer.Interfaces
 {
     public interface IGodContext : IContext<GodDTO>
     {
-        void AddMultiple(IEnumerable<GodDTO> entityList);
+        int? AddMultiple(IEnumerable<GodDTO> entityList);
     }
 }

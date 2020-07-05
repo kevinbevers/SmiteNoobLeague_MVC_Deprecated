@@ -72,7 +72,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-        public void AddMultiple(IEnumerable<PlayerStatDTO> entityList)
+        public int? AddMultiple(IEnumerable<PlayerStatDTO> entityList)
         {
             //build a string with all the values in it.
             StringBuilder sCommand = new StringBuilder("INSERT INTO playerstat (PlayerID,MatchID,TeamID,GodPlayedID,PlayerLevel," +
@@ -99,7 +99,7 @@ namespace SNL_PersistenceLayer.Contexts
             {
                 conn.Open();
                 MySqlCommand addMultipleCMD = new MySqlCommand(sCommand.ToString(), conn);
-                addMultipleCMD.ExecuteNonQuery();
+                return addMultipleCMD.ExecuteNonQuery();
             }
         }
         //Read

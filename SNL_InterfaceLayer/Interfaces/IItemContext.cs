@@ -7,6 +7,6 @@ namespace SNL_InterfaceLayer.Interfaces
 {
     public interface IItemContext : IContext<ItemDTO>
     {
-        void AddMultiple(IEnumerable<ItemDTO> entityList);
+        int? AddMultiple(IEnumerable<ItemDTO> entityList);
     }
 }

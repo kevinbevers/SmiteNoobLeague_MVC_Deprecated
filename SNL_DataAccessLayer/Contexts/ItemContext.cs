@@ -52,7 +52,7 @@ namespace SNL_PersistenceLayer.Contexts
                 throw new ContextErrorException(ex);
             }
         }
-        public void AddMultiple(IEnumerable<ItemDTO> entityList)
+        public int? AddMultiple(IEnumerable<ItemDTO> entityList)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace SNL_PersistenceLayer.Contexts
                 {
                     conn.Open();
                     MySqlCommand addMultipleCMD = new MySqlCommand(sCommand.ToString(), conn);
-                    addMultipleCMD.ExecuteNonQuery();
+                    return addMultipleCMD.ExecuteNonQuery();
                 }
             }
             catch(Exception ex)

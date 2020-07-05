@@ -7,6 +7,6 @@ namespace SNL_InterfaceLayer.Interfaces
 {
     public interface IPlayerContext : IContext<PlayerDTO>
     {
-        void AddMultiple(IEnumerable<PlayerDTO> entity);
+        int? AddMultiple(IEnumerable<PlayerDTO> entity);
     }
 }
