@@ -10,7 +10,8 @@ using Microsoft.Extensions.Logging;
 using SmiteNoobLeague.HelperClasses;
 using Microsoft.AspNetCore.Hosting;
 using System.Drawing;
-using SmiteNoobLeague.Models.AdminPageViews;
+using SmiteNoobLeague.Models.AdminPageViews.AccountViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SmiteNoobLeague.Controllers
 {
@@ -31,14 +32,17 @@ namespace SmiteNoobLeague.Controllers
         {
             return View();
         }
+
         #region CreateAccount 
         [HttpGet]
         [AjaxOnly]
         public IActionResult CreateAccount()
         {
+            AdminAccountCreateView model = new AdminAccountCreateView();
             //return PartialView("_CreateTeamFormPartial");
-            return PartialView("Account/_CreateAccountPartial");
+            return PartialView("Account/_CreateAccountPartial", model);
         }
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [AjaxOnly]
         public IActionResult CreateAccount(AdminAccountCreateView model)
@@ -73,6 +77,144 @@ namespace SmiteNoobLeague.Controllers
                 return PartialView("Account/_CreateAccountPartial", model);
             }
         }
+        #endregion
+        #region ManageAccount 
+        [HttpGet]
+        [AjaxOnly]
+        public IActionResult ManageAccount()
+        {
+            try
+            {
+                var accountService = _logicFactory.GetAccountService();
+                var allAccounts = accountService.GetAll();
+                AdminManageAccountListView model = new AdminManageAccountListView();
+                model.AccountList = new List<AccountListView>();
+                foreach (Account acc in allAccounts)
+                {
+                    model.AccountList.Add(new AccountListView
+
+                    {
+                        AccountName = acc.AccountName,
+                        AccountID = acc.AccountID,
+                        AccountEmail = acc.AccountEmail,
+                        AccountPlayerName = acc.AccountPlayer?.PlayerName
+                    });
+                }
+                return PartialView("Account/_ManageAccountListPartial", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong trying to get all accounts for the manage modal. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                //notfound will result in a ajax error result. this will show a message to the user.
+                return NotFound();
+            }
+        }
+        [HttpGet]
+        [AjaxOnly]
+        public IActionResult EditGetAccount(int id)
+        {
+            try
+            {
+                var accountService = _logicFactory.GetAccountService();
+                //get the team
+                Account a = accountService.GetByID(id);
+                //create the view model
+                AdminAccountEditView editAccountView = new AdminAccountEditView
+                {
+                    AccountID = a.AccountID,
+                    AccountName = a.AccountName,
+                    AccountEmail = a.AccountEmail,
+                    AccountPassword = a.AccountPassword,
+                    PlayerID = a.AccountPlayer?.PlayerID,
+                    PlayerName = a.AccountPlayer?.PlayerName,
+                    PlayerPlatformID = a.AccountPlayer?.PlayerPlatformID
+                };
+
+                return PartialView("Account/_EditAccountPartial", editAccountView);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong trying to get a team to edit. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                //notfound will result in a ajax error result. this will show a message to the user. 
+                return NotFound();
+            }
+        }
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [AjaxOnly]
+        public IActionResult EditAccount(AdminAccountEditView model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var accountService = _logicFactory.GetAccountService();
+                    var oldValues = accountService.GetByID(model.AccountID); //change this, password should be handled in logic layer
+
+                    Account accountToEdit = new Account
+                    {
+                        AccountID = model.AccountID,
+                        AccountName = model.AccountName,
+                        AccountPassword = model.AccountPassword != null ? model.AccountPassword : oldValues.AccountPassword, //change this
+                        AccountEmail = model.AccountEmail,
+                        AccountPlayer = model.PlayerID != null ? new Player { PlayerID = model.PlayerID, PlayerName = model.PlayerName, PlayerPlatformID = model.PlayerPlatformID } : oldValues.AccountPlayer
+                    };
+
+
+                    accountService.Update(accountToEdit);
+
+                    return PartialView("Account/_AccountEditSuccess"); //success
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Something went wrong trying to get an account to edit. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                    //notfound will result in a ajax error result. this will show a message to the user. 
+                    return NotFound();
+                }
+            }
+            else
+            {
+                return PartialView("_EditTeamFormPartial", model);
+            }
+
+        }
+        [HttpPost]
+        [AjaxOnly]
+        public IActionResult DeleteAccount(int id)
+        {
+            try
+            {
+                var accountService = _logicFactory.GetAccountService();
+                //delete the team
+                accountService.Remove(new Account { AccountID = id });
+                //get all the teams that remain to update the view
+                var accounts = accountService.GetAll();
+                var allAccounts = accountService.GetAll();
+                AdminManageAccountListView model = new AdminManageAccountListView();
+                model.AccountList = new List<AccountListView>();
+                foreach (Account acc in allAccounts)
+                {
+                    model.AccountList.Add(new AccountListView
+
+                    {
+                        AccountName = acc.AccountName,
+                        AccountID = acc.AccountID,
+                        AccountEmail = acc.AccountEmail,
+                        AccountPlayerName = acc.AccountPlayer?.PlayerName
+                    });
+                }
+                return PartialView("Account/_ManageAccountListPartial", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong trying to delete a team to the database. |Message: {ex.Message} |Stacktrace: {ex.StackTrace}");
+                //notfound will result in a ajax error result. this will show a message to the user. 
+                //could also return a partial view with a script that runs to show the messagebox. this feels cleaner. 
+                //i couldn't find a way to send a Json result with partial view and success yes or no
+                return NotFound();
+            }
+        }
+        #endregion
         #region TakenValidationAccount
         public IActionResult UserNameTaken(string AccountName)
         {
@@ -96,7 +238,79 @@ namespace SmiteNoobLeague.Controllers
 
             return Json(true);
         }
-        #endregion
+        public IActionResult PlayerTaken(int PlayerID)
+        {
+            var accountService = _logicFactory.GetAccountService();
+
+            if (!accountService.PlayerTaken(PlayerID))
+            {
+                return Json($"Player is already linked to an account.");
+            }
+
+            return Json(true);
+        }
+        public IActionResult UserNameTakenEdit(string AccountName, int? AccountID)
+        {
+            var accountService = _logicFactory.GetAccountService();
+
+            if (AccountID != null)
+            {
+                if (accountService.GetByID(AccountID)?.AccountName == AccountName)
+                {
+                    return Json(true);
+                }
+
+            }
+
+            if (!accountService.UserNameTaken(AccountName))
+            {
+                return Json($"Accountname '{AccountName}' is already taken.");
+            }
+
+            return Json(true);
+        }
+        public IActionResult EmailTakenEdit(string AccountEmail, int? AccountID)
+        {
+            var accountService = _logicFactory.GetAccountService();
+
+
+            if (AccountID != null)
+            {
+                if (accountService.GetByID(AccountID)?.AccountEmail == AccountEmail)
+                {
+                    return Json(true);
+                }
+
+            }
+
+            if (!accountService.EmailTaken(AccountEmail))
+            {
+                return Json($"e-mailaddress '{AccountEmail}' is already taken.");
+            }
+
+
+            return Json(true);
+        }
+        public IActionResult PlayerTakenEdit(int PlayerID, int? AccountID)
+        {
+            var accountService = _logicFactory.GetAccountService();
+
+            if (AccountID != null)
+            {
+                if (accountService.GetByID(AccountID)?.AccountPlayer?.PlayerID == PlayerID)
+                {
+                    return Json(true);
+                }
+
+            }
+
+            if (!accountService.PlayerTaken(PlayerID))
+            {
+                return Json($"Player is already linked to an account.");
+            }
+
+            return Json(true);
+        }
         #endregion
 
         #region CreateTeam
@@ -105,15 +319,31 @@ namespace SmiteNoobLeague.Controllers
         [AjaxOnly]
         public IActionResult CreateTeam()
         {
+            var accountService = _logicFactory.GetAccountService();
+
+            AdminTeamBasicCreateView model = new AdminTeamBasicCreateView {
+                CaptainsList = accountService.GetAll().Select(a => new SelectListItem
+                { Value = a.AccountPlayer.PlayerID.ToString(), Text = a.AccountName }).ToList(),
+            };
+
             //return PartialView("_CreateTeamFormPartial");
-            return PartialView("Team/_CreateBasicTeamFormPartial");
+            return PartialView("Team/_CreateBasicTeamFormPartial", model);
         }
         [ValidateAntiForgeryToken]
         [HttpPost]
         [AjaxOnly]
         public IActionResult CreateTeamWithMembers(AdminTeamBasicCreateView model)
         {
-            AdminTeamCreateView newModel = new AdminTeamCreateView { TeamID = model.TeamID, TeamCaptainID = model.TeamCaptainID, TeamLogoFile = model.TeamLogoFile, TeamName = model.TeamName };
+            var accountService = _logicFactory.GetAccountService();
+
+            AdminTeamCreateView newModel = new AdminTeamCreateView { 
+                TeamID = model.TeamID, 
+                TeamCaptainID = model.TeamCaptainID, 
+                TeamLogoFile = model.TeamLogoFile, 
+                TeamName = model.TeamName, 
+                CaptainsList = accountService.GetAll().Select(a => new SelectListItem
+                { Value = a.AccountPlayer.PlayerID.ToString(), Text = a.AccountName }).ToList(),
+            };
             //return PartialView("_CreateTeamFormPartial");
             return PartialView("Team/_CreateTeamFormPartial", newModel);
         }
@@ -122,7 +352,10 @@ namespace SmiteNoobLeague.Controllers
         [AjaxOnly]
         public IActionResult CreateTeamWithoutMembers(AdminTeamCreateView model)
         {
+            var accountService = _logicFactory.GetAccountService();
             AdminTeamBasicCreateView newModel = model;
+            newModel.CaptainsList = accountService.GetAll().Select(a => new SelectListItem
+            { Value = a.AccountPlayer.PlayerID.ToString(), Text = a.AccountName }).ToList();
             //return PartialView("_CreateTeamFormPartial");
             return PartialView("Team/_CreateBasicTeamFormPartial", newModel);
         }
@@ -145,10 +378,10 @@ namespace SmiteNoobLeague.Controllers
                     {
                         TeamName = model.TeamName,
                         TeamCaptain = new Player { PlayerID = model.TeamCaptainID },
-                        TeamMembers = new List<Player> { new Player { PlayerID = model.TeamMember2ID },
-                                                    new Player { PlayerID = model.TeamMember3ID },
-                                                    new Player { PlayerID = model.TeamMember4ID },
-                                                    new Player { PlayerID = model.TeamMember5ID }},
+                        TeamMembers = new List<Player> { new Player { PlayerID = model.TeamMember2ID, PlayerName = model.TeamMember2Name, PlayerPlatformID = model.TeamMember2PlatformID },
+                                                    new Player { PlayerID = model.TeamMember3ID, PlayerName = model.TeamMember3Name, PlayerPlatformID = model.TeamMember3PlatformID },
+                                                    new Player { PlayerID = model.TeamMember4ID, PlayerName = model.TeamMember4Name, PlayerPlatformID = model.TeamMember4PlatformID },
+                                                    new Player { PlayerID = model.TeamMember5ID, PlayerName = model.TeamMember5Name, PlayerPlatformID = model.TeamMember5PlatformID }},
                         TeamLogo = model.TeamLogoFile != null ? await ImageProcessing.FormFileToResizedByteArrayAsync(model.TeamLogoFile) : ImageProcessing.ImageToByteArray(Image.FromFile(path))
                     };
                     teamService.Add(t);
@@ -182,7 +415,7 @@ namespace SmiteNoobLeague.Controllers
                     //basic info about team. this is always filled in when adding
                     Team t = new Team();
                     t.TeamName = model.TeamName;
-                    t.TeamCaptain = new Player { PlayerID = model.TeamCaptainID, PlayerName = "test captain" };
+                    t.TeamCaptain = new Player { PlayerID = model.TeamCaptainID};
                     t.TeamLogo = model.TeamLogoFile != null ? await ImageProcessing.FormFileToResizedByteArrayAsync(model.TeamLogoFile) : ImageProcessing.ImageToByteArray(Image.FromFile(path));
 
                     teamService.Add(t);
@@ -272,6 +505,7 @@ namespace SmiteNoobLeague.Controllers
             try
             {
                 var teamService = _logicFactory.GetTeamService();
+                var accountService = _logicFactory.GetAccountService();
                 //get the team
                 Team t = teamService.GetByID(id);
                 //create the view model
@@ -282,6 +516,8 @@ namespace SmiteNoobLeague.Controllers
                     TeamCaptainID = t.TeamCaptain?.PlayerID,
                     //convert image
                     TeamLogoString64 = ImageProcessing.ByteArrayToString64(t.TeamLogo),
+                    CaptainsList = accountService.GetAll().Select(a => new SelectListItem
+                    { Value = a.AccountPlayer.PlayerID.ToString(), Text = a.AccountName }).ToList(),
                 };
 
 
@@ -303,8 +539,9 @@ namespace SmiteNoobLeague.Controllers
             try
             {
                 var teamService = _logicFactory.GetTeamService();
+                var accountService = _logicFactory.GetAccountService();
                 //get the team
-                Team t = teamService.GetByID((int)model.TeamID);
+                Team t = teamService.GetByID(model.TeamID);
                 //create the view model
                 AdminTeamEditView editTeamView = new AdminTeamEditView
                 {
@@ -315,12 +552,18 @@ namespace SmiteNoobLeague.Controllers
                     TeamLogoFile = model.TeamLogoFile,
                     TeamMember2ID = t.TeamMembers[0].PlayerID,
                     TeamMember2Name = t.TeamMembers[0].PlayerName,
+                    TeamMember2PlatformID = t.TeamMembers[0].PlayerPlatformID,
                     TeamMember3ID = t.TeamMembers[1].PlayerID,
                     TeamMember3Name = t.TeamMembers[1].PlayerName,
+                    TeamMember3PlatformID = t.TeamMembers[1].PlayerPlatformID,
                     TeamMember4ID = t.TeamMembers[2].PlayerID,
                     TeamMember4Name = t.TeamMembers[2].PlayerName,
+                    TeamMember4PlatformID = t.TeamMembers[2].PlayerPlatformID,
                     TeamMember5ID = t.TeamMembers[3].PlayerID,
                     TeamMember5Name = t.TeamMembers[3].PlayerName,
+                    TeamMember5PlatformID = t.TeamMembers[3].PlayerPlatformID,
+                    CaptainsList = accountService.GetAll().Select(a => new SelectListItem
+                    { Value = a.AccountPlayer.PlayerID.ToString(), Text = a.AccountName }).ToList(),
                 };
 
                 return PartialView("Team/_EditTeamFormPartial", editTeamView);
@@ -339,6 +582,7 @@ namespace SmiteNoobLeague.Controllers
         {
             try
             {
+                var accountService = _logicFactory.GetAccountService();
                 //create the view model
                 AdminBasicTeamEditView editTeamView = new AdminBasicTeamEditView
                 {
@@ -348,6 +592,8 @@ namespace SmiteNoobLeague.Controllers
                     //convert image
                     TeamLogoString64 = model.TeamLogoFile != null ? ImageProcessing.ByteArrayToString64(await ImageProcessing.FormFileToResizedByteArrayAsync(model.TeamLogoFile)) : model.TeamLogoString64,
                     TeamLogoFile = model.TeamLogoFile,
+                    CaptainsList = accountService.GetAll().Select(a => new SelectListItem
+                    { Value = a.AccountPlayer.PlayerID.ToString(), Text = a.AccountName }).ToList(),
                 };
 
 
@@ -377,13 +623,13 @@ namespace SmiteNoobLeague.Controllers
                         TeamID = model.TeamID,
                         TeamName = model.TeamName,
                         TeamCaptain = new Player { PlayerID = model.TeamCaptainID },
-                        TeamMembers = new List<Player> { new Player { PlayerID = model.TeamMember2ID, PlayerName = model.TeamMember2Name },
-                                                       new Player { PlayerID = model.TeamMember3ID, PlayerName = model.TeamMember3Name },
-                                                       new Player { PlayerID = model.TeamMember4ID, PlayerName = model.TeamMember4Name },
-                                                       new Player { PlayerID = model.TeamMember5ID, PlayerName = model.TeamMember5Name }},
+                        TeamMembers = new List<Player> { new Player { PlayerID = model.TeamMember2ID, PlayerName = model.TeamMember2Name, PlayerPlatformID = model.TeamMember2PlatformID },
+                                                       new Player { PlayerID = model.TeamMember3ID, PlayerName = model.TeamMember3Name, PlayerPlatformID = model.TeamMember3PlatformID },
+                                                       new Player { PlayerID = model.TeamMember4ID, PlayerName = model.TeamMember4Name, PlayerPlatformID = model.TeamMember4PlatformID },
+                                                       new Player { PlayerID = model.TeamMember5ID, PlayerName = model.TeamMember5Name, PlayerPlatformID = model.TeamMember5PlatformID }},
                     };
                     byte[] img = await ImageProcessing.FormFileToResizedByteArrayAsync(model.TeamLogoFile);
-                    teamToEdit.TeamLogo = img == default ? teamService.GetByID((int)model.TeamID).TeamLogo : teamToEdit.TeamLogo = img;
+                    teamToEdit.TeamLogo = img == default ? teamService.GetByID(model.TeamID).TeamLogo : teamToEdit.TeamLogo = img;
 
                     teamService.Update(teamToEdit);
 
@@ -419,7 +665,8 @@ namespace SmiteNoobLeague.Controllers
                         TeamID = model.TeamID,
                         TeamName = model.TeamName,
                         TeamCaptain = new Player { PlayerID = model.TeamCaptainID, },
-                        TeamLogo = img == default ? teamService.GetByID((int)model.TeamID).TeamLogo : img,
+                        TeamLogo = img == default ? teamService.GetByID(model.TeamID).TeamLogo : img,
+                        TeamMembers = teamService.GetByID(model.TeamID)?.TeamMembers
                     });
                 }
                 catch (Exception ex)
@@ -452,7 +699,7 @@ namespace SmiteNoobLeague.Controllers
 
             if (TeamID != null)
             {
-                if (teamService.GetByID((int)TeamID)?.TeamName == TeamName)
+                if (teamService.GetByID(TeamID)?.TeamName == TeamName)
                 {
                     return Json(true);
                 }
@@ -484,7 +731,7 @@ namespace SmiteNoobLeague.Controllers
 
             if (TeamID != null)
             {
-                if (teamService.GetByID((int)TeamID)?.TeamCaptain?.PlayerID == TeamCaptainID)
+                if (teamService.GetByID(TeamID)?.TeamCaptain?.PlayerID == TeamCaptainID)
                 {
                     return Json(true);
                 }

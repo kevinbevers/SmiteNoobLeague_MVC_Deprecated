@@ -10,6 +10,7 @@ using SNL_LogicLayer.ServiceInterfaces;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SmiteNoobLeague.Models.AdminPageViews.TeamViewModels
 {
@@ -28,6 +29,8 @@ namespace SmiteNoobLeague.Models.AdminPageViews.TeamViewModels
         //Team logo not required, it will be replaced with a local image if empty
         [MaxFileSize(29 * 1024 * 1024)]
         [AllowedExtensions(new[] { ".jpg", ".png", ".jpeg,", ".bmp" })]
-        public IFormFile TeamLogoFile { get; set; }  
+        public IFormFile TeamLogoFile { get; set; }
+        //list to select captains
+        public List<SelectListItem> CaptainsList { get; set; }
     }
 }

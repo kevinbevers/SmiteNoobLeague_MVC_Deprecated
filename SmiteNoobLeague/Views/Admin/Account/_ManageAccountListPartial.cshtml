@@ -1,7 +1,8 @@
-﻿@model SmiteNoobLeague.Models.AdminPageViews.TeamViewModels.AdminManageTeamListView
+﻿
+@model SmiteNoobLeague.Models.AdminPageViews.AccountViewModels.AdminManageAccountListView
 
 <div class="modal-header">
-    <h5 class="modal-title" id="CreateTeamModalTitle">Manage teams</h5>
+    <h5 class="modal-title" id="CreateTeamModalTitle">Manage Accounts</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -12,13 +13,13 @@
             <div class="col-lg-12">
                 <div class="list-group">
                     <div id="grouped-teams">
-                        @foreach (var team in Model.TeamList)
+                        @foreach (var account in Model.AccountList)
                         {
                             <div class="row team">
-                                <p class="list-group-item list-group-item-action col-lg-10">@team.Teamname</p>
+                                <p class="list-group-item list-group-item-action col-lg-10">@account.AccountName</p>
                                 <div class="col-lg-2 buttons btn-group">
-                                    <a href="#" class="btn-sm adminEditButton" onclick="EditTeamPopUp(@team.TeamID)"><i class="fas fa-edit fa-2x"></i></a>
-                                    <a href="#" class="btn-sm adminDeleteButton" onclick="AreYouSureTeam(@team.TeamID,'@team.Teamname')"><i class="fas fa-trash-alt fa-2x"></i></a>
+                                    <a href="#" class="btn-sm adminEditButton" onclick="EditAccountPopUp(@account.AccountID)"><i class="fas fa-edit fa-2x"></i></a>
+                                    <a href="#" class="btn-sm adminDeleteButton" onclick="AreYouSureAccount(@account.AccountID,'@account.AccountName')"><i class="fas fa-trash-alt fa-2x"></i></a>
                                 </div>
                             </div>
                         }

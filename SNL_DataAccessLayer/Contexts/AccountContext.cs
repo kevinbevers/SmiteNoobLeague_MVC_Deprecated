@@ -52,8 +52,9 @@ namespace SNL_PersistenceLayer.Contexts
 
                 using (MySqlConnection conn = _con.GetConnection())
                 {
+                    //AccountPassword don't get this when selecting an account
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SELECT AccountID,AccountName,AccountEmail,AccountPassword,PlayerID FROM account", conn);
+                    MySqlCommand cmd = new MySqlCommand("SELECT AccountID,AccountName,AccountEmail,PlayerID FROM account", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -64,8 +65,8 @@ namespace SNL_PersistenceLayer.Contexts
                                 AccountID = reader[0] as int? ?? default,
                                 AccountName = reader[1] as string ?? default,
                                 AccountEmail = reader[2] as string ?? default,
-                                AccountPassword = reader[3] as string ?? default,
-                                PlayerID = reader[4] as int? ?? default,
+                                //AccountPassword = reader[3] as string ?? default, //dont get password
+                                PlayerID = reader[3] as int? ?? default,
                             };
                             accountList.Add(account);
                         }
@@ -97,7 +98,7 @@ namespace SNL_PersistenceLayer.Contexts
                             account.AccountID = reader[0] as int? ?? default;
                             account.AccountName = reader[1] as string ?? default;
                             account.AccountEmail = reader[2] as string ?? default;
-                            account.AccountPassword = reader[3] as string ?? default;
+                            account.AccountPassword = reader[3] as string ?? default; //get this so we can insert the same value again when empty from view
                             account.PlayerID = reader[4] as int? ?? default;
                         }
                     }
@@ -200,6 +201,36 @@ namespace SNL_PersistenceLayer.Contexts
                     MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM account WHERE AccountEmail = ?name", conn);
                     //where id =
                     cmd.Parameters.AddWithValue("name", MySqlHelper.EscapeString(email));
+                    //execute command
+                    int count = 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                    //should return if a row is affected or not
+                    return count > 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ContextErrorException(ex);
+            }
+
+
+        }
+        public bool PlayerAvailable(int playerid)
+        {
+            try
+            {
+                using (MySqlConnection conn = _con.GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM account WHERE PlayerID = ?id", conn);
+                    //where id =
+                    cmd.Parameters.AddWithValue("id", playerid);
                     //execute command
                     int count = 0;
                     using (var reader = cmd.ExecuteReader())

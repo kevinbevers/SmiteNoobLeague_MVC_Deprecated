@@ -89,7 +89,7 @@ namespace SNL_LogicLayer.Services
             }
             return teamList;
         }
-        public Team GetByID(int id)
+        public Team GetByID(int? id)
         {
             //team
             TeamDTO tDTO = _teamContext.GetByID(id);
@@ -258,10 +258,10 @@ namespace SNL_LogicLayer.Services
             //create list of team members excluding the captain
             List<Player> teamMembers = new List<Player>
             {
-                new Player { PlayerID = tm2DTO.PlayerID, PlayerName = tm2DTO.PlayerName, PlayerRole = new Role {RoleID = t2Role.RoleID, RoleName = t2Role.RoleName, RoleDescription = t2Role.RoleDescription } },
-                new Player {  PlayerID = tm3DTO.PlayerID, PlayerName = tm3DTO.PlayerName, PlayerRole = new Role {RoleID = t3Role.RoleID, RoleName = t3Role.RoleName, RoleDescription = t3Role.RoleDescription }},
-                new Player {  PlayerID = tm4DTO.PlayerID, PlayerName = tm4DTO.PlayerName, PlayerRole = new Role {RoleID = t4Role.RoleID, RoleName = t4Role.RoleName, RoleDescription = t4Role.RoleDescription }},
-                new Player {  PlayerID = tm5DTO.PlayerID, PlayerName = tm5DTO.PlayerName, PlayerRole = new Role {RoleID = t5Role.RoleID, RoleName = t5Role.RoleName, RoleDescription = t5Role.RoleDescription }},
+                new Player { PlayerID = tm2DTO.PlayerID, PlayerName = tm2DTO.PlayerName, PlayerPlatformID = tm2DTO.PlayerPlatformID, PlayerRole = new Role {RoleID = t2Role.RoleID, RoleName = t2Role.RoleName, RoleDescription = t2Role.RoleDescription } },
+                new Player {  PlayerID = tm3DTO.PlayerID, PlayerName = tm3DTO.PlayerName, PlayerPlatformID = tm3DTO.PlayerPlatformID, PlayerRole = new Role {RoleID = t3Role.RoleID, RoleName = t3Role.RoleName, RoleDescription = t3Role.RoleDescription }},
+                new Player {  PlayerID = tm4DTO.PlayerID, PlayerName = tm4DTO.PlayerName, PlayerPlatformID = tm4DTO.PlayerPlatformID, PlayerRole = new Role {RoleID = t4Role.RoleID, RoleName = t4Role.RoleName, RoleDescription = t4Role.RoleDescription }},
+                new Player {  PlayerID = tm5DTO.PlayerID, PlayerName = tm5DTO.PlayerName, PlayerPlatformID = tm5DTO.PlayerPlatformID, PlayerRole = new Role {RoleID = t5Role.RoleID, RoleName = t5Role.RoleName, RoleDescription = t5Role.RoleDescription }},
 
             };
             //TeamDivision
@@ -273,7 +273,7 @@ namespace SNL_LogicLayer.Services
                 TeamID = tDTO.TeamID,
                 TeamName = tDTO.TeamName,
                 TeamLogo = tDTO.TeamLogo,
-                TeamCaptain = new Player { PlayerID = CaptainDTO.PlayerID, PlayerName = CaptainDTO.PlayerName, PlayerRole = new Role { RoleID = cRole.RoleID, RoleName = cRole.RoleName, RoleDescription = cRole.RoleDescription } },
+                TeamCaptain = new Player { PlayerID = CaptainDTO.PlayerID, PlayerName = CaptainDTO.PlayerName, PlayerPlatformID = CaptainDTO.PlayerPlatformID, PlayerRole = new Role { RoleID = cRole.RoleID, RoleName = cRole.RoleName, RoleDescription = cRole.RoleDescription } },
                 TeamMembers = teamMembers,
                 TeamDivision = new Division { DivisionID = div.DivisionID, DivisionName = div.DivisionName },
             };

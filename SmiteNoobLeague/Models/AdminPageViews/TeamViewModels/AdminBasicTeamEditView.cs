@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SmiteNoobLeague.HelperClasses;
 using System;
 using System.Collections.Generic;
@@ -27,5 +28,6 @@ namespace SmiteNoobLeague.Models.AdminPageViews.TeamViewModels
         [AllowedExtensions(new[] { ".jpg", ".png", ".jpeg,", ".bmp" })]
         public IFormFile TeamLogoFile { get; set; }
         public string TeamLogoString64 { get; set; }
+        public List<SelectListItem> CaptainsList { get; set; }
     }
 }

@@ -9,5 +9,6 @@ namespace SNL_LogicLayer.ServiceInterfaces
     {
         bool UserNameTaken(string username);
         bool EmailTaken(string email);
+        bool PlayerTaken(int playerid);
     }
 }

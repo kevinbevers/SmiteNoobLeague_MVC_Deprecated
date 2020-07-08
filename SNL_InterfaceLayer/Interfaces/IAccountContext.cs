@@ -9,5 +9,6 @@ namespace SNL_InterfaceLayer.Interfaces
     {
         bool AccountNameAvailable(string name);
         bool EmailAvailable(string name);
+        bool PlayerAvailable(int playerid);
     }
 }

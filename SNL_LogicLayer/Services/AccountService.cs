@@ -1,5 +1,6 @@
 ﻿using SNL_InterfaceLayer.DateTransferObjects;
 using SNL_InterfaceLayer.Interfaces;
+using SNL_LogicLayer.LogicHelpers;
 using SNL_LogicLayer.Models;
 using SNL_LogicLayer.ServiceInterfaces;
 using System;
@@ -24,12 +25,14 @@ namespace SNL_LogicLayer.Services
             AccountDTO aDTO = new AccountDTO
             {
                 AccountName = entity.AccountName,
-                AccountEmail = entity.AccountEmail,
+                AccountEmail = PasswordEncryption.CreateShaHash(entity.AccountPassword),
                 AccountPassword = entity.AccountPassword,
                 PlayerID = entity.AccountPlayer?.PlayerID,
             };
             //add the account to DB
             _accountContext.Add(aDTO);
+            //send email to with password and username
+            
             //do something with the account player    
             if(entity.AccountPlayer != null)
             {
@@ -54,7 +57,7 @@ namespace SNL_LogicLayer.Services
             return accountList;
         }
 
-        public Account GetByID(int id)
+        public Account GetByID(int? id)
         {
             //team
             AccountDTO aDTO = _accountContext.GetByID(id);
@@ -81,7 +84,7 @@ namespace SNL_LogicLayer.Services
                 AccountID = entity.AccountID,
                 AccountName = entity.AccountName,
                 AccountEmail = entity.AccountEmail,
-                AccountPassword = entity.AccountPassword,
+                AccountPassword = entity.AccountPassword != null ? PasswordEncryption.CreateShaHash(entity.AccountPassword) : _accountContext.GetByID(entity.AccountID).AccountPassword,
                 PlayerID = entity.AccountPlayer?.PlayerID,
             };
             //update the account to DB
@@ -105,6 +108,10 @@ namespace SNL_LogicLayer.Services
         public bool EmailTaken(string email)
         {
             return _accountContext.EmailAvailable(email);
+        }
+        public bool PlayerTaken(int playerid)
+        {
+            return _accountContext.PlayerAvailable(playerid);
         }
 
         private Account BuildAccountModel(AccountDTO aDTO)

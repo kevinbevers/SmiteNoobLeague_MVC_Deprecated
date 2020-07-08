@@ -2,12 +2,12 @@
 
 <div class="modal-header">
     <h5 class="modal-title" id="CreateTeamModalTitle">Edit @Model.TeamName</h5>
-    <button type="button" class="close" onclick="CreateManagePopUp()" aria-label="Return">
+    <button type="button" class="close" onclick="ManageTeamPopUp()" aria-label="Return">
         <i class="fas fa-arrow-left"></i>
     </button>
 </div>
 <div class="modal-body">
-    <form id="EditTeamForm" asp-action="EditTeam" asp-controller="Admin" enctype="multipart/form-data" data-ajax="true" data-ajax-update="#EditTeamForm" data-ajax-method="post">
+    <form id="EditTeamForm" asp-action="EditTeam" asp-controller="Admin" enctype="multipart/form-data" data-ajax="true" data-ajax-update="#EditTeamFormContainer" data-ajax-method="post">
         <input asp-for="@Model.TeamID" hidden>
         <div class="form-group">
             <label>* Team Name</label>
@@ -24,9 +24,8 @@
         </div>
         <div class="form-group">
             <label>* Team Captain</label>
-            <select asp-for="@Model.TeamCaptainID" class="form-control">
-                <option></option>
-                <option value="5">Example Captain with ID 5</option>
+            <select asp-for="@Model.TeamCaptainID" asp-items="Model.CaptainsList" class="form-control">
+                <option disabled>Select a team captain</option>
             </select>
             <span asp-validation-for="@Model.TeamCaptainID" class="text-danger"></span>
         </div>
@@ -38,10 +37,10 @@
             <div class="input-group">
                 <input asp-for="@Model.TeamMember2Name" id="tm2Name" class="form-control" />
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm2Name','#tm2')">Search player</button>
+                    <button type="button" class="btn btn-primary" id="tm2Button" onclick="SearchPlayer('#tm2')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember2Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember2PlatformID" id="tm2PlatformID" class="form-control" hidden>
             <input asp-for="@Model.TeamMember2ID" id="tm2ID" class="form-control" hidden>
             <span asp-validation-for="@Model.TeamMember2ID" class="text-danger"></span>
         </div>
@@ -50,10 +49,10 @@
             <div class="input-group">
                 <input asp-for="@Model.TeamMember3Name" id="tm3Name" class="form-control" />
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm3Name','#tm3')">Search player</button>
+                    <button type="button" class="btn btn-primary" id="tm3Button" onclick="SearchPlayer('#tm3')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember3Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember3PlatformID" id="tm3PlatformID" class="form-control" hidden>
             <input asp-for="@Model.TeamMember3ID" id="tm3ID" class="form-control" hidden>
             <span asp-validation-for="@Model.TeamMember3ID" class="text-danger"></span>
         </div>
@@ -62,10 +61,10 @@
             <div class="input-group">
                 <input asp-for="@Model.TeamMember4Name" id="tm4Name" class="form-control" />
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm4Name','#tm4')">Search player</button>
+                    <button type="button" class="btn btn-primary" id="tm4Button" onclick="SearchPlayer('#tm4')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember4Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember4PlatformID" id="tm4PlatformID" class="form-control" hidden>
             <input asp-for="@Model.TeamMember4ID" id="tm4ID" class="form-control" hidden>
             <span asp-validation-for="@Model.TeamMember4ID" class="text-danger"></span>
         </div>
@@ -74,10 +73,10 @@
             <div class="input-group">
                 <input asp-for="@Model.TeamMember5Name" id="tm5Name" class="form-control" />
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-primary" onclick="SearchPlayer('#tm5Name','#tm5')">Search player</button>
+                    <button type="button" class="btn btn-primary" id="tm5Button" onclick="SearchPlayer('#tm5')">Search player</button>
                 </div>
             </div>
-            <span asp-validation-for="@Model.TeamMember5Name" class="text-danger"></span>
+            <input asp-for="@Model.TeamMember5PlatformID" id="tm5PlatformID" class="form-control" hidden>
             <input asp-for="@Model.TeamMember5ID" id="tm5ID" class="form-control" hidden>
             <span asp-validation-for="@Model.TeamMember5ID" class="text-danger"></span>
         </div>
@@ -89,3 +88,35 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-primary" onclick="$('#EditTeamSubmit').click()">Save changes</button>
 </div>
+@if (!Model.tm2Empty)
+{
+    <script>
+    $(function () {
+         SendBackID(@Model.TeamMember2ID,'#tm2','@Model.TeamMember2Name',@Model.TeamMember2PlatformID);
+    });
+    </script>
+}
+@if (!Model.tm3Empty)
+{
+    <script>
+    $(function () {
+         SendBackID(@Model.TeamMember3ID,'#tm3','@Model.TeamMember3Name',@Model.TeamMember3PlatformID);
+    });
+    </script>
+}
+@if (!Model.tm4Empty)
+{
+    <script>
+    $(function () {
+         SendBackID(@Model.TeamMember4ID,'#tm4','@Model.TeamMember4Name',@Model.TeamMember4PlatformID);
+    });
+    </script>
+}
+@if (!Model.tm5Empty)
+{
+    <script>
+    $(function () {
+         SendBackID(@Model.TeamMember5ID,'#tm5','@Model.TeamMember5Name',@Model.TeamMember5PlatformID);
+    });
+    </script>
+}

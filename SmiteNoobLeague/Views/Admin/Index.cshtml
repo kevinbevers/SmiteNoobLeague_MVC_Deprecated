@@ -66,7 +66,7 @@
                                     <button class="btn btn-primary btn-lg btn-block" onclick="CreateAccountPopUp()">Create account</button>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary btn-lg btn-block">Manage accounts</button>
+                                    <button class="btn btn-primary btn-lg btn-block" onclick="ManageAccountPopUp()">Manage accounts</button>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                     <button class="btn btn-primary btn-lg btn-block" onclick="CreateTeamPopUp()">Create team</button>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary btn-lg btn-block" onclick="CreateManagePopUp()">Manage teams</button>
+                                    <button class="btn btn-primary btn-lg btn-block" onclick="ManageTeamPopUp()">Manage teams</button>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
     <!-- AccountModal -->
     <div class="modal fade" id="AccountModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content" id="AccountFormContent">
             </div>
         </div>
     </div>
