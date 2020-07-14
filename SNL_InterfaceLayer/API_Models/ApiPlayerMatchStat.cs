@@ -129,7 +129,7 @@ namespace SNL_InterfaceLayer.API_Models
         public string hz_player_name { get; set; }
         public int match_queue_id { get; set; }
         public string name { get; set; }
-        public string playerId { get; set; }
+        public int playerId { get; set; }
         public string playerName { get; set; }
         public string playerPortalId { get; set; }
         public string playerPortalUserId { get; set; }
