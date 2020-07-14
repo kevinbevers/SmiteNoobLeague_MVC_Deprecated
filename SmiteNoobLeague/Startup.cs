@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SNL_PersistenceLayer;
 using SNL_FactoryLayer;
+using SNL_InterfaceLayer.Interfaces;
+using SNL_InterfaceLayer.API_Models;
 
 namespace SmiteNoobLeague
 {
@@ -31,6 +33,8 @@ namespace SmiteNoobLeague
             services.AddSingleton(new ConnectionContext(Configuration.GetConnectionString("DevConnection")));
             //logic layer DI  : Scoped objects are the same within a request, but different across different requests.
             services.AddScoped<LogicFactory, LogicFactory>();
+            //add API dev authorization
+            services.AddSingleton(new HirezApiContext(Configuration.GetSection("Credentials").Get<ApiCredentials>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
