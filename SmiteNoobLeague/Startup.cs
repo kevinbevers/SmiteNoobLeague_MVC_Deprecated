@@ -31,10 +31,10 @@ namespace SmiteNoobLeague
             services.AddControllersWithViews();
             //connection for database DI : Singleton objects are the same for every object and every request.
             services.AddSingleton(new ConnectionContext(Configuration.GetConnectionString("DevConnection")));
-            //logic layer DI  : Scoped objects are the same within a request, but different across different requests.
-            services.AddScoped<LogicFactory, LogicFactory>();
             //add API dev authorization
             services.AddSingleton(new HirezApiContext(Configuration.GetSection("Credentials").Get<ApiCredentials>()));
+            //logic layer DI  : Scoped objects are the same within a request, but different across different requests.
+            services.AddScoped<LogicFactory, LogicFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

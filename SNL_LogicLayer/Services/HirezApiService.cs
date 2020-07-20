@@ -7,15 +7,22 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using SNL_InterfaceLayer.DateTransferObjects;
+using System.Net;
 
 namespace SNL_LogicLayer.Services
 {
     public class HirezApiService : IHirezApiService
     {
         private readonly IHirezApiContext _hirezApi;
-        public HirezApiService(IHirezApiContext hirezApi)
+        private readonly IGodContext _godContext;
+        private readonly IItemContext _itemContext;
+
+        public HirezApiService(IHirezApiContext hirezApi, IGodContext godContext, IItemContext itemContext)
         {
             _hirezApi = hirezApi;
+            _godContext = godContext;
+            _itemContext = itemContext;
         }
         public async Task<string> GetCurrentPatchInfoAsync()
         {
@@ -87,14 +94,108 @@ namespace SNL_LogicLayer.Services
             return p;
         }
 
-        public Task<int?> UpdateGods()
+        public async Task<int?> UpdateGods()
         {
-            throw new NotImplementedException();
+            IEnumerable<ApiGod> apiGods = await _hirezApi.GetAllGods();
+            int countNewAdditions = 0;
+
+            foreach(ApiGod god in apiGods)
+            {
+                var GodInDB = _godContext.GetByID((int)god.Id);
+                GodDTO gDTO = new GodDTO
+                {
+                    GodID = (int?)god.Id,
+                    GodName = god.Name,
+                    GodTitle = god.Title,
+                    GodClass = god.Classes.ToString(),
+                    GodLore = god.Lore,
+                };
+                using (var webClient = new WebClient())
+                {
+                    try
+                    {
+                        byte[] icon = webClient.DownloadData(god.GodIcon_URL);
+                        byte[] CardArt = webClient.DownloadData(god.GodCard_Url);
+
+                        gDTO.GodIcon = icon;
+                        gDTO.GodCardArt = CardArt;
+                    }
+                    catch
+                    {
+                        //"Couldn't update god because the api returned a bad gateway, image / data is likely not implemented yet";
+                    }
+                }
+
+                if (GodInDB.GodName == null)
+                {
+                    //create               
+                    _godContext.Add(gDTO);
+                    countNewAdditions++;
+                }
+                else
+                {
+                    //update
+                    _godContext.Update(gDTO);
+                }
+            }
+
+            return countNewAdditions;
         }
 
-        public Task<int?> UpdateItems()
+        public async Task<int?> UpdateItems()
         {
-            throw new NotImplementedException();
+            IEnumerable<ApiItem> apiItems = await _hirezApi.GetAllItems();
+            int countNewAdditions = 0;
+
+            foreach (ApiItem item in apiItems)
+            {
+                var ItemInDB = _itemContext.GetByID((int)item.ItemId);
+                ItemDTO iDTO = new ItemDTO
+                {
+                    ItemID = (int?)item.ItemId,
+                    ItemName = item.DeviceName,
+                    ItemDescription = item.ItemDescription.SecondaryDescription != null ? item.ItemDescription.SecondaryDescription.ToString() : item.ItemDescription.Description,
+                    ItemShortDescription = item.ShortDesc,
+                    ItemPrice = item.Price,
+                };
+                //Add the itemStats ranging from 1 to 4 stats
+                List<string> Stats = new List<string>();
+                int statCount = item.ItemDescription.Menuitems.Count();
+                //variable to set = the if statement ? if true do this : else do this
+                Stats.Add(statCount > 0 ? item.ItemDescription.Menuitems[0].Value + " " + item.ItemDescription.Menuitems[0].Description : null);
+                Stats.Add(statCount > 1 ? item.ItemDescription.Menuitems[1].Value + " " + item.ItemDescription.Menuitems[1].Description : null);
+                Stats.Add(statCount > 2 ? item.ItemDescription.Menuitems[2].Value + " " + item.ItemDescription.Menuitems[2].Description : null);
+                Stats.Add(statCount > 3 ? item.ItemDescription.Menuitems[3].Value + " " + item.ItemDescription.Menuitems[3].Description : null);
+                iDTO.ItemStats = Stats;
+
+                using (var webClient = new WebClient())
+                {
+                    try
+                    {
+                        byte[] icon = webClient.DownloadData(item.ItemIcon_Url);
+
+                        iDTO.ItemIcon = icon;
+                    }
+                    catch
+                    {
+                        //something went wrong trying to get the image....
+                    }
+                }
+
+                if (ItemInDB == null)
+                {
+                    //create               
+                    _itemContext.Add(iDTO);
+                    countNewAdditions++;
+                }
+                else
+                {
+                    //update
+                    _itemContext.Update(iDTO);
+                }
+            }
+            //return number of added items.
+            return countNewAdditions;
         }
     }
 }

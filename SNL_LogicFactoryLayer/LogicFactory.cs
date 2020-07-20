@@ -11,9 +11,11 @@ namespace SNL_FactoryLayer
     public class LogicFactory
     {
         private readonly ConnectionContext _conn;
-        public LogicFactory(ConnectionContext context)
+        private readonly HirezApiContext _api;
+        public LogicFactory(ConnectionContext context, HirezApiContext api)
         {
             _conn = context;
+            _api = api; 
         }
         
         public ITeamService GetTeamService()
@@ -24,6 +26,11 @@ namespace SNL_FactoryLayer
         public IAccountService GetAccountService()
         {
             return new AccountService(new PlayerContext(_conn),new AccountContext(_conn));
+        }
+
+        public IHirezApiService GetHirezApiService()
+        {
+            return new HirezApiService(_api, new GodContext(_conn), new ItemContext(_conn));
         }
     }
 }
