@@ -89,7 +89,7 @@ namespace SNL_LogicLayer.Services
             List<Player> p = new List<Player>();
             foreach(var player in playersFound)
             {
-                p.Add(new Player { PlayerName = player.Name, PlayerID = player.player_id, PlayerPlatformID = player.portal_id });
+                p.Add(new Player { PlayerName = player.Name, PlayerID = player.player_id, PlayerPlatformID = (int)player.portal_id, PlayerPlatformName = player.portal_id.ToString()});
             }
             return p;
         }

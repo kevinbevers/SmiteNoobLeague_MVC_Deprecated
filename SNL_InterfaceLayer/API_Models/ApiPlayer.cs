@@ -8,7 +8,7 @@ namespace SNL_InterfaceLayer.API_Models
     {
         public string Name { get; set; }
         public int player_id { get; set; }
-        public int portal_id { get; set; }
+        public ApiPlatformEnum portal_id { get; set; }
         public object ret_msg { get; set; }
     }
 }

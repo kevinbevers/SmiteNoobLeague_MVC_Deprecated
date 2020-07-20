@@ -759,5 +759,18 @@ namespace SmiteNoobLeague.Controllers
         }
         #endregion
 
+        #region searchPlayer
+        [HttpPost]
+        [AjaxOnly]
+        public async Task<IActionResult> SearchPlayerWithSmiteAPI(string playername)
+        {
+            var hirezApiService = _logicFactory.GetHirezApiService();
+
+            var playersFound = await hirezApiService.SearchPlayersByName(playername);
+
+            return Json(playersFound);
+        }
+        #endregion
+
     }
 }

@@ -16,6 +16,10 @@
     <ProjectReference Include="..\SNL_LogicFactoryLayer\SNL_FactoryLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Config\" />
+  </ItemGroup>
+
 
 
 </Project>

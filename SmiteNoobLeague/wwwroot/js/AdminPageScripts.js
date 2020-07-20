@@ -438,17 +438,45 @@ function EditAccountFailed() {
 /*PlayerScripts*/
 function SearchPlayer(targetInputID) {
     var inputID = targetInputID + "Name";
-    var playername = $(inputID).val();
+    var Playername = $(inputID).val();
     var modalObj = $('.bd-TeamMemberSearchModal');
-    if (playername != "") {
+
+
+    if (Playername != "") {
+        var playersFound = [];
         // do a jquery call to get playerid, platform and name by playername via the Smite API
-        modalObj.find('.modal-title').text('Players found with name: ' + playername);
-        modalObj.find('.modal-body').html("");
-        modalObj.find('.modal-body').append("<ul>");
-        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 2 + ",'" + targetInputID + "','" + playername + "','" + 9 + "'" + ')" href="#">' + playername + ' Playstation</a></li>');
-        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 3 + ",'" + targetInputID + "','" + playername + "','" + 1 + "'" + ')" href="#">' + playername + ' PC</a></li>');
-        modalObj.find('.modal-body').append("</ul>");
-        modalObj.modal();
+        $.ajax({
+            type: "POST",
+            url: "/Admin/SearchPlayerWithSmiteAPI",
+            //contentType: "application/json; charset=utf-8", // specify the content type
+            //dataType: 'JSON',
+            data: { playername: Playername },
+            traditional: true,
+            success: function (data) {
+                //put data in a object
+                playersFound = data;
+                if (playersFound.length > 0) {
+                    modalObj.find('.modal-title').text('Players found with name: ' + Playername);
+                    modalObj.find('.modal-body').html("");
+                    modalObj.find('.modal-body').append("<ul>");
+                    for (var i = 0; i < playersFound.length; i++) {
+                        modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + playersFound[i].playerID + ",'" + targetInputID + "','" + playersFound[i].playerName + "','" + playersFound[i].playerPlatformID + "'" + ')" href="#">' + playersFound[i].playerName + ' ' + playersFound[i].playerPlatformName + '</a></li>');
+                    }
+                    //modalObj.find('.modal-body').append('<li><a onclick="SendBackID(' + 3 + ",'" + targetInputID + "','" + Playername + "','" + 1 + "'" + ')" href="#">' + Playername + ' PC</a></li>');
+                    modalObj.find('.modal-body').append("</ul>");
+                    modalObj.modal();
+                }
+                else {
+                    modalObj.find('.modal-title').text('Players found with name: ' + Playername);
+                    modalObj.find('.modal-body').html("");
+                    modalObj.find('.modal-body').append("<h3>No players found</h3>");
+                    modalObj.modal();
+                }
+            },
+            error: function (data) {
+                //ManageTeamsError('Something went wrong trying to delete the account');
+            }
+        });
     }
     else {
         //do nothing / tell user that a name needs to be filled in
