@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MySqlX.XDevAPI;
+using Newtonsoft.Json;
 using SNL_InterfaceLayer.API_Models;
 using SNL_InterfaceLayer.Interfaces;
 using System;
@@ -74,9 +75,17 @@ namespace SNL_PersistenceLayer
             string json = File.ReadAllText("Config/hirezapi.json");
             sessionResult = JsonConvert.DeserializeObject<ApiSessionResult>(json);
 
-            DateTime parsedSessionTime = DateTime.Parse(sessionResult.sessionTime, CultureInfo.InvariantCulture);
+            if (sessionResult.sessionTime != null)
+            {
+                DateTime parsedSessionTime = DateTime.Parse(sessionResult.sessionTime, CultureInfo.InvariantCulture);
 
-            if ((DateTime.UtcNow - parsedSessionTime).TotalMinutes >= 15)
+                //also check if sessionID is not empty, it is sometimes empty for some reason
+                if ((DateTime.UtcNow - parsedSessionTime).TotalMinutes >= 15 || sessionResult.sessionID == "")
+                {
+                    await CreateSession();
+                }
+            }
+            else
             {
                 await CreateSession();
             }
